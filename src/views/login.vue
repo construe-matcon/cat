@@ -1,6 +1,6 @@
 <template>
     <div id="login">
-        <h1>Login Simples</h1>
+        <h1>Login</h1>
         <input type="text" name="username" v-model="input.username" placeholder="utilize: admin" />
         <input type="password" name="password" v-model="input.password" placeholder="utilize: admin" />
         <button type="button" v-on:click="login()">Login</button>
