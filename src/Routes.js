@@ -28,6 +28,7 @@ Vue.use(Router);
 
 export default new Router({
   mode: 'history',
+  // base: process.env.BASE_URL,
   routes: [
     {
       path: '/login',
@@ -40,7 +41,7 @@ export default new Router({
       component: ErrorPage,
     },
     {
-      path: '/app',
+      path: '/',
       name: 'Layout',
       component: Layout,
       children: [
