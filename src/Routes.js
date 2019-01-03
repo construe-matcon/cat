@@ -31,11 +31,6 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '*',
-      name: 'PageNotFound',
-      component: Login,
-    },
-    {
       path: '/login',
       name: 'Login',
       component: Login,

@@ -77,7 +77,7 @@ export default {
     },
   },
   created() {
-    alert('Está logado? ' + (window.localStorage.getItem('authenticated') == 'true' ? 'Sim' : 'Não'))
+    // alert('Está logado? ' + (window.localStorage.getItem('authenticated') == 'true' ? 'Sim' : 'Não'))
     if (window.localStorage.getItem('authenticated') === 'true') {
       this.$router.push('/dashboard');
     }
