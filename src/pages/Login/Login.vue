@@ -18,11 +18,11 @@
             {{errorMessage}}
           </b-alert>
           <div class="form-group">
-            <input class="form-control no-border" ref="username"
+            <input class="form-control no-border" v-model="input.username" ref="username"
               required type="text" name="username" placeholder="Usuário" />
           </div>
           <div class="form-group">
-            <input class="form-control no-border" ref="password"
+            <input class="form-control no-border" v-model="input.password" ref="password"
             required type="password" name="password" placeholder="Senha" />
           </div>
           <div class="clearfix">
@@ -31,7 +31,7 @@
               <b-button type="submit" size="sm" variant="inverse">Entrar</b-button>
             </div>
           </div>
-          <div class="row no-gutters mt-3">
+          <!-- <div class="row no-gutters mt-3">
             <div class="col">
               <div class="abc-checkbox">
                 <input
@@ -42,9 +42,9 @@
               </div>
             </div>
             <div class="col">
-              <!-- <a class="mt-sm" href="">Trouble with account?</a> -->
+              <a class="mt-sm" href="">Trouble with account?</a>
             </div>
-          </div>
+          </div> -->
         </form>
       </Widget>
     </b-container>
@@ -58,30 +58,46 @@
 import Widget from '@/components/Widget/Widget';
 
 export default {
-  name: 'LoginPage',
+  name: 'login',
   components: { Widget },
   data() {
     return {
+      input: {
+        username: "",
+        password: ""
+      },
       errorMessage: null,
     };
   },
   methods: {
-    login() {
-      const username = this.$refs.username.value;
-      const password = this.$refs.password.value;
-
-      if (username.length !== 0 && password.length !== 0) {
-        window.localStorage.setItem('authenticated', true);
-        this.$router.push('/dashboard');
+    login(){
+      if(this.input.username != "" && this.input.password != ""){
+        if(this.input.username == this.$parent.mockAccount.username && this.input.password == this.$parent.mockAccount.password) {
+          this.$emit("authenticated", true);
+          window.localStorage.setItem('authenticated', true);
+          this.$router.push('/dashboard');
+        } else {
+          alert('Nome de usuário ou senha inválidos')
+        }
+      } else {
+        alert('É obrigatório preencher usuário e senha')
       }
-    },
-  },
-  created() {
-    // alert('Está logado? ' + (window.localStorage.getItem('authenticated') == 'true' ? 'Sim' : 'Não'))
-    if (window.localStorage.getItem('authenticated') === 'true') {
-      this.$router.push('/dashboard');
     }
+    // login() {
+    //   const username = this.$refs.username.value;
+    //   const password = this.$refs.password.value;
+
+    //   if (username.length !== 0 && password.length !== 0) {
+    //     window.localStorage.setItem('authenticated', true);
+    //     this.$router.push('/dashboard');
+    //   }
+    // },
   },
+  // created() {
+  //   if (window.localStorage.getItem('authenticated') === 'true') {
+  //     this.$router.push('/dashboard');
+  //   }
+  // },
 };
 </script>
 
