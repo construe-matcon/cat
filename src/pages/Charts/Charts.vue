@@ -828,6 +828,11 @@ export default {
   destroyed() {
     window.removeEventListener('resize', this.onResize);
   },
+  created() {
+    if (window.localStorage.getItem('authenticated') === 'false') {
+      this.$router.push('/login');
+    }
+  }
 };
 </script>
 

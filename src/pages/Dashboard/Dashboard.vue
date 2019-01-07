@@ -359,6 +359,11 @@ export default {
 
     window.addEventListener('resize', this.initChart);
   },
+  created() {
+    if (window.localStorage.getItem('authenticated') === 'false') {
+      this.$router.push('/login');
+    }
+  }
 };
 </script>
 
