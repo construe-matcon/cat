@@ -14,17 +14,17 @@ export default {
     }
   },
   mounted() {
-    if(!this.authenticated) {
-      this.$router.push('/login');
-    }
+    // if(!this.authenticated) {
+    //   this.$router.push('/login');
+    // }
   },
   methods: {
-    setAuthenticated(status) {
-      this.authenticated = status;
-    },
-    logout(){
-      this.authenticated = false;
-    }
+    // setAuthenticated(status) {
+    //   this.authenticated = status;
+    // },
+    // logout(){
+    //   this.authenticated = false;
+    // }
   },
   // created() {
   //   const currentPath = this.$router.history.current.path;

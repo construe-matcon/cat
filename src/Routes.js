@@ -26,10 +26,15 @@ import NotificationsPage from '@/pages/Notifications/Notifications';
 
 Vue.use(Router);
 
-export default new Router({
+let router = new Router({
   mode: 'hash',
   base: process.env.BASE_URL,
   routes: [
+    {
+      path: '*',
+      name: 'Error',
+      component: ErrorPage,
+    },
     {
       path: '/login',
       name: 'login',
@@ -45,6 +50,11 @@ export default new Router({
       name: 'Layout',
       component: Layout,
       children: [
+        {
+          path: '',
+          name: 'AnalyticsPage',
+          component: AnalyticsPage,
+        },
         {
           path: 'dashboard',
           name: 'AnalyticsPage',
@@ -84,3 +94,19 @@ export default new Router({
     },
   ],
 });
+
+router.beforeEach((to, from, next) => {
+
+  if (to.name == 'Error' && to.path !== '/error') {
+    next('/error');
+  } else if(window.localStorage.getItem('authenticated') !== 'true' && to.name !== 'login') {
+    next('/login');
+  } else if(window.localStorage.getItem('authenticated') === 'true' && to.name === 'login') {
+    next(from.path);
+  } else {
+    next();
+  }
+
+});
+
+export default router;
