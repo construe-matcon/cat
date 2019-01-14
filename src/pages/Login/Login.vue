@@ -1,10 +1,9 @@
 <template>
   <div class="login-page">
     <b-container>
+      
       <h5 class="logo">
-        <i class="fa fa-circle text-gray" />
-        Cat-Dev
-        <i class="fa fa-circle text-warning" />
+        <img :src="icon.picture" alt="Construe" class="icon-title">
       </h5>
       <Widget class="mx-auto" title="<h3 class='mt-0'>Faça login para continuar</h3>" customHeader>
         <!-- <p class="text-muted mb-0 mt fs-sm">
@@ -49,7 +48,7 @@
       </Widget>
     </b-container>
     <footer class="footer">
-      2019 - MatCom Construe
+      2019 - MatCon Construe
     </footer>
   </div>
 </template>
@@ -65,6 +64,9 @@ export default {
       input: {
         username: "",
         password: ""
+      },
+      icon: {
+        picture: require('../../assets/img/construe.png'), // eslint-disable-line global-require
       },
       errorMessage: null,
     };
@@ -101,4 +103,6 @@ export default {
 };
 </script>
 
-<style src="./Login.scss" lang="scss" scoped />
+<style lang="scss" scoped>
+  @import './Login.scss';
+</style>
