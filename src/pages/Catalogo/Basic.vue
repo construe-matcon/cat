@@ -1,17 +1,15 @@
 <template>
   <div class="tables-basic">
-    <b-breadcrumb>
+    <!-- <b-breadcrumb>
       <b-breadcrumb-item>YOU ARE HERE</b-breadcrumb-item>
-      <b-breadcrumb-item active>Tables Basic</b-breadcrumb-item>
-    </b-breadcrumb>
-    <h2 class="page-title">Tables - <span class="fw-semi-bold">Static</span></h2>
+      <b-breadcrumb-item active>Catálogo</b-breadcrumb-item>
+    </b-breadcrumb> -->
+    <h2 class="page-title">Catálogo - <span class="fw-semi-bold">Produtos</span></h2>
     <b-row>
       <b-col>
-        <Widget
-          title="<h5>Table <span class='fw-semi-bold'>Styles</span></h5>"
-          customHeader settings close
-        >
-          <div class="table-resposive">
+        <!-- <Widget title="<h5>Table <span class='fw-semi-bold'>Styles</span></h5>" customHeader settings close> -->
+        <Widget>
+          <div class="table-resposive table-hover">
             <table class="table">
               <thead>
                 <tr>
@@ -83,7 +81,7 @@
       </b-col>
     </b-row>
     <b-row>
-     <b-col lg="6">
+     <!-- <b-col lg="6">
        <Widget
          title="<h5>Table <span class='fw-semi-bold'>Styles</span></h5>"
          customHeader settings close
@@ -425,7 +423,7 @@
             </table>
           </div>
         </Widget>
-      </b-col>
+      </b-col> -->
    </b-row>
   </div>
 </template>
@@ -437,7 +435,7 @@ import Widget from '@/components/Widget/Widget';
 import 'imports-loader?jQuery=jquery,this=>window!jquery-sparkline'; // eslint-disable-line
 
 export default {
-  name: 'Tables',
+  name: 'Catalogo',
   components: { Widget },
   data() {
     return {
@@ -508,6 +506,85 @@ export default {
         },
         {
           id: 5,
+          picture: require('../../assets/tables/5.jpg'), // eslint-disable-line global-require
+          description: 'Fortress',
+          info: {
+            type: 'JPEG',
+            dimensions: '1452x1320',
+          },
+          date: new Date('October 1, 2012'),
+          size: '2.3 MB',
+          progress: {
+            percent: 41,
+            colorClass: 'primary',
+          },
+        },
+        {
+          id: 6,
+          picture: require('../../assets/tables/1.jpg'), // eslint-disable-line global-require
+          description: 'Palo Alto',
+          info: {
+            type: 'JPEG',
+            dimensions: '200x150',
+          },
+          date: new Date('September 14, 2012'),
+          size: '45.6 KB',
+          progress: {
+            percent: 29,
+            colorClass: 'success',
+          },
+        },
+        {
+          id: 7,
+          picture: require('../../assets/tables/2.jpg'), // eslint-disable-line global-require
+          description: 'The Sky',
+          info: {
+            type: 'PSD',
+            dimensions: '2400x1455',
+          },
+          date: new Date('November 14, 2012'),
+          size: '15.3 MB',
+          progress: {
+            percent: 33,
+            colorClass: 'warning',
+          },
+        },
+        {
+          id: 8,
+          picture: require('../../assets/tables/3.jpg'), // eslint-disable-line global-require
+          description: 'Down the road',
+          label: {
+            colorClass: 'danger',
+            text: 'INFO!',
+          },
+          info: {
+            type: 'JPEG',
+            dimensions: '200x150',
+          },
+          date: new Date('September 14, 2012'),
+          size: '49.0 KB',
+          progress: {
+            percent: 38,
+            colorClass: 'inverse',
+          },
+        },
+        {
+          id: 9,
+          picture: require('../../assets/tables/4.jpg'), // eslint-disable-line global-require
+          description: 'The Edge',
+          info: {
+            type: 'PNG',
+            dimensions: '210x160',
+          },
+          date: new Date('September 15, 2012'),
+          size: '69.1 KB',
+          progress: {
+            percent: 17,
+            colorClass: 'danger',
+          },
+        },
+        {
+          id: 10,
           picture: require('../../assets/tables/5.jpg'), // eslint-disable-line global-require
           description: 'Fortress',
           info: {

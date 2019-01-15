@@ -76,7 +76,7 @@ export default {
     fullIconName() {
       return `fi ${this.iconName}`;
     },
-    isActive() {  
+    isActive() {
       return (this.activeItem
       && this.activeItem.includes(this.index)
       && this.headerLinkWasClicked);

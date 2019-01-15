@@ -1,7 +1,7 @@
 <template>
   <div class="login-page">
     <b-container>
-      
+
       <h5 class="logo">
         <img :src="icon.picture" alt="Construe" class="icon-title">
       </h5>
@@ -77,7 +77,7 @@ export default {
         if(this.input.username == this.$parent.mockAccount.username && this.input.password == this.$parent.mockAccount.password) {
           this.$emit("authenticated", true);
           window.localStorage.setItem('authenticated', true);
-          this.$router.push('/dashboard');
+          this.$router.push('/');
         } else {
           alert('Nome de usuário ou senha inválidos')
         }

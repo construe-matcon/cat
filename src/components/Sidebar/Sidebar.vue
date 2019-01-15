@@ -5,10 +5,11 @@
     @mouseleave="sidebarMouseLeave"
   >
     <header class="logo">
-      <router-link to="/dashboard"><span class="text-warning">Cat-</span>Dev</router-link>
+      <!-- <router-link to="/catalogo"><span class="text-warning">Cat-</span>Dev</router-link> -->
+      <router-link to="/"><img :src="icon.picture" width="50%" alt="Construe" class="icon-title"></router-link>
     </header>
     <ul class="nav">
-      <NavLink
+      <!-- <NavLink
         header="Dashboard"
         link="/dashboard"
         iconName="flaticon-home"
@@ -28,8 +29,15 @@
         iconName="flaticon-equal-1"
         index="tables"
         isHeader
-      />
+      /> -->
       <NavLink
+        header="Catálogo"
+        link="/"
+        iconName="flaticon-equal-1"
+        index="catalogo"
+        isHeader
+      />
+      <!-- <NavLink
         header="Notifications"
         link="/notifications"
         iconName="flaticon-star"
@@ -47,9 +55,9 @@
           { header: 'Icons', link: '/components/icons' },
           { header: 'Maps', link: '/components/maps' },
         ]"
-      />
+      /> -->
     </ul>
-    <p>
+    <!-- <p>
     <h5 class="navTitle">
       LABELS
       <a class="actionLink">
@@ -91,7 +99,7 @@
           :variant="alert.color" :value="alert.value" :max="100" />
         <small>{{alert.footer}}</small>
       </b-alert>
-    </div>
+    </div> -->
   </nav>
 </template>
 
@@ -121,6 +129,9 @@ export default {
           color: 'danger',
         },
       ],
+      icon: {
+        picture: require('../../assets/img/construe.png'), // eslint-disable-line global-require
+      },
     };
   },
   methods: {

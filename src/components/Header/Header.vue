@@ -1,6 +1,6 @@
 <template>
   <b-navbar class="header d-print-none">
-    <b-nav>
+    <!-- <b-nav>
       <b-nav-item>
         <a class="d-md-down-none px-2" href="#" @click="toggleSidebarMethod" id="barsTooltip">
           <i class='la la-bars la-lg' />
@@ -25,7 +25,7 @@
           <i class="la la-times la-lg" />
         </a>
       </b-nav-item>
-    </b-nav>
+    </b-nav> -->
     <b-nav>
       <b-form class="d-sm-down-none ml-5" inline>
         <b-form-group>
@@ -33,7 +33,7 @@
             <div class="input-group-addon d-flex align-items-center">
               <i class="la la-search px-3" />
             </div>
-            <b-input id="search-input" placeholder="Search Dashboard" />
+            <b-input id="search-input" placeholder="Buscar" />
           </b-input-group>
         </b-form-group>
       </b-form>
@@ -48,7 +48,7 @@
       <i class="fa fa-circle text-gray" />
     </a>
     <b-nav class="ml-auto">
-      <b-nav-item-dropdown
+      <!-- <b-nav-item-dropdown
         id="basic-nav-dropdown"
         class="notificationsMenu d-sm-down-none mr-2"
         extra-menu-classes="notificationsWrapper py-0 animated animated-fast fadeInUp"
@@ -57,27 +57,36 @@
           <span class="avatar thumb-sm float-left mr-2">
             <img class="rounded-circle" src="../../assets/people/a5.jpg" alt="..." />
           </span>
-          <span class="small">Philip <span class="fw-semi-bold">Smith</span></span>
+          <span class="small">User <span class="fw-semi-bold">Logado</span></span>
           <span class="ml-1 circle bg-warning text-white fw-bold">13</span>
         </template>
         <Notifications />
-      </b-nav-item-dropdown>
-      <b-nav-item-dropdown class="settingsDropdown d-sm-down-none" no-caret right>
-        <template slot="button-content">
+      </b-nav-item-dropdown> -->
+      <b-nav-item-dropdown class="notificationsMenu d-sm-down-none mr-2"
+        extra-menu-classes="notificationsWrapper py-0"
+        right>
+        <!-- <template slot="button-content">
           <i class="la la-cog px-2" />
+        </template> -->
+        <template slot="button-content">
+          <span class="avatar thumb-sm float-left mr-2">
+            <img class="rounded-circle" src="../../assets/people/a5.jpg" alt="..." />
+          </span>
+          <span class="small">User <span class="fw-semi-bold">Logado</span></span>
+          <!-- <span class="ml-1 circle bg-warning text-white fw-bold">13</span> -->
         </template>
-        <b-dropdown-item><i class="la la-user" /> My Account</b-dropdown-item>
+        <b-dropdown-item><i class="la la-user" /> Minha Conta</b-dropdown-item>
         <b-dropdown-divider />
-        <b-dropdown-item>Calendar</b-dropdown-item>
+        <!-- <b-dropdown-item>Calendar</b-dropdown-item>
         <b-dropdown-item>
           Inbox &nbsp;&nbsp;<b-badge variant="danger" pill class="animated bounceIn">9</b-badge>
         </b-dropdown-item>
-        <b-dropdown-divider />
+        <b-dropdown-divider /> -->
         <b-dropdown-item-button @click="logout">
-          <i class="la la-sign-out" /> Log Out
+          <i class="la la-sign-out" /> Sair
         </b-dropdown-item-button>
       </b-nav-item-dropdown>
-      <b-nav-item>
+      <!-- <b-nav-item>
         <a class="d-sm-down-none px-2" id="toggle-chat" href="#" @click="toggleChat">
           <i class="la la-globe" />
         </a>
@@ -101,7 +110,7 @@
         <a href="#" @click="toggleChat">
           <span class="rounded rounded-lg bg-gray text-white"><i class="la la-globe" /></span>
         </a>
-      </b-nav-item>
+      </b-nav-item> -->
     </b-nav>
   </b-navbar>
 </template>

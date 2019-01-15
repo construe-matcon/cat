@@ -23,6 +23,9 @@ import ChartsPage from '@/pages/Charts/Charts';
 import IconsPage from '@/pages/Icons/Icons';
 import NotificationsPage from '@/pages/Notifications/Notifications';
 
+// Catalogo
+import CatalogoPage from '@/pages/Catalogo/Basic';
+
 
 Vue.use(Router);
 
@@ -52,8 +55,8 @@ let router = new Router({
       children: [
         {
           path: '',
-          name: 'AnalyticsPage',
-          component: AnalyticsPage,
+          name: 'CatalogoPage',
+          component: CatalogoPage,
         },
         {
           path: 'dashboard',
@@ -96,6 +99,8 @@ let router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+
+  // document.title = 'Catálogos Matcon - Construe'
 
   if (to.name == 'Error' && to.path !== '/error') {
     next('/error');
