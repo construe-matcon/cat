@@ -1,6 +1,6 @@
 <template>
 <!-- <div :class="{root: true, chatOpen, sidebarClose, sidebarStatic}"> -->
-<div :class="{root: true, sidebarStatic}">
+<div :class="{root: true, sidebarStatic, sidebarClose}">
   <Sidebar />
   <div class="wrap">
     <Header />
@@ -27,29 +27,43 @@ import './Layout.scss';
 export default {
   name: 'Layout',
   components: { Sidebar, Header},
+  data() {
+    return {
+      sidebarClose: false,
+      sidebarStatic: true,
+      windowWidth: window.screen.width,
+    }
+  },
   methods: {
     ...mapActions(
       'layout', ['switchSidebar', 'handleSwipe', 'changeSidebarActive'],
     ),
+    handleWindowResize() {
+      this.windowWidth = window.screen.width;
+      if(this.windowWidth <= 767) {
+        this.sidebarClose = true;
+        this.sidebarStatic = false;
+      } else {
+        this.sidebarClose = false;
+        this.sidebarStatic = true;
+      }
+    },
   },
   computed: {
     ...mapState('layout', {
-      sidebarClose: state => state.sidebarClose,
-      sidebarStatic: state => state.sidebarStatic,
       chatOpen: state => state.chatOpen,
     }),
   },
   created() {
-    const staticSidebar = JSON.parse(localStorage.getItem('sidebarStatic'));
+    //
+  },
 
-    if (staticSidebar) {
-      this.$store.state.layout.sidebarStatic = true;
-    } else if (!this.sidebarClose) {
-      setTimeout(() => {
-        this.switchSidebar(true);
-        this.changeSidebarActive(null);
-      }, 2500);
-    }
+  beforeDestroy: function () {
+    window.removeEventListener('resize', this. handleWindowResize)
+  },
+  mounted() {
+    window.addEventListener('resize', this.handleWindowResize);
+    this.handleWindowResize(window);
   },
 };
 </script>

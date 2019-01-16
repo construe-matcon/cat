@@ -1,6 +1,6 @@
 <template>
   <b-navbar class="header d-print-none">
-    <!-- <b-nav>
+    <b-nav>
       <b-nav-item>
         <a class="d-md-down-none px-2" href="#" @click="toggleSidebarMethod" id="barsTooltip">
           <i class='la la-bars la-lg' />
@@ -25,7 +25,7 @@
           <i class="la la-times la-lg" />
         </a>
       </b-nav-item>
-    </b-nav> -->
+    </b-nav>
     <b-nav>
       <b-form class="d-sm-down-none ml-5" inline>
         <b-form-group>
@@ -39,13 +39,7 @@
       </b-form>
     </b-nav>
     <a  class="navbarBrand d-md-none">
-      <i class="fa fa-circle text-gray mr-n-sm" />
-      <i class="fa fa-circle text-warning" />
-      &nbsp;
-      sing
-      &nbsp;
-      <i class="fa fa-circle text-warning mr-n-sm" />
-      <i class="fa fa-circle text-gray" />
+      <img :src="icon.picture" width="50%" alt="Construe" class="icon-title">
     </a>
     <b-nav class="ml-auto">
       <!-- <b-nav-item-dropdown
@@ -123,6 +117,13 @@ import Notifications from '@/components/Notifications/Notifications';
 export default {
   name: 'Headed',
   components: { Notifications },
+  data() {
+    return {
+      icon: {
+        picture: require('../../assets/img/construe.png'), // eslint-disable-line global-require
+      },
+    }
+  },
   computed: {
     ...mapState('layout', {
       sidebarClose: state => state.sidebarClose,
