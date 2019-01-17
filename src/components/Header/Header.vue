@@ -66,7 +66,8 @@
           <span class="avatar thumb-sm float-left mr-2">
             <img class="rounded-circle" src="../../assets/people/a5.jpg" alt="..." />
           </span>
-          <span class="small">User <span class="fw-semi-bold">Logado</span></span>
+          <span class="small" v-text="account.firstname"></span>
+          <span class="fw-semi-bold" v-text="account.lastname"></span>
           <!-- <span class="ml-1 circle bg-warning text-white fw-bold">13</span> -->
         </template>
         <b-dropdown-item><i class="la la-user" /> Minha Conta</b-dropdown-item>
@@ -119,6 +120,11 @@ export default {
   components: { Notifications },
   data() {
     return {
+      account: {
+        firstname: this.$parent.$parent.account.name,
+        lastname: this.$parent.$parent.account.lastname,
+        pic: ""
+      },
       icon: {
         picture: require('../../assets/img/construe.png'), // eslint-disable-line global-require
       },
@@ -179,6 +185,9 @@ export default {
       }, 4000);
     }
   },
+  mounted(){
+    // console.log(this.$parent.$parent.account.name);
+  }
 };
 </script>
 

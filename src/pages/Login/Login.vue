@@ -1,108 +1,93 @@
 <template>
-  <div class="login-page">
-    <b-container>
-
-      <h5 class="logo">
-        <img :src="icon.picture" alt="Construe" class="icon-title">
-      </h5>
-      <Widget class="mx-auto" title="<h3 class='mt-0'>Faça login para continuar</h3>" customHeader>
-        <!-- <p class="text-muted mb-0 mt fs-sm">
-          Use Facebook, Twitter or your email to sign in.
-        </p>
-        <p class="text-muted fs-sm">
-          Don't have an account? Sign up now!
-        </p> -->
-        <form class="mt" @submit.prevent="login">
-          <b-alert class="alert-sm" variant="danger" :show="!!errorMessage">
-            {{errorMessage}}
-          </b-alert>
-          <div class="form-group">
-            <input class="form-control no-border" v-model="input.username" ref="username"
-              required type="text" name="username" placeholder="Usuário" />
-          </div>
-          <div class="form-group">
-            <input class="form-control no-border" v-model="input.password" ref="password"
-            required type="password" name="password" placeholder="Senha" />
-          </div>
-          <div class="clearfix">
-            <div class="btn-toolbar float-right">
-              <!-- <b-button type="reset" size="sm" variant="default">Create an Account</b-button> -->
-              <b-button type="submit" size="sm" variant="inverse">Entrar</b-button>
-            </div>
-          </div>
-          <!-- <div class="row no-gutters mt-3">
-            <div class="col">
-              <div class="abc-checkbox">
-                <input
-                  type="checkbox"
-                  id="checkbox"
-                />
-                <label for="checkbox" class="text-muted fs-sm">Mantenha Conectado</label>
-              </div>
-            </div>
-            <div class="col">
-              <a class="mt-sm" href="">Trouble with account?</a>
-            </div>
-          </div> -->
-        </form>
-      </Widget>
-    </b-container>
-    <footer class="footer">
-      2019 - MatCon Construe
-    </footer>
-  </div>
+	<div class="login-page">
+		<b-container>
+			<h5 class="logo">
+				<img :src="icon.picture" alt="Construe" class="icon-title">
+			</h5>
+			<Widget class="mx-auto" title="<h3 class='mt-0'>Faça login para continuar</h3>" customHeader>
+      <form class="mt" @submit.prevent="login">
+      	<b-alert class="alert-sm" variant="danger" :show="!!errorMessage">
+      		{{errorMessage}}
+      	</b-alert>
+      	<div class="form-group">
+      		<input class="form-control no-border" v-model="input.username" ref="username"
+      		required type="text" name="username" placeholder="Usuário" />
+      	</div>
+      	<div class="form-group">
+      		<input class="form-control no-border" v-model="input.password" ref="password"
+      		required type="password" name="password" placeholder="Senha" />
+      	</div>
+      	<div class="clearfix">
+      		<div class="btn-toolbar float-right">
+      			<b-button type="submit" size="sm" variant="inverse">Entrar</b-button>
+      		</div>
+      	</div>
+    </form>
+</Widget>
+</b-container>
+<footer class="footer">
+	2019 - MatCon Construe
+</footer>
+</div>
 </template>
 
 <script>
-import Widget from '@/components/Widget/Widget';
+	var url = "https://api.mlab.com/api/1/databases/construe-cf/collections/login?apiKey=LLKamk80CzsWhh1DYeLENAKd0-vPMjN_"
+	import Widget from '@/components/Widget/Widget';
 
-export default {
-  name: 'login',
-  components: { Widget },
-  data() {
-    return {
-      input: {
-        username: "",
-        password: ""
-      },
-      icon: {
-        picture: require('../../assets/img/construe.png'), // eslint-disable-line global-require
-      },
-      errorMessage: null,
-    };
-  },
-  methods: {
-    login(){
-      if(this.input.username != "" && this.input.password != ""){
-        if(this.input.username == this.$parent.mockAccount.username && this.input.password == this.$parent.mockAccount.password) {
-          this.$emit("authenticated", true);
-          window.localStorage.setItem('authenticated', true);
-          this.$router.push('/');
-        } else {
-          alert('Nome de usuário ou senha inválidos')
-        }
-      } else {
-        alert('É obrigatório preencher usuário e senha')
-      }
-    }
-    // login() {
-    //   const username = this.$refs.username.value;
-    //   const password = this.$refs.password.value;
+	export default {
+		name: 'login',
+		components: { Widget },
+		data() {
+			return {
+				input: {
+					username: "",
+					password: ""
+				},
+				user: '',
+				icon: {
+			        picture: require('../../assets/img/construe.png'), // eslint-disable-line global-require
+			    },
+    			errorMessage: null,
+			};
+		},
+		methods: {
+			login(){
+				if(this.input.username != "" && this.input.password != ""){
+					var that = this
+					,	inputName = this.input.username
+					,	inputPass = this.input.password;
 
-    //   if (username.length !== 0 && password.length !== 0) {
-    //     window.localStorage.setItem('authenticated', true);
-    //     this.$router.push('/dashboard');
-    //   }
-    // },
-  },
-  // created() {
-  //   if (window.localStorage.getItem('authenticated') === 'true') {
-  //     this.$router.push('/dashboard');
-  //   }
-  // },
-};
+					fetch(url).then(function(response){
+						response.json().then(function(data){
+							that.user = data
+							if(!!that.user.find(us => inputName == us.user && inputPass == us.pass)) {
+								var loggedUser = that.user.find(us => inputName == us.user && inputPass == us.pass)
+								that.$parent.account = {
+									name: loggedUser.name,
+									lastname: loggedUser.lastname,
+									user: loggedUser.user,
+									id: loggedUser._id
+								}
+
+								that.$emit("authenticated", true);
+								window.localStorage.setItem('authenticated', true);
+								that.$router.push('/');
+							} else {
+								alert('Nome de usuário ou senha inválidos')
+							}
+						});
+					}).catch(function(err){
+						console.error('Erro ao validar:', err);
+					});
+				} else {
+					alert('É obrigatório preencher usuário e senha')
+				}
+			}
+		},
+	};
 </script>
 
 <style lang="scss" scoped>
-  @import './Login.scss';
+@import './Login.scss';
 </style>

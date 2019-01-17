@@ -7,10 +7,7 @@ export default {
   data(){
     return {
       authenticated: false,
-      mockAccount: {
-        username: "admin",
-        password: "admin"
-      }
+      account: {}
     }
   },
   mounted() {

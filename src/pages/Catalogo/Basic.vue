@@ -9,11 +9,11 @@
               <thead>
                 <tr>
                   <th class="hidden-sm-down">#</th>
-                  <th>Picture</th>
-                  <th>Description</th>
+                  <th>Imagem</th>
+                  <th>Nome</th>
                   <th class="hidden-sm-down">Info</th>
-                  <th class="hidden-sm-down">Date</th>
-                  <th class="hidden-sm-down">Size</th>
+                  <th class="hidden-sm-down">Data</th>
+                  <th class="hidden-sm-down">Peso</th>
                   <th class="hidden-sm-down">Status</th>
                 </tr>
               </thead>
@@ -21,7 +21,7 @@
                 <tr v-for="row in tableStyles" :key="row.id">
                   <td>{{row.id}}</td>
                   <td>
-                    <img class="img-rounded" :src="row.picture" alt="" height="50" />
+                    <img class="img-rounded" :src="row.picture" :alt="row.description" width="100" />
                   </td>
                   <td>
                     {{row.description}}
@@ -32,13 +32,13 @@
                   <td>
                     <p class="mb-0">
                       <small>
-                        <span class="fw-semi-bold">Type:</span>
+                        <span class="fw-semi-bold">Tipo:</span>
                         <span class="text-muted">&nbsp; {{row.info.type}}</span>
                       </small>
                     </p>
                     <p>
                       <small>
-                        <span class="fw-semi-bold">Dimensions:</span>
+                        <span class="fw-semi-bold">Dimensão:</span>
                         <span class="text-muted">&nbsp; {{row.info.dimensions}}</span>
                       </small>
                     </p>
@@ -59,7 +59,7 @@
               </tbody>
             </table>
           </div>
-          <div class="clearfix">
+          <!-- <div class="clearfix">
             <div class="float-right">
               <b-button variant="default" class="mr-xs" size="sm">Send to...</b-button>
               <b-dropdown variant="inverse" class="mr-xs" size="sm" text="Clear" right>
@@ -71,7 +71,7 @@
               </b-dropdown>
             </div>
             <p>Basic table with styled content</p>
-          </div>
+          </div> -->
         </Widget>
       </b-col>
     </b-row>
@@ -89,175 +89,13 @@ export default {
   components: { Widget },
   data() {
     return {
-      tableStyles: [
-        {
-          id: 1,
-          picture: require('../../assets/tables/1.jpg'), // eslint-disable-line global-require
-          description: 'Palo Alto',
-          info: {
-            type: 'JPEG',
-            dimensions: '200x150',
-          },
-          date: new Date('September 14, 2012'),
-          size: '45.6 KB',
-          progress: {
-            percent: 29,
-            colorClass: 'success',
-          },
-        },
-        {
-          id: 2,
-          picture: require('../../assets/tables/2.jpg'), // eslint-disable-line global-require
-          description: 'The Sky',
-          info: {
-            type: 'PSD',
-            dimensions: '2400x1455',
-          },
-          date: new Date('November 14, 2012'),
-          size: '15.3 MB',
-          progress: {
-            percent: 33,
-            colorClass: 'warning',
-          },
-        },
-        {
-          id: 3,
-          picture: require('../../assets/tables/3.jpg'), // eslint-disable-line global-require
-          description: 'Down the road',
-          label: {
-            colorClass: 'danger',
-            text: 'INFO!',
-          },
-          info: {
-            type: 'JPEG',
-            dimensions: '200x150',
-          },
-          date: new Date('September 14, 2012'),
-          size: '49.0 KB',
-          progress: {
-            percent: 38,
-            colorClass: 'inverse',
-          },
-        },
-        {
-          id: 4,
-          picture: require('../../assets/tables/4.jpg'), // eslint-disable-line global-require
-          description: 'The Edge',
-          info: {
-            type: 'PNG',
-            dimensions: '210x160',
-          },
-          date: new Date('September 15, 2012'),
-          size: '69.1 KB',
-          progress: {
-            percent: 17,
-            colorClass: 'danger',
-          },
-        },
-        {
-          id: 5,
-          picture: require('../../assets/tables/5.jpg'), // eslint-disable-line global-require
-          description: 'Fortress',
-          info: {
-            type: 'JPEG',
-            dimensions: '1452x1320',
-          },
-          date: new Date('October 1, 2012'),
-          size: '2.3 MB',
-          progress: {
-            percent: 41,
-            colorClass: 'primary',
-          },
-        },
-        {
-          id: 6,
-          picture: require('../../assets/tables/1.jpg'), // eslint-disable-line global-require
-          description: 'Palo Alto',
-          info: {
-            type: 'JPEG',
-            dimensions: '200x150',
-          },
-          date: new Date('September 14, 2012'),
-          size: '45.6 KB',
-          progress: {
-            percent: 29,
-            colorClass: 'success',
-          },
-        },
-        {
-          id: 7,
-          picture: require('../../assets/tables/2.jpg'), // eslint-disable-line global-require
-          description: 'The Sky',
-          info: {
-            type: 'PSD',
-            dimensions: '2400x1455',
-          },
-          date: new Date('November 14, 2012'),
-          size: '15.3 MB',
-          progress: {
-            percent: 33,
-            colorClass: 'warning',
-          },
-        },
-        {
-          id: 8,
-          picture: require('../../assets/tables/3.jpg'), // eslint-disable-line global-require
-          description: 'Down the road',
-          label: {
-            colorClass: 'danger',
-            text: 'INFO!',
-          },
-          info: {
-            type: 'JPEG',
-            dimensions: '200x150',
-          },
-          date: new Date('September 14, 2012'),
-          size: '49.0 KB',
-          progress: {
-            percent: 38,
-            colorClass: 'inverse',
-          },
-        },
-        {
-          id: 9,
-          picture: require('../../assets/tables/4.jpg'), // eslint-disable-line global-require
-          description: 'The Edge',
-          info: {
-            type: 'PNG',
-            dimensions: '210x160',
-          },
-          date: new Date('September 15, 2012'),
-          size: '69.1 KB',
-          progress: {
-            percent: 17,
-            colorClass: 'danger',
-          },
-        },
-        {
-          id: 10,
-          picture: require('../../assets/tables/5.jpg'), // eslint-disable-line global-require
-          description: 'Fortress',
-          info: {
-            type: 'JPEG',
-            dimensions: '1452x1320',
-          },
-          date: new Date('October 1, 2012'),
-          size: '2.3 MB',
-          progress: {
-            percent: 41,
-            colorClass: 'primary',
-          },
-        },
-      ],
-      checkboxes1: [false, false, false, false],
-      checkboxes2: [false, false, false, false, false, false],
-      checkboxes3: [false, false, false, false, false, false],
+      tableStyles: [],
     };
   },
   methods: {
     parseDate(date) {
       const dateSet = date.toDateString().split(' ');
-      return `${date.toLocaleString('en-us', { month: 'long' })} ${dateSet[2]}, ${dateSet[3]}`;
+      return `${date.toLocaleString('en-us', { month: 'short' })} ${dateSet[2]}, ${dateSet[3]}`;
     },
     checkAll(ev, checkbox) {
       const checkboxArr = (new Array(this[checkbox].length)).fill(ev.target.checked);
@@ -276,6 +114,7 @@ export default {
         result.push(Math.floor(Math.random() * 20) + 1);
       }
 
+
       return result;
     },
     initCharts() {
@@ -288,11 +127,49 @@ export default {
         });
       });
     },
+    fetchUrl(){
+    	var that = this
+			, 	url 	 = "https://images.construe.cf/listaImagens"
+
+			console.log(that.tableStyles)
+
+		  fetch(url).then(function(response){
+				response.json().then(function(data){
+					var ran = data.sort(() => .5 - Math.random()).slice(0,20)
+					for(var i = 0, lgt = ran.length; i < lgt; i++) {
+						that.tableStyles[i] = {
+							id: ran[i].replace(/\D/g, '').slice(-5),
+		          picture: 'https://images.construe.cf/hidrobuk/'+ran[i],
+		          description: ran[i].split('.').slice(0, -1).join('.'),
+		          info: {
+		          	type: ran[i].split('.').pop(),
+            		dimensions: '200x150',
+		          },
+		          date: new Date('September 14, 2012'),
+		          size: '45.6 KB',
+		          progress: {
+		            percent: 29,
+		            colorClass: 'success',
+		          },
+						}
+					}
+					console.log(that.tableStyles)
+				});
+			}).catch(function(err){
+				console.error('Erro na chamada', err);
+			});
+	  }
   },
   mounted() {
     this.initCharts();
+  	this.fetchUrl();
   },
 };
 </script>
 
 <style src="./Basic.scss" lang="scss" scoped />
+
+
+
+
+
