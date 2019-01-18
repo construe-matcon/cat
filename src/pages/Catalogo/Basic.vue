@@ -144,7 +144,7 @@
 				}).catch(function(err){
 					console.error('Erro na chamada', err);
 				});
-			}
+			},
 		},
 		mounted() {
 			this.initCharts();

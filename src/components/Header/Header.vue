@@ -119,10 +119,11 @@ export default {
   name: 'Headed',
   components: { Notifications },
   data() {
+    var dados = JSON.parse(window.localStorage.getItem("account"))
     return {
       account: {
-        firstname: this.$parent.$parent.account.name,
-        lastname: this.$parent.$parent.account.lastname,
+        firstname: dados.name,
+        lastname: dados.lastname,
         pic: ""
       },
       icon: {
@@ -161,7 +162,7 @@ export default {
       }
     },
     logout() {
-      window.localStorage.setItem('authenticated', false);
+      window.localStorage.clear();
       this.$router.push('/login');
     },
   },
@@ -186,7 +187,6 @@ export default {
     }
   },
   mounted(){
-    // console.log(this.$parent.$parent.account.name);
   }
 };
 </script>

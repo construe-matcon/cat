@@ -61,18 +61,24 @@
 					fetch(url).then(function(response){
 						response.json().then(function(data){
 							that.user = data;
-							
+
 							if(!that.user.find(us => inputName == us.user && inputPass == us.pass) == false) {
 								var loggedUser = that.user.find(us => inputName == us.user && inputPass == us.pass)
-								that.$parent.account = {
+								// that.$parent.account = {
+								// 	name: loggedUser.name,
+								// 	lastname: loggedUser.lastname,
+								// 	user: loggedUser.user,
+								// 	id: loggedUser._id
+								// }
+
+								that.$emit("authenticated", true);
+								window.localStorage.setItem('authenticated', true);
+								window.localStorage.setItem('account', JSON.stringify({
 									name: loggedUser.name,
 									lastname: loggedUser.lastname,
 									user: loggedUser.user,
 									id: loggedUser._id
-								}
-
-								that.$emit("authenticated", true);
-								window.localStorage.setItem('authenticated', true);
+								}));
 								that.$router.push('/');
 							} else {
 								alert('Nome de usuário ou senha inválidos')

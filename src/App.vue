@@ -6,7 +6,7 @@ export default {
   name: 'App',
   data(){
     return {
-      authenticated: false,
+      authenticated: JSON.parse(window.localStorage.getItem("authenticated")),
       account: {}
     }
   },
