@@ -8,52 +8,58 @@
 						<table class="table">
 							<thead>
 								<tr>
-									<th class="hidden-sm-down">#</th>
+									<th class="hidden-sm-down">ID</th>
+									<th class="hidden-sm-down">Códigos</th>
 									<th>Imagem</th>
 									<th>Nome</th>
-									<th class="hidden-sm-down">Info</th>
-									<th class="hidden-sm-down">Data</th>
-									<th class="hidden-sm-down">Peso</th>
-									<th class="hidden-sm-down">Status</th>
+									<th class="hidden-sm-down">Linha</th>
+									<th class="hidden-sm-down">Marca</th>
+									<th class="hidden-sm-down">Categoria</th>
+									<th class="hidden-sm-down">Tags</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr v-for="row in tableStyles" :key="row.id">
+								<tr v-for="row in tableStyles" :key="row.id" @click="ir(row.id)">
 									<td>{{row.id}}</td>
-									<td>
-										<img class="img-rounded" :src="row.picture" :alt="row.description" width="100" />
-									</td>
-									<td>
-										{{row.description}}
-										<div v-if="row.label">
-											<b-badge :variant="row.label.colorClass">{{row.label.text}}</b-badge>
-										</div>
-									</td>
 									<td>
 										<p class="mb-0">
 											<small>
-												<span class="fw-semi-bold">Tipo:</span>
-												<span class="text-muted">&nbsp; {{row.info.type}}</span>
+												<span class="fw-semi-bold">EAN:</span>
+												<span class="text-muted">&nbsp; {{row.ean}}</span>
 											</small>
 										</p>
 										<p>
 											<small>
-												<span class="fw-semi-bold">Dimensão:</span>
-												<span class="text-muted">&nbsp; {{row.info.dimensions}}</span>
+												<span class="fw-semi-bold">NCM:</span>
+												<span class="text-muted">&nbsp; {{row.ncm}}</span>
 											</small>
 										</p>
 									</td>
-									<td class="text-semi-muted">
-										{{parseDate(row.date)}}
+									<td>
+										<img class="img-rounded imgCat" :src="'https://images.construe.cf/hidrobuk/'+row.ean+'.jpg'" alt="" />
+									</td>
+									<td>
+										{{row.descricao}}
+										<div v-if="row.label">
+											<b-badge :variant="row.label.colorClass">{{row.label.text}}</b-badge>
+										</div>
 									</td>
 									<td class="text-semi-muted">
-										{{row.size}}
+										{{row.linha}}
+									</td>
+									<td class="text-semi-muted">
+										{{row.marca}}
+									</td>
+									<td class="text-semi-muted">
+										{{row.categoria}}
 									</td>
 									<td class="width-150">
-										<b-progress
-										:variant="row.progress.colorClass" :value="row.progress.percent" :max="100"
-										class="progress-sm mb-xs"
-										/>
+										<template v-if="row.tags.length > 0">
+											<span v-for="tags in row.tags" :key="tags">
+												{{tags}}
+												<br>
+											</span>
+										</template>
 									</td>
 								</tr>
 							</tbody>
@@ -116,35 +122,49 @@
 			},
 			fetchUrl(){
 				var that = this
-				, 	url 	 = "https://images.construe.cf/listaImagens"
+				, 	url 	 = "https://api.construe.cf/produtos/industria/11"
 
 				fetch(url).then(function(response){
 					response.json().then(function(data){
-						var ran = data.sort(() => .5 - Math.random()).slice(0,20);
-						that.tableStyles = [];
-						for(var i = 0, lgt = ran.length; i < lgt; i++) {
-							that.tableStyles[i] = {
-								id: ran[i].replace(/\D/g, '').slice(-5),
-								picture: 'https://images.construe.cf/hidrobuk/'+ran[i],
-								description: ran[i].split('.').slice(0, -1).join('.'),
-								info: {
-									type: ran[i].split('.').pop(),
-									dimensions: '200x150',
-								},
-								date: new Date('September 14, 2012'),
-								size: '45.6 KB',
-								progress: {
-									percent: 29,
-									colorClass: 'success',
-								},
-							}
-						}
+						var ran = data.data
+						that.tableStyles = ran;
 						console.log(that.tableStyles)
+						for(var i = 0, lgt = ran.length; i < lgt; i++) {
+							// console.log(ran[i])
+						}
+						// var ran = data.sort(() => .5 - Math.random()).slice(0,20);
+						// that.tableStyles = [];
+						// for(var i = 0, lgt = ran.length; i < lgt; i++) {
+						// 	that.tableStyles[i] = {
+						// 		id: ran[i].replace(/\D/g, '').slice(-5),
+						// 		picture: 'https://images.construe.cf/hidrobuk/'+ran[i],
+						// 		description: ran[i].split('.').slice(0, -1).join('.'),
+						// 		info: {
+						// 			type: ran[i].split('.').pop(),
+						// 			dimensions: '200x150',
+						// 		},
+						// 		date: new Date('September 14, 2012'),
+						// 		size: '45.6 KB',
+						// 		progress: {
+						// 			percent: 29,
+						// 			colorClass: 'success',
+						// 		},
+						// 	}
+						// }
+						// console.log(that.tableStyles)
 					});
 				}).catch(function(err){
 					console.error('Erro na chamada', err);
 				});
 			},
+			ir(id){
+				this.$router.push({
+					path: "/produto?id="+id,
+					params: {
+						row: id
+					}
+				});
+			}
 		},
 		mounted() {
 			this.initCharts();

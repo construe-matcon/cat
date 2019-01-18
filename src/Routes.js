@@ -25,6 +25,8 @@ import NotificationsPage from '@/pages/Notifications/Notifications';
 
 // Catalogo
 import CatalogoPage from '@/pages/Catalogo/Basic';
+// Produto
+import ProdutoPage from '@/pages/Produto/Produto';
 
 
 Vue.use(Router);
@@ -57,6 +59,11 @@ let router = new Router({
           path: '',
           name: 'CatalogoPage',
           component: CatalogoPage,
+        },
+        {
+          path: 'produto',
+          name: 'ProdutoPage',
+          component: ProdutoPage,
         },
         {
           path: 'dashboard',

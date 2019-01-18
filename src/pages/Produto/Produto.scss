@@ -1,0 +1,22 @@
+@import '../../styles/app';
+
+.list {
+  margin-top: $spacer;
+}
+
+.list-item {
+  font-size: 14px;
+  line-height: 32px;
+
+  .imgCat {
+    width: 450px;
+    height: 450px;
+    background: url('https://images.construe.cf/404.png') center center no-repeat;
+    background-size: cover;
+    display: block;
+  }
+
+  .interno {
+    display: inline-block;
+  }
+}
