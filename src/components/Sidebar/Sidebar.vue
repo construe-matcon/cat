@@ -9,7 +9,7 @@
     </header>
     <ul class="nav">
       <NavLink
-        header="Catálogo"
+        nome="Catálogo"
         link="/"
         iconName="flaticon-equal-1"
         index="catalogo"
@@ -17,13 +17,11 @@
       />
       <NavLink
         :activeItem="activeItem"
-        header="Categorias"
-        link="/categorias"
+        nome="Categorias"
+        link="/Categorias"
         iconName="flaticon-list"
         index="catalogo"
-        :childrenLinks="[
-          { header: 'Sub-categoria', link: '/categorias/{{sub-categoria}}' },
-        ]"
+        :childrenLinks="navItens"
       />
     </ul>
   </nav>
@@ -43,6 +41,7 @@ export default {
       icon: {
         picture: require('../../assets/img/construe.png'), // eslint-disable-line global-require
       },
+      navItens: [],
     };
   },
   methods: {
@@ -64,9 +63,24 @@ export default {
         this.changeSidebarActive(null);
       }
     },
+    fetchUrl(){
+        var that = this
+        ,   url    = "https://api.construe.cf/categorias?pagina=0&tamanho_pagina=20"
+
+        fetch(url).then(function(response){
+          response.json().then(function(data){
+            var ran = data.data
+            that.navItens = ran;
+            // console.log(that.navItens)
+          });
+        }).catch(function(err){
+          console.error('Erro na chamada de categorias:', err);
+        });
+      },
   },
   created() {
     // this.setActiveByRoute();
+    this.fetchUrl();
   },
   computed: {
     ...mapState('layout', {

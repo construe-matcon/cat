@@ -127,10 +127,10 @@
 					response.json().then(function(data){
 						var ran = data.data
 						that.tableStyles = ran;
-						console.log(that.tableStyles)
-						for(var i = 0, lgt = ran.length; i < lgt; i++) {
-							// console.log(ran[i])
-						}
+						// console.log(that.tableStyles)
+						// for(var i = 0, lgt = ran.length; i < lgt; i++) {
+						// 	console.log(ran[i])
+						// }
 						// var ran = data.sort(() => .5 - Math.random()).slice(0,20);
 						// that.tableStyles = [];
 						// for(var i = 0, lgt = ran.length; i < lgt; i++) {

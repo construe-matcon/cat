@@ -4,17 +4,17 @@
       <span class="icon">
         <i :class="fullIconName"></i>
       </span>
-      {{header}} <sup v-if="label" class="headerLabel">{{label}}</sup>
+      {{nome}} <sup v-if="label" class="headerLabel">{{label}}</sup>
       <b-badge v-if="badge" class="badge rounded-f" variant="warning" pill>{{badge}}</b-badge>
     </router-link>
   </li>
   <li v-else-if="childrenLinks" :class="{headerLink: true, className}">
     <div @click="() => togglePanelCollapse(link)">
-      <router-link :to="link" event="" class="d-flex">
+      <router-link :to="link" class="d-flex">
         <span class="icon">
           <i :class="fullIconName"></i>
         </span>
-        {{header}} <sup v-if="label" class="headerLabel">{{label}}</sup>
+        {{nome}} <sup v-if="label" class="headerLabel">{{label}}</sup>
         <div :class="{caretWrapper: true, carretActive: isActive}">
           <!-- <i class="fa fa-angle-left" /> -->
         </div>
@@ -24,10 +24,10 @@
       <ul>
         <NavLink v-for="link in childrenLinks"
           :activeItem="activeItem"
-          :header="link.header"
+          :nome="link.nome"
           :index="link.index"
-          :link="link.link"
-          :childrenLinks="link.childrenLinks"
+          :link="link.id.toString()"
+          :childrenLinks="link.subcategorias"
           :key="link.link"
         />
       </ul>
@@ -35,7 +35,7 @@
   </li>
   <li v-else>
     <router-link :to="index !== 'menu' && link">
-      {{header}} <sup v-if="label" class="headerLabel">{{label}}</sup>
+      {{nome}} <sup v-if="label" class="headerLabel">{{label}}</sup>
     </router-link>
   </li>
 </template>
@@ -47,7 +47,7 @@ export default {
   name: 'NavLink',
   props: {
     badge: { type: String, dafault: '' },
-    header: { type: String, default: '' },
+    nome: { type: String, default: '' },
     iconName: { type: String, default: '' },
     headerLink: { type: String, default: '' },
     link: { type: String, default: '' },
@@ -62,6 +62,7 @@ export default {
   data() {
     return {
       headerLinkWasClicked: true,
+      navItens: [],
     };
   },
   methods: {
@@ -70,6 +71,20 @@ export default {
       this.changeSidebarActive(link);
       this.headerLinkWasClicked = !this.headerLinkWasClicked
       || !this.activeItem.includes(this.index);
+    },
+    fetchUrl(){
+      var that = this
+      ,   url    = "https://api.construe.cf/categorias?pagina=0&tamanho_pagina=20"
+
+      fetch(url).then(function(response){
+        response.json().then(function(data){
+          var ran = data.data
+          that.navItens = ran;
+          // console.log(that.navItens)
+        });
+      }).catch(function(err){
+        console.error('Erro na chamada de categorias:', err);
+      });
     },
   },
   computed: {
@@ -82,6 +97,9 @@ export default {
       && this.headerLinkWasClicked);
     },
   },
+  created(){
+    // this.fetchUrl()
+  }
 };
 </script>
 
