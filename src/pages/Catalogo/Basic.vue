@@ -55,7 +55,7 @@
 									</td>
 									<td class="width-150">
 										<template v-if="row.tags.length > 0">
-											<span v-for="tags in row.tags" :key="tags">
+											<span v-for="(tags, i) in row.tags" :key="i">
 												{{tags}}<br>
 											</span>
 										</template>

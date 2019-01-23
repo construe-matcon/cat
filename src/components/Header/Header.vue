@@ -120,10 +120,11 @@ export default {
   components: { Notifications },
   data() {
     var dados = JSON.parse(window.localStorage.getItem("account"))
+    console.log('dados', dados)
     return {
       account: {
-        firstname: dados.name,
-        lastname: dados.lastname,
+        firstname: (!dados) ? '' :  dados.name,
+        lastname: (!dados) ? '' :  dados.lastname,
         pic: ""
       },
       icon: {

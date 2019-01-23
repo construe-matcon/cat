@@ -115,6 +115,9 @@ router.beforeEach((to, from, next) => {
     next('/login');
   } else if(window.localStorage.getItem('authenticated') === 'true' && to.name === 'login') {
     next(from.path);
+  } else if(window.localStorage.getItem("account") == null && to.name !== 'login') {
+    window.localStorage.setItem('authenticated','false');
+    next('/login');
   } else {
     next();
   }
