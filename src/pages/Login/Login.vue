@@ -32,8 +32,9 @@
 </template>
 
 <script>
-	var url = "https://api.mlab.com/api/1/databases/construe-cf/collections/login?apiKey=LLKamk80CzsWhh1DYeLENAKd0-vPMjN_"
+	var url = "https://api.construe.cf/login"
 	import Widget from '@/components/Widget/Widget';
+	import jwt from 'jsonwebtoken';
 
 	export default {
 		name: 'login',
@@ -56,32 +57,44 @@
 				if(this.input.username != "" && this.input.password != ""){
 					var that = this
 					,	inputName = this.input.username
-					,	inputPass = this.input.password;
+					,	inputPass = this.input.password
+					,	jsonInputs = {
+						'email': inputName,
+						'senha': inputPass
+					};
 
-					fetch(url).then(function(response){
+					fetch(url, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify(jsonInputs)
+					}).then(function(response){
 						response.json().then(function(data){
 							that.user = data;
 
-							if(!that.user.find(us => inputName == us.user && inputPass == us.pass) == false) {
-								var loggedUser = that.user.find(us => inputName == us.user && inputPass == us.pass)
+							if (data.mensagens != null) {
+								alert(data.mensagens[0])
+							} else {
+								var loggedUser = jwt.decode(data.token).usuario
+
+								that.$emit("authenticated", true);
+								window.localStorage.setItem('authenticated', true);
+								window.localStorage.setItem('account', JSON.stringify({
+									name: loggedUser.nome,
+									user: loggedUser.email,
+									id: loggedUser.id,
+									token: data.token
+								}));
+
 								// that.$parent.account = {
 								// 	name: loggedUser.name,
 								// 	lastname: loggedUser.lastname,
 								// 	user: loggedUser.user,
 								// 	id: loggedUser._id
 								// }
-
-								that.$emit("authenticated", true);
-								window.localStorage.setItem('authenticated', true);
-								window.localStorage.setItem('account', JSON.stringify({
-									name: loggedUser.name,
-									lastname: loggedUser.lastname,
-									user: loggedUser.user,
-									id: loggedUser._id
-								}));
+								
 								that.$router.push('/');
-							} else {
-								alert('Nome de usuário ou senha inválidos')
 							}
 						});
 					}).catch(function(err){

@@ -65,9 +65,15 @@ export default {
     },
     fetchUrl(){
         var that = this
+        ,   dados = JSON.parse(window.localStorage.getItem("account"))
         ,   url    = "https://api.construe.cf/categorias?pagina=0&tamanho_pagina=20"
 
-        fetch(url).then(function(response){
+        fetch(url, {
+          method: 'GET',
+          headers: {
+            'Authorization': dados.token
+          }
+        }).then(function(response){
           response.json().then(function(data){
             var ran = data.data
             that.navItens = ran;

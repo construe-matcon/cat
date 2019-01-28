@@ -10,6 +10,7 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "jsonwebtoken": "^8.4.0",
     "animate.css": "^3.6.1",
     "awesome-bootstrap-checkbox": "^1.0.1",
     "bootstrap": "^4.1.1",
@@ -67,14 +68,14 @@
       "eslint:recommended"
     ],
     "rules": {
-        "no-console": "off",
-        "no-restricted-syntax": [
-            "error",
-            {
-                "selector": "CallExpression[callee.object.name='console'][callee.property.name!=/^(log|warn|error|info|trace)$/]",
-                "message": "Unexpected property on console object was called"
-            }
-        ]
+      "no-console": "off",
+      "no-restricted-syntax": [
+        "error",
+        {
+          "selector": "CallExpression[callee.object.name='console'][callee.property.name!=/^(log|warn|error|info|trace)$/]",
+          "message": "Unexpected property on console object was called"
+        }
+      ]
     },
     "parserOptions": {
       "parser": "babel-eslint"

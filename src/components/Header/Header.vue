@@ -66,8 +66,8 @@
           <span class="avatar thumb-sm float-left mr-2">
             <img class="rounded-circle" src="../../assets/people/a5.jpg" alt="..." />
           </span>
-          <span class="small" v-text="account.firstname"></span>
-          <span class="fw-semi-bold" v-text="account.lastname"></span>
+          <!-- <span class="small" v-text="account.firstname"></span> -->
+          <span class="fw-semi-bold" v-text="account.name"></span>
           <!-- <span class="ml-1 circle bg-warning text-white fw-bold">13</span> -->
         </template>
         <b-dropdown-item><i class="la la-user" /> Minha Conta</b-dropdown-item>
@@ -122,8 +122,7 @@ export default {
     var dados = JSON.parse(window.localStorage.getItem("account"))
     return {
       account: {
-        firstname: (!dados) ? '' :  dados.name,
-        lastname: (!dados) ? '' :  dados.lastname,
+        name: (!dados) ? '' :  dados.name,
         pic: ""
       },
       icon: {

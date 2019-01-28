@@ -121,9 +121,15 @@
 			},
 			fetchUrl(){
 				var that = this
+				,	dados = JSON.parse(window.localStorage.getItem("account"))
 				, 	url 	 = "https://api.construe.cf/produtos/industria/11"
-
-				fetch(url).then(function(response){
+				console.log(dados.token)
+				fetch(url, {
+		          headers: {
+		          	'Accept': 'application/json',
+		            'Authorization': dados.token
+		          }
+		        }).then(function(response){
 					response.json().then(function(data){
 						var ran = data.data
 						that.tableStyles = ran;
