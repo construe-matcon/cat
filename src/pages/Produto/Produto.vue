@@ -5,12 +5,12 @@
       <b-tab title="Geral" active>
         <b-row class="formProduto">
           <b-col lg="4" class="list-item">
-            <img class="img-rounded imgCat" :src="'https://images.construe.cf/hidrobuk/'+prod.ean+'.jpg'" alt="" />
+            <img class="img-rounded imgCat" :src="'https://images.construe.cf/fogo/'+prod.ean+'.jpg'" alt="" />
             <!-- ADICIONAR IF PARA GALERIA AQUI -->
             <b-col lg="12" class="thumb-gal">
-              <img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/hidrobuk/'+prod.ean+'.jpg'" alt="" />
-              <img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/hidrobuk/'+prod.ean+'.jpg'" alt="" />
-              <img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/hidrobuk/'+prod.ean+'.jpg'" alt="" />
+              <img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/fogo/'+prod.ean+'.jpg'" alt="" />
+              <img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/fogo/'+prod.ean+'.jpg'" alt="" />
+              <img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/fogo/'+prod.ean+'.jpg'" alt="" />
             </b-col>
             <!-- ADICIONAR IF PARA GALERIA AQUI -->
           </b-col>

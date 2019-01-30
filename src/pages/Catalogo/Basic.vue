@@ -36,7 +36,7 @@
 										</p>
 									</td>
 									<td>
-										<img class="img-rounded imgCat" :src="'https://images.construe.cf/hidrobuk/'+row.ean+'.jpg'" alt="" />
+										<img class="img-rounded imgCat" :src="'https://images.construe.cf/fogo/'+row.ean+'.jpg'" alt="" />
 									</td>
 									<td>
 										{{row.descricao}}
