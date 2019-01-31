@@ -1,9 +1,10 @@
 <template>
-  <nav
+  <!-- <nav
     :class="{sidebar: true, sidebarStatic, sidebarOpened}"
     @mouseenter="sidebarMouseEnter"
     @mouseleave="sidebarMouseLeave"
-  >
+  > -->
+  <nav class="sidebar">
     <header class="logo">
       <router-link to="/"><img :src="icon.picture" width="50%" alt="Construe" class="icon-title"></router-link>
     </header>

@@ -174,7 +174,7 @@
 			},
 			retorno(data) {
 				var ran = data.data
-				console.log(ran);
+				// console.log(ran);
 			}
 		},
 		mounted() {
