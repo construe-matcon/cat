@@ -8,7 +8,7 @@
 			<b-badge v-if="badge" class="badge rounded-f" variant="warning" pill>{{badge}}</b-badge>
 		</router-link>
 	</li>
-	<li v-else-if="childrenLinks" :class="{headerLink: true, className}" @mouseenter="mouseIn(index)" @mouseleave="mouseOut(index)">
+	<li v-else-if="childrenLinks" :class="{headerLink: true, className}">
 		<!-- <div @click="() => togglePanelCollapse(link)"> -->
 		<div>
 			<router-link :to="link" class="d-flex">
@@ -21,12 +21,12 @@
 				</div> -->
 			</router-link>
 		</div>
-		<b-collapse :id="'collapse' + index" :visible="isActive">
+		<b-collapse v-if="childrenLinks.length > 0" :id="'collapse' + index" :visible="isActive">
 			<ul>
 				<NavLink v-for="link in childrenLinks"
 				:activeItem="activeItem"
 				:nome="link.nome"
-				:index="link.index"
+				:index="link.id.toString()"
 				:link="link.id.toString()"
 				:childrenLinks="link.subcategorias"
 				:key="link.link"
@@ -67,17 +67,17 @@
 		},
 		methods: {
 			...mapActions('layout', ['changeSidebarActive']),
-			mouseIn(index) {
-				this.changeSidebarActive(index);
-				this.headerLinkWasClicked = true
-				console.log(!this.activeItem)
-				// || !this.activeItem.includes(this.index);
-			},
-			mouseOut(index) {
-				this.changeSidebarActive(index);
-				this.headerLinkWasClicked = false
-				// || !this.activeItem.includes(this.index);
-			},
+			// mouseIn(index) {
+			// 	// this.changeSidebarActive(index);
+			// 	// this.headerLinkWasClicked = true
+			// 	// console.log(!this.activeItem)
+			// 	// || !this.activeItem.includes(this.index);
+			// },
+			// mouseOut(index) {
+			// 	// this.changeSidebarActive(index);
+			// 	// this.headerLinkWasClicked = false
+			// 	// || !this.activeItem.includes(this.index);
+			// },
 		},
 		computed: {
 			fullIconName() {

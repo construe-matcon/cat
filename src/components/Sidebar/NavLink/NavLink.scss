@@ -162,4 +162,23 @@ a.router-link-active {
 }
 
 
-
+.nav > .headerLink {
+  &:hover > .collapse {
+    display: block !important;
+    & .headerLink:hover > .collapse {
+      display: block !important;
+        & .headerLink > .collapse {
+          display: none !important;
+        }
+        & .headerLink:hover > .collapse {
+          display: block !important;
+          & .headerLink > .collapse {
+            display: none !important;
+          }
+          & .headerLink:hover > .collapse {
+            display: block !important;
+          }
+        }
+    }
+  }
+}
