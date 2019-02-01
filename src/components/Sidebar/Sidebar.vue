@@ -1,30 +1,26 @@
 <template>
-	<nav
-	:class="{sidebar: true, sidebarStatic, sidebarOpened}"
-	@mouseenter="sidebarMouseEnter"
-	@mouseleave="sidebarMouseLeave"
-	>
-	<header class="logo">
-		<router-link to="/"><img :src="icon.picture" width="50%" alt="Construe" class="icon-title"></router-link>
-	</header>
-	<ul class="nav">
-		<NavLink
-		nome="Catálogo"
-		link="/"
-		iconName="flaticon-equal-1"
-		index="catalogo"
-		isHeader
-		/>
-		<NavLink
-		:activeItem="activeItem"
-		nome="Categorias"
-		link="/Categorias"
-		iconName="flaticon-list"
-		index="catalogo"
-		:childrenLinks="navItens"
-		/>
-	</ul>
-</nav>
+	<nav class="sidebar">
+		<header class="logo">
+			<router-link to="/"><img :src="icon.picture" width="50%" alt="Construe" class="icon-title"></router-link>
+		</header>
+		<ul class="nav">
+			<NavLink
+			nome="Catálogo"
+			link="/"
+			iconName="flaticon-equal-1"
+			index="catalogo"
+			isHeader
+			/>
+			<NavLink
+			:activeItem="activeItem"
+			nome="Categorias"
+			link="/Categorias"
+			iconName="flaticon-list"
+			index="catalogo"
+			:childrenLinks="navItens"
+			/>
+		</ul>
+	</nav>
 </template>
 
 <script>

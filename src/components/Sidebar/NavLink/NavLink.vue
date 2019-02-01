@@ -8,16 +8,17 @@
 			<b-badge v-if="badge" class="badge rounded-f" variant="warning" pill>{{badge}}</b-badge>
 		</router-link>
 	</li>
-	<li v-else-if="childrenLinks" :class="{headerLink: true, className}">
-		<div @click="() => togglePanelCollapse(link)">
+	<li v-else-if="childrenLinks" :class="{headerLink: true, className}" @mouseenter="mouseIn(index)" @mouseleave="mouseOut(index)">
+		<!-- <div @click="() => togglePanelCollapse(link)"> -->
+		<div>
 			<router-link :to="link" class="d-flex">
 				<span class="icon">
 					<i :class="fullIconName"></i>
 				</span>
 				{{nome}} <sup v-if="label" class="headerLabel">{{label}}</sup>
-				<div :class="{caretWrapper: true, carretActive: isActive}">
-					<!-- <i class="fa fa-angle-left" /> -->
-				</div>
+				<!-- <div :class="{caretWrapper: true, carretActive: isActive}">
+					<i class="fa fa-angle-left" />
+				</div> -->
 			</router-link>
 		</div>
 		<b-collapse :id="'collapse' + index" :visible="isActive">
@@ -42,7 +43,6 @@
 
 <script>
 	import { mapActions } from 'vuex';
-
 	export default {
 		name: 'NavLink',
 		props: {
@@ -61,19 +61,22 @@
 		},
 		data() {
 			return {
-				headerLinkWasClicked: true,
+				headerLinkWasClicked: false,
 				navItens: [],
 			};
 		},
 		methods: {
 			...mapActions('layout', ['changeSidebarActive']),
-			togglePanelCollapse(link) {
-				this.changeSidebarActive(link);
-				this.headerLinkWasClicked = !this.headerLinkWasClicked
-				|| !this.activeItem.includes(this.index);
+			mouseIn(index) {
+				this.changeSidebarActive(index);
+				this.headerLinkWasClicked = true
+				console.log(!this.activeItem)
+				// || !this.activeItem.includes(this.index);
 			},
-			fetchUrl(obj){
-				this.navItens = obj.data;
+			mouseOut(index) {
+				this.changeSidebarActive(index);
+				this.headerLinkWasClicked = false
+				// || !this.activeItem.includes(this.index);
 			},
 		},
 		computed: {

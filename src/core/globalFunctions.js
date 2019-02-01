@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import router from '../Routes';
 
 export default {

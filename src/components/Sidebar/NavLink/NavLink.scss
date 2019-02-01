@@ -137,3 +137,29 @@ a.router-link-active {
     }
   }
 }
+
+
+.flyout,
+.flyout-alt {
+  position: relative;
+}
+
+.flyout-content {
+  height: 0;
+  position:relative;
+  overflow: hidden;
+  transition: height .5s;
+
+  text-transform: lowercase;
+}
+
+.flyout:hover > .flyout-content {
+  height: auto;
+}
+
+.flyout-alt:hover > .flyout-content {
+  height: auto;
+}
+
+
+
