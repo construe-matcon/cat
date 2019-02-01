@@ -120,49 +120,8 @@
 					});
 				});
 			},
-			fetchUrl(){
-				var that = this
-				,	dados = JSON.parse(window.localStorage.getItem("account"))
-				, 	url 	 = "https://api.construe.cf/produtos/industria/11"
-				// console.log(dados.token)
-				fetch(url, {
-					headers: {
-						'Accept': 'application/json',
-						'Authorization': dados.token
-					}
-				}).then(function(response){
-					response.json().then(function(data){
-						var ran = data.data
-						that.tableStyles = ran;
-						// console.log(that.tableStyles)
-						// for(var i = 0, lgt = ran.length; i < lgt; i++) {
-						// 	console.log(ran[i])
-						// }
-						// var ran = data.sort(() => .5 - Math.random()).slice(0,20);
-						// that.tableStyles = [];
-						// for(var i = 0, lgt = ran.length; i < lgt; i++) {
-						// 	that.tableStyles[i] = {
-						// 		id: ran[i].replace(/\D/g, '').slice(-5),
-						// 		picture: 'https://images.construe.cf/hidrobuk/'+ran[i],
-						// 		description: ran[i].split('.').slice(0, -1).join('.'),
-						// 		info: {
-						// 			type: ran[i].split('.').pop(),
-						// 			dimensions: '200x150',
-						// 		},
-						// 		date: new Date('September 14, 2012'),
-						// 		size: '45.6 KB',
-						// 		progress: {
-						// 			percent: 29,
-						// 			colorClass: 'success',
-						// 		},
-						// 	}
-						// }
-						// console.log(that.tableStyles)
-
-					});
-				}).catch(function(err){
-					console.error('Erro na chamada', err);
-				});
+			fetchUrl(obj){
+				this.tableStyles = obj.data;
 			},
 			ir(id){
 				this.$router.push({
@@ -171,16 +130,11 @@
 						row: id
 					}
 				});
-			},
-			retorno(data) {
-				var ran = data.data
-				console.log(ran);
 			}
 		},
-		mounted() {
-			gfn.fApi({url:"https://api.construe.cf/produtos/industria/11"},this.retorno);
+		async mounted() {
+			await gfn.fApi({url:"https://api.construe.cf/produtos/industria/11", options: {method: 'GET'}}, this.fetchUrl);
 			this.initCharts();
-			this.fetchUrl();
 		},
 	};
 </script>
