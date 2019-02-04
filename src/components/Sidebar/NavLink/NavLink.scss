@@ -1,184 +1,167 @@
 @import '../../../styles/app';
 
 .headerLink {
-  width: 100%;
-  overflow-x: hidden;
+	width: 100%;
+	overflow-x: hidden;
 
-  @media (min-width: map_get($grid-breakpoints, lg))
-  and (min-height: $screen-lg-height), (max-width: map_get($grid-breakpoints, md) - 1px) {
-    font-size: $font-size-base;
-  }
+	@media (min-width: map_get($grid-breakpoints, lg))
+	and (min-height: $screen-lg-height), (max-width: map_get($grid-breakpoints, md) - 1px) {
+		font-size: $font-size-base;
+	}
 
-  a {
-    display: block;
-    color: $sidebar-color;
-    text-decoration: none;
-    cursor: pointer;
-  }
+	a {
+		display: block;
+		color: $sidebar-color;
+		text-decoration: none;
+		cursor: pointer;
+	}
 
-  &:last-child > a {
-    border-bottom: 1px solid $sidebar-item-border-color;
-  }
+	&:last-child > a {
+		border-bottom: 1px solid $sidebar-item-border-color;
+	}
 
-  > a,
-  > div a {
-    position: relative;
-    padding-left: 50px;
-    line-height: 35px;
-    border-top: 1px solid $sidebar-item-border-color;
+	> a,
+	> div a {
+		position: relative;
+		padding-left: 50px;
+		line-height: 35px;
+		border-top: 1px solid $sidebar-item-border-color;
 
-    &:hover {
-      background-color: $sidebar-item-hover-bg-color;
-    }
+		&:hover {
+			background-color: $sidebar-item-hover-bg-color;
+		}
 
-    > i {
-      margin-right: 7px;
-    }
+		> i {
+			margin-right: 7px;
+		}
 
-    @media (min-width: map_get($grid-breakpoints, lg))
-    and (min-height: $screen-lg-height), (max-width: map_get($grid-breakpoints, md) - 1px) {
-      line-height: 55px;
-    }
-  }
+		@media (min-width: map_get($grid-breakpoints, lg))
+		and (min-height: $screen-lg-height), (max-width: map_get($grid-breakpoints, md) - 1px) {
+			line-height: 55px;
+		}
+	}
 
-  .icon {
-    font-size: $font-size-larger;
-    display: block;
-    position: absolute;
-    top: 3px;
-    left: 11px;
-    width: 28px;
-    height: 28px;
-    line-height: 28px;
-    text-align: center;
+	.icon {
+		font-size: $font-size-larger;
+		display: block;
+		position: absolute;
+		top: 3px;
+		left: 11px;
+		width: 28px;
+		height: 28px;
+		line-height: 28px;
+		text-align: center;
 
-    @media (min-width: map_get($grid-breakpoints, lg))
-    and (min-height: $screen-lg-height), (max-width: map_get($grid-breakpoints, md) - 1px) {
-      top: 12px;
-    }
-  }
+		@media (min-width: map_get($grid-breakpoints, lg))
+		and (min-height: $screen-lg-height), (max-width: map_get($grid-breakpoints, md) - 1px) {
+			top: 12px;
+		}
+	}
 
-  .badge {
-    float: right;
-    line-height: 8px;
-    margin-top: 16px;
-    margin-right: 15px;
-    padding: 7px;
-  }
+	.badge {
+		float: right;
+		line-height: 8px;
+		margin-top: 16px;
+		margin-right: 15px;
+		padding: 7px;
+	}
 }
 
 .headerLabel {
-  font-weight: 600;
-  color: theme-color('warning');
+	font-weight: 600;
+	color: theme-color('warning');
 }
 
 .caretWrapper {
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-  margin-right: 15px;
+	display: flex;
+	width: 35px;
+	align-items: center;
+	justify-content: flex-end;
+	margin-left: auto;
+	padding-right: 15px;
 
-  i {
-    @include transition(transform 0.3s ease-in-out);
-  }
+	i {
+		@include transition(transform 0.3s ease-in-out);
+	}
 }
 
 .carretActive i {
-  transform: rotate(-90deg);
+	transform: rotate(-90deg);
 }
 
 a.router-link-active {
-  // color: $sidebar-item-active-color;
-  color: $matcon;
+	// color: $sidebar-item-active-color;
+	color: $matcon;
 
-  .icon {
-    border-radius: 50%;
-    // background-color: $sidebar-item-active-color;
-    background-color: $matcon;
+	.icon {
+		border-radius: 50%;
+		// background-color: $sidebar-item-active-color;
+		background-color: $matcon;
 
-    i {
-      color: $white;
-    }
-  }
+		i {
+			color: $white;
+		}
+	}
 }
 
 .collapse,
 .collapsing {
-  border: none;
-  box-shadow: none;
-  margin: 0;
-  border-radius: 0;
-  background-color: lighten($sidebar-bg-color, 5%);
+	border: none;
+	box-shadow: none;
+	margin: 0;
+	border-radius: 0;
+	background-color: lighten($sidebar-bg-color, 5%);
 
-  a {
-    line-height: 20px !important;
+	a {
+		line-height: 20px !important;
 
-    &.router-link-active {
-      font-weight: $font-weight-semi-bold;
-      color: $sidebar-color;
-    }
-  }
+		&.router-link-active {
+			font-weight: $font-weight-semi-bold;
+			color: $sidebar-color;
+		}
+	}
 
-  ul {
-    background: $sidebar-action-bg;
-    padding: $spacer;
+	ul {
+		background: $sidebar-action-bg;
+		padding: $spacer 0 $spacer $spacer;
 
-    li {
-      list-style: none;
-    }
+		li {
+			list-style: none;
+		}
 
-    a {
-      padding: 10px 20px 10px 26px;
-      font-size: $font-size-mini;
+		a {
+			padding: 10px 0 10px 5px;
+			font-size: $font-size-mini;
 
-      &:hover {
-        background-color: $sidebar-item-hover-bg-color;
-      }
-    }
-  }
+			&:hover {
+				background-color: $sidebar-item-hover-bg-color;
+			}
+		}
+	}
+}
+.firstLevel {
+	color: red;
 }
 
 
 .flyout,
 .flyout-alt {
-  position: relative;
+	position: relative;
 }
 
 .flyout-content {
-  height: 0;
-  position:relative;
-  overflow: hidden;
-  transition: height .5s;
+	height: 0;
+	position:relative;
+	overflow: hidden;
+	transition: height .5s;
 
-  text-transform: lowercase;
+	text-transform: lowercase;
 }
 
 .flyout:hover > .flyout-content {
-  height: auto;
+	height: auto;
 }
 
 .flyout-alt:hover > .flyout-content {
-  height: auto;
-}
-
-
-.nav > .headerLink {
-  &:hover > .collapse {
-    display: block !important;
-    & .headerLink:hover > .collapse {
-      display: block !important;
-        & .headerLink > .collapse {
-          display: none !important;
-        }
-        & .headerLink:hover > .collapse {
-          display: block !important;
-          & .headerLink > .collapse {
-            display: none !important;
-          }
-          & .headerLink:hover > .collapse {
-            display: block !important;
-          }
-        }
-    }
-  }
+	height: auto;
 }

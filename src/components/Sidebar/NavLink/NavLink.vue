@@ -4,21 +4,20 @@
 			<span class="icon">
 				<i :class="fullIconName"></i>
 			</span>
-			{{nome}} <sup v-if="label" class="headerLabel">{{label}}</sup>
+			{{nome}}
 			<b-badge v-if="badge" class="badge rounded-f" variant="warning" pill>{{badge}}</b-badge>
 		</router-link>
 	</li>
 	<li v-else-if="childrenLinks" :class="{headerLink: true, className}">
-		<!-- <div @click="() => togglePanelCollapse(link)"> -->
 		<div>
-			<router-link :to="link" class="d-flex">
-				<span class="icon">
+			<router-link :to="link" class="d-flex" :class="{firstLevel: isHeader}">
+				<span v-if="fullIconName" class="icon">
 					<i :class="fullIconName"></i>
 				</span>
-				{{nome}} <sup v-if="label" class="headerLabel">{{label}}</sup>
-				<!-- <div :class="{caretWrapper: true, carretActive: isActive}">
+				{{nome}}
+				<div v-if="childrenLinks.length > 0" :class="{caretWrapper: true, carretActive: isActive}" @click.prevent="openMenuList">
 					<i class="fa fa-angle-left" />
-				</div> -->
+				</div>
 			</router-link>
 		</div>
 		<b-collapse v-if="childrenLinks.length > 0" :id="'collapse' + index" :visible="isActive">
@@ -36,13 +35,14 @@
 	</li>
 	<li v-else>
 		<router-link :to="index !== 'menu' && link">
-			{{nome}} <sup v-if="label" class="headerLabel">{{label}}</sup>
+			{{nome}}
 		</router-link>
 	</li>
 </template>
 
 <script>
 	import { mapActions } from 'vuex';
+	import $ from 'jquery';
 	export default {
 		name: 'NavLink',
 		props: {
@@ -67,6 +67,15 @@
 		},
 		methods: {
 			...mapActions('layout', ['changeSidebarActive']),
+			openMenuList(e) {
+				var el = e.target
+				if ($(el).hasClass('caretWrapper')) {
+					$(el).toggleClass('carretActive')
+				} else {
+					$(el).closest('.caretWrapper').toggleClass('carretActive')
+				}
+				$(el).closest('.headerLink').find('.collapse').first().toggle(100);
+			}
 			// mouseIn(index) {
 			// 	// this.changeSidebarActive(index);
 			// 	// this.headerLinkWasClicked = true
@@ -81,7 +90,7 @@
 		},
 		computed: {
 			fullIconName() {
-				return `fi ${this.iconName}`;
+				return (this.iconName) ? `fi ${this.iconName}` : ``;
 			},
 			isActive() {
 				return (this.activeItem

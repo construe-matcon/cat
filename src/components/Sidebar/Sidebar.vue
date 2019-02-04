@@ -17,6 +17,7 @@
 			link="/Categorias"
 			iconName="flaticon-list"
 			index="catalogo"
+			isHeader
 			:childrenLinks="navItens"
 			/>
 		</ul>
