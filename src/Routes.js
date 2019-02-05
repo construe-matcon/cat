@@ -69,6 +69,7 @@ let router = new Router({
           path: '',
           name: 'Catalogo',
           component: Catalogo,
+          redirect: 'catalogo'
         },
         {
           path: 'catalogo',

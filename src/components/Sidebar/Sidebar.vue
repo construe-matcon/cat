@@ -6,7 +6,7 @@
 		<ul class="nav">
 			<NavLink
 			nome="Catálogo"
-			link="/"
+			link="/catalogo"
 			iconName="flaticon-list-1"
 			index="catalogo"
 			isHeader
