@@ -7,16 +7,16 @@
 			<NavLink
 			nome="Catálogo"
 			link="/"
-			iconName="flaticon-equal-1"
+			iconName="flaticon-list-1"
 			index="catalogo"
 			isHeader
 			/>
 			<NavLink
 			:activeItem="activeItem"
 			nome="Categorias"
-			link="/Categorias"
+			link="/categorias"
 			iconName="flaticon-list"
-			index="catalogo"
+			index="categorias"
 			:childrenLinks="navItens"
 			:level="0"
 			/>
@@ -26,7 +26,6 @@
 
 <script>
 	import { mapState, mapActions } from 'vuex';
-	import isScreen from '@/core/screenHelper';
 	import NavLink from './NavLink/NavLink';
 	import gfn from '@/core/globalFunctions';
 
@@ -48,18 +47,6 @@
 				const paths = this.$route.fullPath.split('/');
 				paths.pop();
 				this.changeSidebarActive(paths.join('/'));
-			},
-			sidebarMouseEnter() {
-				if (!this.sidebarStatic && (isScreen('lg') || isScreen('xl'))) {
-					this.switchSidebar(false);
-					this.setActiveByRoute();
-				}
-			},
-			sidebarMouseLeave() {
-				if (!this.sidebarStatic && (isScreen('lg') || isScreen('xl'))) {
-					this.switchSidebar(true);
-					this.changeSidebarActive(null);
-				}
 			},
 			fetchUrl(obj){
 				this.navItens = obj.data;
