@@ -111,7 +111,7 @@ export default {
       fetchUrl(){
         var that = this
         ,   dados = JSON.parse(window.localStorage.getItem("account"))
-        ,   url    = "https://api.construe.cf/produtos/"+that.$route.query.id
+        ,   url    = "https://api.construe.cf/produtos/"+that.$route.params.id
 
         fetch(url, {
             headers: {

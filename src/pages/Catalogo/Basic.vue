@@ -125,7 +125,7 @@
 			},
 			ir(id){
 				this.$router.push({
-					path: "/produto?id="+id,
+					path: "/produto/"+id,
 					params: {
 						row: id
 					}

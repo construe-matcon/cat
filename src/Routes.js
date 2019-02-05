@@ -61,7 +61,7 @@ let router = new Router({
           component: CatalogoPage,
         },
         {
-          path: 'produto',
+          path: 'produto/:id',
           name: 'ProdutoPage',
           component: ProdutoPage,
         },
