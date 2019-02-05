@@ -10,7 +10,7 @@
 	</li>
 	<li v-else-if="childrenLinks" :class="{headerLink: true, className}">
 		<div>
-			<router-link :to="link" class="d-flex" :class="{firstLevel: isHeader}">
+			<router-link :to="link" class="d-flex" :class="classLevel">
 				<span v-if="fullIconName" class="icon">
 					<i :class="fullIconName"></i>
 				</span>
@@ -29,6 +29,7 @@
 				:link="link.id.toString()"
 				:childrenLinks="link.subcategorias"
 				:key="link.link"
+				:level="(level + 1)"
 				/>
 			</ul>
 		</b-collapse>
@@ -58,11 +59,13 @@
 			activeItem: { type: String, default: '' },
 			label: { type: String },
 			index: { type: String },
+			level: { type: Number, default: 0 },
 		},
 		data() {
 			return {
 				headerLinkWasClicked: false,
 				navItens: [],
+				classLevel: 'level' + this.level,
 			};
 		},
 		methods: {
