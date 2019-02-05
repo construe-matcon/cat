@@ -1,13 +1,13 @@
 <template>
   <b-navbar class="header d-print-none">
-    <b-nav>
+    <!-- <b-nav>
       <b-nav-item>
         <a class="d-md-down-none px-2" href="#" @click="toggleSidebarMethod" id="barsTooltip">
           <i class='la la-bars la-lg' />
         </a>
-        <!-- <b-tooltip target="barsTooltip" placement="bottom">
+        <b-tooltip target="barsTooltip" placement="bottom">
           Turn on/off <br> sidebar <br> collapsing
-        </b-tooltip> -->
+        </b-tooltip>
         <a class="fs-lg d-lg-none" href="#" @click="switchSidebarMethod">
           <span class="rounded rounded-lg bg-gray text-white d-md-none">
             <i class="la la-bars la-lg" />
@@ -37,7 +37,7 @@
           </b-input-group>
         </b-form-group>
       </b-form>
-    </b-nav>
+    </b-nav> -->
     <a  class="navbarBrand d-md-none">
       <img :src="icon.picture" width="50%" alt="Construe" class="icon-title">
     </a>
