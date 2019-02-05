@@ -79,17 +79,6 @@
 				}
 				$(el).closest('.headerLink').find('.collapse').first().toggle(100);
 			}
-			// mouseIn(index) {
-			// 	// this.changeSidebarActive(index);
-			// 	// this.headerLinkWasClicked = true
-			// 	// console.log(!this.activeItem)
-			// 	// || !this.activeItem.includes(this.index);
-			// },
-			// mouseOut(index) {
-			// 	// this.changeSidebarActive(index);
-			// 	// this.headerLinkWasClicked = false
-			// 	// || !this.activeItem.includes(this.index);
-			// },
 		},
 		computed: {
 			fullIconName() {
