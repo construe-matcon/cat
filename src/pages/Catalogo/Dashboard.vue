@@ -1,8 +1,9 @@
 <template>
   <div>
-    <h1 class="page-title">Dashboard</h1>
+    <h1 class="page-title">Catálogo</h1>
+    <h5 class="page-title"><small>Última atualização: 05/02/2019 as 17:13</small></h5>
     <b-row>
-      <b-col lg="3" sm="6" xs="12">
+      <!-- <b-col lg="3" sm="6" xs="12">
         <div class="pb-xlg h-100">
           <Widget class="h-100 mb-0" title="Visits Today">
             <div class="d-flex justify-content-between align-items-center mb-lg">
@@ -22,44 +23,31 @@
             </div>
           </Widget>
         </div>
-      </b-col>
+      </b-col> -->
       <b-col lg="3" sm="6" xs="12">
         <div class="pb-xlg h-100">
-          <Widget class="h-100 mb-0" title="Revenue Breakdown">
+          <Widget class="h-100 mb-0" title="Produtos Com/Sem Categoria">
             <b-row>
-              <b-col xs="12" md="6" lg="7" class="text-center">
-                <div ref="chartContainer" style="height: 100px" />
-              </b-col>
-              <b-col xs="12" md="5" lg="4">
-                <div ref="chartLegend" />
-              </b-col>
+              <canvas id="piechart" width="80" height="80"></canvas>
             </b-row>
           </Widget>
         </div>
       </b-col>
       <b-col lg="3" sm="6" xs="12">
         <div class="pb-xlg h-100">
-          <Widget class="h-100 mb-0" title="App Perfomance">
-            <p class="text-muted d-flex flex-wrap">
-              <small class="mr-lg d-flex align-items-center">
-                <span class="circle bg-success text-success mr-xs" style="font-size: 4px;">.</span>
-                  This Period
-              </small>
-              <small class="mr-lg d-flex align-items-center">
-                <span class="circle bg-warning text-warning mr-xs" style="font-size: 4px;">.</span>
-                Last Period
-              </small>
-            </p>
-            <h6>SDK</h6>
-            <b-progress class="mb-xs" style="height: 5px"
-              variant="success" :value="60" :max="100" />
-            <b-progress class="mb" style="height: 5px"
-              variant="warning" :value="35" :max="100" />
-            <h6>Integration</h6>
-            <b-progress class="mb-xs" style="height: 5px"
-              variant="success" :value="40" :max="100" />
-            <b-progress style="height: 5px"
-              variant="warning" :value="55" :max="100" />
+          <Widget class="h-100 mb-0" title="Produtos Com/Sem Tags">
+            <b-row>
+              <canvas id="piechart2" width="80" height="80"></canvas>
+            </b-row>
+          </Widget>
+        </div>
+      </b-col>
+      <b-col lg="3" sm="6" xs="12">
+        <div class="pb-xlg h-100">
+          <Widget class="h-100 mb-0" title="Total de produtos por indústria">
+            <b-row>
+              <canvas id="barchart1" width="80" height="80"></canvas>
+            </b-row>
           </Widget>
         </div>
       </b-col>
@@ -250,6 +238,9 @@ import 'imports-loader?jQuery=jquery,this=>window!flot';
 import 'imports-loader?jQuery=jquery,this=>window!flot/jquery.flot.pie';
 /* eslint-enable */
 import Widget from '@/components/Widget/Widget';
+/* ChartJS */
+import Chart from 'chart.js';
+
 
 export default {
   name: 'Dashboard',
@@ -349,9 +340,149 @@ export default {
         },
       });
     },
+    startCharts() {
+      var pie   = document.getElementById('piechart').getContext('2d')
+      var pie2  = document.getElementById('piechart2').getContext('2d')
+      var bars1 = document.getElementById('barchart1').getContext('2d')
+      new Chart(pie, {
+        type: 'pie',
+        data:{
+          labels: ["Com categoria", "Sem categoria"],
+          datasets: [{
+              label: 'Label',
+              data: [3687, 1913],
+              backgroundColor: [
+                  'green',
+                  'red',
+              ],
+          }]
+        },
+        options: {
+          legend: {
+            display: true,
+            position: 'bottom'
+          },
+          scales: {
+            xAxes: [{
+                ticks: {
+                  display: false
+                },
+                gridLines: {
+                    drawBorder: false,
+                    display: false
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                  display: false
+                },
+                gridLines: {
+                    drawBorder: false,
+                    display: false
+                }
+            }]
+          }
+        }
+      }) // End Pie Chart
+      new Chart(pie2, {
+        type: 'pie',
+        data:{
+          labels: ["Com Tags", "Sem Tags"],
+          datasets: [{
+              label: 'Label',
+              data: [19887, 3687],
+              backgroundColor: [
+                  'green',
+                  'red',
+              ],
+          }]
+        },
+        options: {
+          legend: {
+            display: true,
+            position: 'bottom'
+          },
+          scales: {
+            xAxes: [{
+                ticks: {
+                  display: false
+                },
+                gridLines: {
+                    drawBorder: false,
+                    display: false
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                  display: false
+                },
+                gridLines: {
+                    drawBorder: false,
+                    display: false
+                }
+            }]
+          }
+        }
+      }) // End Pie Chart2
+      new Chart(bars1, {
+        type: 'bar',
+        data:{
+          datasets: [
+            {
+              label: "Ind1",
+              data: [3687],
+              backgroundColor: 'green',
+            },
+            {
+              label: "Ind2",
+              data: [4890],
+              backgroundColor: 'red',
+            },
+            {
+              label: "Ind3",
+              data: [2744],
+              backgroundColor: 'blue',
+            },
+            {
+              label: "Ind4",
+              data: [1913],
+              backgroundColor: 'orange',
+            },
+          ]
+        },
+        options: {
+          legend: {
+            display: true,
+            position: 'bottom'
+          },
+          scales: {
+            xAxes: [{
+                ticks: {
+                  display: false
+                },
+                gridLines: {
+                    drawBorder: true,
+                    display: true
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                  display: true
+                },
+                gridLines: {
+                    drawBorder: true,
+                    display: true
+                }
+            }]
+          }
+        }
+      }) // End Bar Chart 1
+
+    },
   },
   mounted() {
-    this.initChart();
+    // this.initChart();
+    this.startCharts();
 
     window.addEventListener('resize', this.initChart);
   },
