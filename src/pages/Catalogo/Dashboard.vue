@@ -1,32 +1,11 @@
 <template>
   <div>
     <h1 class="page-title">Catálogo</h1>
-    <h5 class="page-title"><small>Última atualização: 05/02/2019 as 17:13</small></h5>
+    <h5 class="page-title"><small>Última atualização: {{date}}</small></h5>
     <b-row>
-      <!-- <b-col lg="3" sm="6" xs="12">
-        <div class="pb-xlg h-100">
-          <Widget class="h-100 mb-0" title="Visits Today">
-            <div class="d-flex justify-content-between align-items-center mb-lg">
-              <h2>4,332</h2>
-              <i class="la la-arrow-right text-success rotate-315" />
-            </div>
-            <div class="d-flex flex-wrap justify-content-between">
-              <div class="mt">
-                <h6>+830</h6><p class="text-muted mb-0 mr"><small>Logins</small></p>
-              </div>
-              <div class="mt">
-                <h6>0.5%</h6><p class="text-muted mb-0"><small>Sign Out</small></p>
-              </div>
-              <div class="mt">
-                <h6>4.5%</h6><p class="text-muted mb-0 mr"><small>Rate</small></p>
-              </div>
-            </div>
-          </Widget>
-        </div>
-      </b-col> -->
       <b-col lg="3" sm="6" xs="12">
         <div class="pb-xlg h-100">
-          <Widget class="h-100 mb-0" title="Produtos Com/Sem Categoria">
+          <Widget class="h-100 mb-0" title="Produtos Sem Categoria">
             <b-row>
               <canvas id="piechart" width="80" height="80"></canvas>
             </b-row>
@@ -35,9 +14,18 @@
       </b-col>
       <b-col lg="3" sm="6" xs="12">
         <div class="pb-xlg h-100">
-          <Widget class="h-100 mb-0" title="Produtos Com/Sem Tags">
+          <Widget class="h-100 mb-0" title="Produtos Sem Tags">
             <b-row>
               <canvas id="piechart2" width="80" height="80"></canvas>
+            </b-row>
+          </Widget>
+        </div>
+      </b-col>
+      <b-col lg="3" sm="6" xs="12">
+        <div class="pb-xlg h-100">
+          <Widget class="h-100 mb-0" title="Produtos Sem EAN">
+            <b-row>
+              <canvas id="piechart3" width="80" height="80"></canvas>
             </b-row>
           </Widget>
         </div>
@@ -48,42 +36,6 @@
             <b-row>
               <canvas id="barchart1" width="80" height="80"></canvas>
             </b-row>
-          </Widget>
-        </div>
-      </b-col>
-      <b-col lg="3" sm="6" xs="12">
-        <div class="pb-xlg h-100">
-          <Widget class="h-100 mb-0" title="Server Overview">
-            <div class="d-flex align-items-center mb-sm">
-              <p class="width-150"><small>60% / 37°С / 3.3 Ghz</small></p>
-              <div style="width: calc(100% - 150px)">
-                <trend
-                  :data="getRandomData()"
-                  :gradient="['#ffc247']"
-                  :height="30"
-                  smooth />
-              </div>
-            </div>
-            <div class="d-flex align-items-center mb-sm">
-              <p class="width-150"><small>54% / 31°С / 3.3 Ghz</small></p>
-              <div style="width: calc(100% - 150px)">
-                <trend
-                  :data="getRandomData()"
-                  :gradient="['#9964e3']"
-                  :height="30"
-                  smooth />
-              </div>
-            </div>
-            <div class="d-flex align-items-center">
-              <p class="width-150"><small>57% / 21°С / 3.3 Ghz</small></p>
-              <div style="width: calc(100% - 150px)">
-                <trend
-                  :data="getRandomData()"
-                  :gradient="['#3abf94']"
-                  :height="30"
-                  smooth />
-              </div>
-            </div>
           </Widget>
         </div>
       </b-col>
@@ -241,6 +193,8 @@ import Widget from '@/components/Widget/Widget';
 /* ChartJS */
 import Chart from 'chart.js';
 
+import gfn from '@/core/globalFunctions';
+
 
 export default {
   name: 'Dashboard',
@@ -297,6 +251,8 @@ export default {
         city: 'Hanoverton',
         status: 'Sent',
       }],
+      date: [],
+      teste: [],
     };
   },
   methods: {
@@ -340,17 +296,18 @@ export default {
         },
       });
     },
-    startCharts() {
+    startCharts(obj) {
       var pie   = document.getElementById('piechart').getContext('2d')
-      var pie2  = document.getElementById('piechart2').getContext('2d')
-      var bars1 = document.getElementById('barchart1').getContext('2d')
+      ,   pie2  = document.getElementById('piechart2').getContext('2d')
+      ,   pie3  = document.getElementById('piechart3').getContext('2d')
+      ,   bars1 = document.getElementById('barchart1').getContext('2d')
       new Chart(pie, {
         type: 'pie',
         data:{
-          labels: ["Com categoria", "Sem categoria"],
+          labels: ["Total", "Sem categoria"],
           datasets: [{
               label: 'Label',
-              data: [3687, 1913],
+              data: [obj.qtd_total_produto, obj.qtd_produto_sem_categoria],
               backgroundColor: [
                   'green',
                   'red',
@@ -387,10 +344,10 @@ export default {
       new Chart(pie2, {
         type: 'pie',
         data:{
-          labels: ["Com Tags", "Sem Tags"],
+          labels: ["Total", "Sem Tags"],
           datasets: [{
               label: 'Label',
-              data: [19887, 3687],
+              data: [obj.qtd_total_produto, obj.qtd_produto_sem_tag],
               backgroundColor: [
                   'green',
                   'red',
@@ -424,31 +381,49 @@ export default {
           }
         }
       }) // End Pie Chart2
-      new Chart(bars1, {
+      new Chart(pie3, {
+        type: 'pie',
+        data:{
+          labels: ["Total", "Sem EAN"],
+          datasets: [{
+              label: 'Label',
+              data: [obj.qtd_total_produto, obj.qtd_produto_sem_ean],
+              backgroundColor: [
+                  'green',
+                  'red',
+              ],
+          }]
+        },
+        options: {
+          legend: {
+            display: true,
+            position: 'bottom'
+          },
+          scales: {
+            xAxes: [{
+                ticks: {
+                  display: false
+                },
+                gridLines: {
+                    drawBorder: false,
+                    display: false
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                  display: false
+                },
+                gridLines: {
+                    drawBorder: false,
+                    display: false
+                }
+            }]
+          }
+        }
+      }) // End Pie Chart3
+      this.teste = new Chart(bars1, {
         type: 'bar',
         data:{
-          datasets: [
-            {
-              label: "Ind1",
-              data: [3687],
-              backgroundColor: 'green',
-            },
-            {
-              label: "Ind2",
-              data: [4890],
-              backgroundColor: 'red',
-            },
-            {
-              label: "Ind3",
-              data: [2744],
-              backgroundColor: 'blue',
-            },
-            {
-              label: "Ind4",
-              data: [1913],
-              backgroundColor: 'orange',
-            },
-          ]
         },
         options: {
           legend: {
@@ -477,14 +452,52 @@ export default {
           }
         }
       }) // End Bar Chart 1
+    },
+    rds(arr) {
+      var seen = {};
+      var ret_arr = [];
+      for (var i = 0; i < arr.length; i++) {
+          if (!(arr[i] in seen)) {
+              ret_arr.push(arr[i]);
+              seen[arr[i]] = true;
+          }
+      }
+      return ret_arr;
+    },
+    getRandomRgb() {
+      var num = Math.round(0xffffff * Math.random());
+      var r = num >> 16;
+      var g = num >> 8 & 255;
+      var b = num & 255;
+      return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+    },
+    addData(chart, label, color, dados) {
+        chart.data.datasets.push({
+          label: label,
+          backgroundColor: color,
+          data: dados
+        });
+        chart.update();
+    },
+    fetchUrl(obj){
+      this.startCharts(obj);
+      this.date = obj.ultimas_importacoes[0].dt_inclusao;
+      var inds = obj.ultimas_importacoes;
 
+      for (var i = 0, lgt = inds.length; i < lgt; i++ ) {
+        var ind = inds[i].industria
+        ,   qtI = inds[i].qtd_inseridos
+        ,   qtT = inds[i].qtd_total_produtos
+        ,   qtA = inds[i].qtd_atualizados
+
+        this.addData(this.teste, ind, this.getRandomRgb(), [qtT])
+      }
     },
   },
-  mounted() {
+  async mounted() {
     // this.initChart();
-    this.startCharts();
-
     window.addEventListener('resize', this.initChart);
+    await gfn.fApi({url:"https://api.construe.cf/dashboard", options: {method: 'GET'}}, this.fetchUrl);
   },
   created() {
     // if (window.localStorage.getItem('authenticated') === 'false') {
