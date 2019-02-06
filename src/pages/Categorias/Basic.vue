@@ -64,6 +64,17 @@
 							</tbody>
 						</table>
 					</div>
+					<b-pagination
+						align="right"
+						size="md"
+						next-text="Proximo"
+						prev-text="Anterior"
+						:limit="10"
+						:hide-goto-end-buttons="true"
+						:total-rows="totalProdutos"
+						:per-page="tamanho"
+						@input="mudaPagina"
+					/>
 				</Widget>
 			</b-col>
 		</b-row>
@@ -83,6 +94,10 @@
 		data() {
 			return {
 				tableStyles: [],
+				totalProdutos: 0,
+				tamanho: 1,
+				paginaAtual: 0,
+				ultimaPagina: true
 			};
 		},
 		methods: {
@@ -122,6 +137,10 @@
 			},
 			fetchUrl(obj){
 				this.tableStyles = obj.data;
+				this.totalProdutos = obj.total_data_size;
+				this.tamanho = obj.size;
+				this.paginaAtual = obj.number;
+				this.ultimaPagina = obj.last_page;
 			},
 			ir(id){
 				this.$router.push({
@@ -130,10 +149,13 @@
 						row: id
 					}
 				});
+			},
+			mudaPagina(page) {
+				gfn.fApi({url:"https://api.construe.cf/produtos?id_industria=11&tamanho_pagina=20&pagina="+(page - 1), options: {method: 'GET'}}, this.fetchUrl);
 			}
 		},
 		async mounted() {
-			await gfn.fApi({url:"https://api.construe.cf/produtos?id_industria=11", options: {method: 'GET'}}, this.fetchUrl);
+			await gfn.fApi({url:"https://api.construe.cf/produtos?id_industria=11&tamanho_pagina=20", options: {method: 'GET'}}, this.fetchUrl);
 			this.initCharts();
 		},
 	};
