@@ -486,9 +486,9 @@ export default {
 
       for (var i = 0, lgt = inds.length; i < lgt; i++ ) {
         var ind = inds[i].industria
-        ,   qtI = inds[i].qtd_inseridos
+        // ,   qtI = inds[i].qtd_inseridos
         ,   qtT = inds[i].qtd_total_produtos
-        ,   qtA = inds[i].qtd_atualizados
+        // ,   qtA = inds[i].qtd_atualizados
 
         this.addData(this.teste, ind, this.getRandomRgb(), [qtT])
       }
