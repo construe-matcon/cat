@@ -133,7 +133,7 @@
 			}
 		},
 		async mounted() {
-			await gfn.fApi({url:"https://api.construe.cf/produtos/industria/11", options: {method: 'GET'}}, this.fetchUrl);
+			await gfn.fApi({url:"https://api.construe.cf/produtos?id_industria=11", options: {method: 'GET'}}, this.fetchUrl);
 			this.initCharts();
 		},
 	};
