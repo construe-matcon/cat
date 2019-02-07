@@ -66,6 +66,9 @@ let router = new Router({
             {
               path: ':id',
               component: CategoriasPage,
+              params: {
+                id: ':id'
+              }
             }
           ]
         },

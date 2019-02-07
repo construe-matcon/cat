@@ -167,6 +167,11 @@
 			await gfn.fApi({url:urlList.replace(/\n|\r|\t/g, ""), options: {method: 'GET'}}, this.fetchUrl);
 			this.initCharts();
 		},
+		watch: {
+			'$route' (to, from, next) {
+				console.log(to, from, next)
+			}
+		}
 	};
 </script>
 
