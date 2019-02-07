@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="page-title">Catálogo</h1>
-    <h5 class="page-title"><small>Última atualização: {{date}}</small></h5>
+    <h5 class="page-title"><small>Última atualização: <span class='fw-semi-bold'>{{date}}</span></small></h5>
     <b-row>
       <b-col lg="3" sm="6" xs="12">
         <div class="pb-xlg h-100">
@@ -34,56 +34,30 @@
         <div class="pb-xlg h-100">
           <Widget class="h-100 mb-0" title="Total de produtos por indústria">
             <b-row>
-              <canvas id="barchart1" width="80" height="80"></canvas>
+
             </b-row>
           </Widget>
         </div>
       </b-col>
     </b-row>
     <b-row>
-      <b-col xs="12">
+      <b-col xs="12" lg="6">
         <Widget
-          title="<h5>Support <span class='fw-semi-bold'>Requests</span></h5>"
+          title="<h5>Total de produtos por <span class='fw-semi-bold'>indústria</span></h5>"
           bodyClass="widget-table-overflow"
-          customHeader
-        >
+          customHeader>
           <div class="table-responsive">
-            <table class="table table-lg mb-0">
-              <thead>
-                <tr class="text-muted">
-                  <th>NAME</th>
-                  <th>EMAIL</th>
-                  <th>PRODUCT</th>
-                  <th>PRICE</th>
-                  <th>DATE</th>
-                  <th>CITY</th>
-                  <th>STATUS</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="row in table"
-                  :key="row.id"
-                >
-                  <td>{{row.name}}</td>
-                  <td>{{row.email}}</td>
-                  <td>{{row.product}}</td>
-                  <td>{{row.price}}</td>
-                  <td>{{row.date}}</td>
-                  <td>{{row.city}}</td>
-                  <td>
-                    <b-button
-                      :variant="row.status === 'Pending'
-                        ? 'success'
-                        : row.status === 'Declined' ? 'danger' : 'info'"
-                      class="p-1 px-3 btn-xs"
-                    >
-                      {{row.status}}
-                    </b-button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <canvas id="barchart1" width="80" height="30"></canvas>
+          </div>
+        </Widget>
+      </b-col>
+      <b-col xs="12" lg="6">
+        <Widget
+          title="<h5>Total de produtos por <span class='fw-semi-bold'>indústria</span></h5>"
+          bodyClass="widget-table-overflow"
+          customHeader>
+          <div class="table-responsive">
+            <canvas id="barchart2" width="80" height="30"></canvas>
           </div>
         </Widget>
       </b-col>
@@ -301,6 +275,7 @@ export default {
       ,   pie2  = document.getElementById('piechart2').getContext('2d')
       ,   pie3  = document.getElementById('piechart3').getContext('2d')
       ,   bars1 = document.getElementById('barchart1').getContext('2d')
+      ,   bars2 = document.getElementById('barchart2').getContext('2d')
       new Chart(pie, {
         type: 'pie',
         data:{
@@ -309,8 +284,8 @@ export default {
               label: 'Label',
               data: [obj.qtd_total_produto, obj.qtd_produto_sem_categoria],
               backgroundColor: [
-                  'green',
-                  'red',
+                  'rgba(237,123,0, 0.8)',
+                  'rgba(97,201,184, 0.8)',
               ],
           }]
         },
@@ -349,8 +324,8 @@ export default {
               label: 'Label',
               data: [obj.qtd_total_produto, obj.qtd_produto_sem_tag],
               backgroundColor: [
-                  'green',
-                  'red',
+                  'rgba(237,123,0, 0.8)',
+                  'rgba(97,201,184, 0.8)',
               ],
           }]
         },
@@ -389,8 +364,8 @@ export default {
               label: 'Label',
               data: [obj.qtd_total_produto, obj.qtd_produto_sem_ean],
               backgroundColor: [
-                  'green',
-                  'red',
+                  'rgba(237,123,0, 0.8)',
+                  'rgba(97,201,184, 0.8)',
               ],
           }]
         },
@@ -421,10 +396,9 @@ export default {
           }
         }
       }) // End Pie Chart3
-      this.teste = new Chart(bars1, {
-        type: 'bar',
-        data:{
-        },
+      this.barChart1 = new Chart(bars1, {
+        type: 'horizontalBar',
+        data:{},
         options: {
           legend: {
             display: true,
@@ -433,7 +407,40 @@ export default {
           scales: {
             xAxes: [{
                 ticks: {
-                  display: false
+                  display: true
+                },
+                gridLines: {
+                    drawBorder: true,
+                    display: true
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                  display: true
+                },
+                gridLines: {
+                    drawBorder: true,
+                    display: true
+                }
+            }]
+          }
+        }
+      }) // End Bar Chart 1
+      this.barChart2 = new Chart(bars2, {
+        type: 'horizontalBar',
+        data:{},
+        options: {
+          legend: {
+            display: true,
+            position: 'bottom',
+            "ticks": {
+              "beginAtZero": true
+            },
+          },
+          scales: {
+            xAxes: [{
+                ticks: {
+                  display: true
                 },
                 gridLines: {
                     drawBorder: true,
@@ -471,11 +478,11 @@ export default {
       var b = num & 255;
       return 'rgb(' + r + ', ' + g + ', ' + b + ')';
     },
-    addData(chart, label, color, dados) {
+    addData(chart, label, bgColor, dados) {
         chart.data.datasets.push({
           label: label,
-          backgroundColor: color,
-          data: dados
+          backgroundColor: bgColor,
+          data: dados,
         });
         chart.update();
     },
@@ -483,6 +490,8 @@ export default {
       this.startCharts(obj);
       this.date = obj.ultimas_importacoes[0].dt_inclusao;
       var inds = obj.ultimas_importacoes;
+      // var colors = ['rgba(237,95,0, 0.8)','rgba(247,167,12, 0.8)','rgba(214,122,11, 0.8)','rgba(214,63,11, 0.8)','rgba(247,38,12, 0.8)'] //Laranja
+      var colors = ['rgba(97,201,184, 0.8)','rgba(23,137,126, 0.8)','rgba(237,95,0, 0.8)','rgba(237,123,0, 0.8)','rgba(250,168,0, 0.8)'] //Com azul
 
       for (var i = 0, lgt = inds.length; i < lgt; i++ ) {
         var ind = inds[i].industria
@@ -490,7 +499,8 @@ export default {
         ,   qtT = inds[i].qtd_total_produtos
         // ,   qtA = inds[i].qtd_atualizados
 
-        this.addData(this.teste, ind, this.getRandomRgb(), [qtT])
+        this.addData(this.barChart1, ind, colors[i], [qtT])
+        this.addData(this.barChart2, ind, colors[i], [qtT])
       }
     },
   },
