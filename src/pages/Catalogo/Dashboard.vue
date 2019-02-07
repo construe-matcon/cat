@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="page-title">Catálogo</h1>
-    <h5 class="page-title"><small>Última atualização: {{date}}</small></h5>
+    <h5 class="page-title"><small>Última atualização: <span class='fw-semi-bold'>{{date}}</span></small></h5>
     <b-row>
       <b-col lg="3" sm="6" xs="12">
         <div class="pb-xlg h-100">
