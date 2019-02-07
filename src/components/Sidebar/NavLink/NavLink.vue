@@ -22,13 +22,13 @@
 		</div>
 		<b-collapse v-if="childrenLinks.length > 0" :id="'collapse' + index" :visible="isActive">
 			<ul>
-				<NavLink v-for="link in childrenLinks"
+				<NavLink v-for="clink in childrenLinks"
 				:activeItem="activeItem"
-				:nome="link.nome"
-				:index="link.id.toString()"
-				:link="link.id.toString()"
-				:childrenLinks="link.subcategorias"
-				:key="link.link"
+				:nome="clink.nome"
+				:index="clink.id.toString()"
+				:link="link + '/' + clink.id.toString()"
+				:childrenLinks="clink.subcategorias"
+				:key="clink.link"
 				:level="(level + 1)"
 				/>
 			</ul>

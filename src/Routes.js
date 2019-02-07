@@ -32,7 +32,7 @@ import ProdutoPage from '@/pages/Produto/Produto';
 Vue.use(Router);
 
 let router = new Router({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes: [
     {
