@@ -46,13 +46,7 @@ let router = new Router({
       component: Login,
     },
     {
-      path: '/error',
-      name: 'Error',
-      component: ErrorPage,
-    },
-    {
-      path: '/',
-      name: 'Layout',
+      path: '',
       component: Layout,
       children: [
         {
@@ -67,8 +61,6 @@ let router = new Router({
         },
         {
           path: '',
-          name: 'Catalogo',
-          component: Catalogo,
           redirect: 'catalogo'
         },
         {
