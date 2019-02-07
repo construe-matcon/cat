@@ -32,7 +32,7 @@ import ProdutoPage from '@/pages/Produto/Produto';
 Vue.use(Router);
 
 let router = new Router({
-  mode: 'hash',
+  mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
@@ -50,16 +50,6 @@ let router = new Router({
       component: Layout,
       children: [
         {
-          path: 'categorias',
-          name: 'CategoriasPage',
-          component: CategoriasPage,
-        },
-        {
-          path: 'produto/:id',
-          name: 'ProdutoPage',
-          component: ProdutoPage,
-        },
-        {
           path: '',
           redirect: 'catalogo'
         },
@@ -67,6 +57,22 @@ let router = new Router({
           path: 'catalogo',
           name: 'Catalogo',
           component: Catalogo,
+        },
+        {
+          path: 'categorias',
+          name: 'AllCategoriasPage',
+          component: CategoriasPage,
+          children: [
+            {
+              path: ':id',
+              component: CategoriasPage,
+            }
+          ]
+        },
+        {
+          path: 'produto/:id',
+          name: 'ProdutoPage',
+          component: ProdutoPage,
         },
         {
           path: 'typography',

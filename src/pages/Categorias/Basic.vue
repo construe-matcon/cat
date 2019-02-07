@@ -1,6 +1,6 @@
 <template>
 	<div class="tables-basic">
-		<h2 class="page-title">Catálogo - <span class="fw-semi-bold">Produtos</span></h2>
+		<h2 class="page-title">Catálogo - <span class="fw-semi-bold">Produtos</span> {{categoriaId}}</h2>
 		<b-row>
 			<b-col>
 				<Widget>
@@ -97,7 +97,9 @@
 				totalProdutos: 0,
 				tamanho: 1,
 				paginaAtual: 0,
-				ultimaPagina: true
+				ultimaPagina: true,
+				categoriaId: '',
+				industriaId: '',
 			};
 		},
 		methods: {
@@ -151,11 +153,18 @@
 				});
 			},
 			mudaPagina(page) {
-				gfn.fApi({url:"https://api.construe.cf/produtos?id_industria=11&tamanho_pagina=20&pagina="+(page - 1), options: {method: 'GET'}}, this.fetchUrl);
+				gfn.fApi({url:"https://api.construe.cf/produtos?tamanho_pagina=20&pagina="+(page - 1), options: {method: 'GET'}}, this.fetchUrl);
 			}
 		},
 		async mounted() {
-			await gfn.fApi({url:"https://api.construe.cf/produtos?id_industria=11&tamanho_pagina=20", options: {method: 'GET'}}, this.fetchUrl);
+			this.categoriaId = (this.$route.params.id ? this.$route.params.id : '');
+
+			let urlList = `
+				https://api.construe.cf/produtos?tamanho_pagina=20
+				${(!this.categoriaId ? '' : `&id_categoria=${this.categoriaId}`)}
+			`
+
+			await gfn.fApi({url:urlList.replace(/\n|\r|\t/g, ""), options: {method: 'GET'}}, this.fetchUrl);
 			this.initCharts();
 		},
 	};
