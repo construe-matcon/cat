@@ -2,39 +2,45 @@
   <div>
     <h1 class="page-title">Catálogo</h1>
     <h5 class="page-title"><small>Última atualização: <span class='fw-semi-bold'>{{date}}</span></small></h5>
+
+
     <b-row>
-      <b-col lg="3" sm="6" xs="12">
+      <b-col v-for="gra in listCat" class="min" v-bind:key="gra.id">
+        <div class="pb-xlg h-100">
+          <Widget class="h-100 mb-0" :title="gra.nome">
+            <b-row>
+              <canvas :id='"industria"+gra.id' height="350"></canvas>
+            </b-row>
+          </Widget>
+        </div>
+      </b-col>
+    </b-row>
+
+
+    <b-row>
+      <b-col class="min">
         <div class="pb-xlg h-100">
           <Widget class="h-100 mb-0" title="Produtos Sem Categoria">
             <b-row>
-              <canvas id="piechart" width="80" height="80"></canvas>
+              <canvas id="piechart0" height="350"></canvas>
             </b-row>
           </Widget>
         </div>
       </b-col>
-      <b-col lg="3" sm="6" xs="12">
+      <b-col class="min">
         <div class="pb-xlg h-100">
           <Widget class="h-100 mb-0" title="Produtos Sem Tags">
             <b-row>
-              <canvas id="piechart2" width="80" height="80"></canvas>
+              <canvas id="piechart1" height="350"></canvas>
             </b-row>
           </Widget>
         </div>
       </b-col>
-      <b-col lg="3" sm="6" xs="12">
+      <b-col class="min">
         <div class="pb-xlg h-100">
           <Widget class="h-100 mb-0" title="Produtos Sem EAN">
             <b-row>
-              <canvas id="piechart3" width="80" height="80"></canvas>
-            </b-row>
-          </Widget>
-        </div>
-      </b-col>
-      <b-col lg="3" sm="6" xs="12">
-        <div class="pb-xlg h-100">
-          <Widget class="h-100 mb-0" title="Total de produtos por indústria">
-            <b-row>
-
+              <canvas id="piechart2" height="350"></canvas>
             </b-row>
           </Widget>
         </div>
@@ -47,7 +53,7 @@
           bodyClass="widget-table-overflow"
           customHeader>
           <div class="table-responsive">
-            <canvas id="barchart1" width="80" height="30"></canvas>
+            <canvas id="barchart1" height="350"></canvas>
           </div>
         </Widget>
       </b-col>
@@ -57,7 +63,7 @@
           bodyClass="widget-table-overflow"
           customHeader>
           <div class="table-responsive">
-            <canvas id="barchart2" width="80" height="30"></canvas>
+            <canvas id="barchart2" height="350"></canvas>
           </div>
         </Widget>
       </b-col>
@@ -175,57 +181,8 @@ export default {
   components: { Widget },
   data() {
     return {
-      table: [{
-        id: 0,
-        name: 'Mark Otto',
-        email: 'ottoto@wxample.com',
-        product: 'ON the Road',
-        price: '$25 224.2',
-        date: '11 May 2017',
-        city: 'Otsego',
-        status: 'Sent',
-      },
-      {
-        id: 1,
-        name: 'Jacob Thornton',
-        email: 'thornton@wxample.com',
-        product: 'HP Core i7',
-        price: '$1 254.2',
-        date: '4 Jun 2017',
-        city: 'Fivepointville',
-        status: 'Sent',
-      },
-      {
-        id: 2,
-        name: 'Larry the Bird',
-        email: 'bird@wxample.com',
-        product: 'Air Pro',
-        price: '$1 570.0',
-        date: '27 Aug 2017',
-        city: 'Leadville North',
-        status: 'Pending',
-      },
-      {
-        id: 3,
-        name: 'Joseph May',
-        email: 'josephmay@wxample.com',
-        product: 'Version Control',
-        price: '$5 224.5',
-        date: '19 Feb 2018',
-        city: 'Seaforth',
-        status: 'Declined',
-      },
-      {
-        id: 4,
-        name: 'Peter Horadnia',
-        email: 'horadnia@wxample.com',
-        product: 'Let\'s Dance',
-        price: '$43 594.7',
-        date: '1 Mar 2018',
-        city: 'Hanoverton',
-        status: 'Sent',
-      }],
       date: [],
+      listCat: [],
       teste: [],
     };
   },
@@ -270,195 +227,280 @@ export default {
         },
       });
     },
-    startCharts(obj) {
-      var pie   = document.getElementById('piechart').getContext('2d')
-      ,   pie2  = document.getElementById('piechart2').getContext('2d')
-      ,   pie3  = document.getElementById('piechart3').getContext('2d')
-      ,   bars1 = document.getElementById('barchart1').getContext('2d')
-      ,   bars2 = document.getElementById('barchart2').getContext('2d')
-      new Chart(pie, {
-        type: 'pie',
-        data:{
-          labels: ["Total", "Sem categoria"],
-          datasets: [{
-              label: 'Label',
-              data: [obj.qtd_total_produto, obj.qtd_produto_sem_categoria],
-              backgroundColor: [
-                  'rgba(237,123,0, 0.8)',
-                  'rgba(97,201,184, 0.8)',
-              ],
-          }]
-        },
-        options: {
-          legend: {
-            display: true,
-            position: 'bottom'
-          },
-          scales: {
-            xAxes: [{
-                ticks: {
-                  display: false
-                },
-                gridLines: {
-                    drawBorder: false,
-                    display: false
-                }
-            }],
-            yAxes: [{
-                ticks: {
-                  display: false
-                },
-                gridLines: {
-                    drawBorder: false,
-                    display: false
-                }
+    startCharts(type, idEl, label, datax) {
+      // var pie   = document.getElementById('piechart').getContext('2d')
+      // ,   pie2  = document.getElementById('piechart2').getContext('2d')
+      // ,   pie3  = document.getElementById('piechart3').getContext('2d')
+      // ,   bars1 = document.getElementById('barchart1').getContext('2d')
+      // ,   bars2 = document.getElementById('barchart2').getContext('2d')
+      // new Chart(pie, {
+      //   type: 'pie',
+      //   data:{
+      //     labels: ["Total", "Sem categoria"],
+      //     datasets: [{
+      //         label: 'Label',
+      //         data: [obj.qtd_total_produto, obj.qtd_produto_sem_categoria],
+      //         backgroundColor: [
+      //             'rgba(237,123,0, 0.8)',
+      //             'rgba(97,201,184, 0.8)',
+      //         ],
+      //     }]
+      //   },
+      //   options: {
+      //     legend: {
+      //       display: true,
+      //       position: 'bottom'
+      //     },
+      //     scales: {
+      //       xAxes: [{
+      //           ticks: {
+      //             display: false
+      //           },
+      //           gridLines: {
+      //               drawBorder: false,
+      //               display: false
+      //           }
+      //       }],
+      //       yAxes: [{
+      //           ticks: {
+      //             display: false
+      //           },
+      //           gridLines: {
+      //               drawBorder: false,
+      //               display: false
+      //           }
+      //       }]
+      //     }
+      //   }
+      // }) // End Pie Chart
+      // new Chart(pie2, {
+      //   type: 'pie',
+      //   data:{
+      //     labels: ["Total", "Sem Tags"],
+      //     datasets: [{
+      //         label: 'Label',
+      //         data: [obj.qtd_total_produto, obj.qtd_produto_sem_tag],
+      //         backgroundColor: [
+      //             'rgba(237,123,0, 0.8)',
+      //             'rgba(97,201,184, 0.8)',
+      //         ],
+      //     }]
+      //   },
+      //   options: {
+      //     legend: {
+      //       display: true,
+      //       position: 'bottom'
+      //     },
+      //     scales: {
+      //       xAxes: [{
+      //           ticks: {
+      //             display: false
+      //           },
+      //           gridLines: {
+      //               drawBorder: false,
+      //               display: false
+      //           }
+      //       }],
+      //       yAxes: [{
+      //           ticks: {
+      //             display: false
+      //           },
+      //           gridLines: {
+      //               drawBorder: false,
+      //               display: false
+      //           }
+      //       }]
+      //     }
+      //   }
+      // }) // End Pie Chart2
+      // new Chart(pie3, {
+      //   type: 'pie',
+      //   data:{
+      //     labels: ["Total", "Sem EAN"],
+      //     datasets: [{
+      //         label: 'Label',
+      //         data: [obj.qtd_total_produto, obj.qtd_produto_sem_ean],
+      //         backgroundColor: [
+      //             'rgba(237,123,0, 0.8)',
+      //             'rgba(97,201,184, 0.8)',
+      //         ],
+      //     }]
+      //   },
+      //   options: {
+      //     legend: {
+      //       display: true,
+      //       position: 'bottom'
+      //     },
+      //     scales: {
+      //       xAxes: [{
+      //           ticks: {
+      //             display: false
+      //           },
+      //           gridLines: {
+      //               drawBorder: false,
+      //               display: false
+      //           }
+      //       }],
+      //       yAxes: [{
+      //           ticks: {
+      //             display: false
+      //           },
+      //           gridLines: {
+      //               drawBorder: false,
+      //               display: false
+      //           }
+      //       }]
+      //     }
+      //   }
+      // }) // End Pie Chart3
+      // this.barChart1 = new Chart(bars1, {
+      //   type: 'horizontalBar',
+      //   data:{},
+      //   options: {
+      //     legend: {
+      //       display: true,
+      //       position: 'bottom'
+      //     },
+      //     scales: {
+      //       xAxes: [{
+      //           ticks: {
+      //             display: true
+      //           },
+      //           gridLines: {
+      //               drawBorder: true,
+      //               display: true
+      //           }
+      //       }],
+      //       yAxes: [{
+      //           ticks: {
+      //             display: true
+      //           },
+      //           gridLines: {
+      //               drawBorder: true,
+      //               display: true
+      //           }
+      //       }]
+      //     }
+      //   }
+      // }) // End Bar Chart 1
+      // this.barChart2 = new Chart(bars2, {
+      //   type: 'horizontalBar',
+      //   data:{},
+      //   options: {
+      //     legend: {
+      //       display: true,
+      //       position: 'bottom',
+      //       "ticks": {
+      //         "beginAtZero": true
+      //       },
+      //     },
+      //     scales: {
+      //       xAxes: [{
+      //           ticks: {
+      //             display: true
+      //           },
+      //           gridLines: {
+      //               drawBorder: true,
+      //               display: true
+      //           }
+      //       }],
+      //       yAxes: [{
+      //           ticks: {
+      //             display: true
+      //           },
+      //           gridLines: {
+      //               drawBorder: true,
+      //               display: true
+      //           }
+      //       }]
+      //     }
+      //   }
+      // }) // End Bar Chart 1
+
+      var el = document.getElementById(idEl).getContext('2d')
+      var graph;
+
+      if (type == 'pie') {
+        graph = {
+          type: type,
+          data:{
+            labels: label,
+            datasets: [{
+                data: datax,
+                backgroundColor: [
+                    'rgba(237,123,0, 0.8)',
+                    'rgba(97,201,184, 0.8)',
+                ],
             }]
-          }
-        }
-      }) // End Pie Chart
-      new Chart(pie2, {
-        type: 'pie',
-        data:{
-          labels: ["Total", "Sem Tags"],
-          datasets: [{
-              label: 'Label',
-              data: [obj.qtd_total_produto, obj.qtd_produto_sem_tag],
-              backgroundColor: [
-                  'rgba(237,123,0, 0.8)',
-                  'rgba(97,201,184, 0.8)',
-              ],
-          }]
-        },
-        options: {
-          legend: {
-            display: true,
-            position: 'bottom'
           },
-          scales: {
-            xAxes: [{
-                ticks: {
-                  display: false
-                },
-                gridLines: {
-                    drawBorder: false,
-                    display: false
-                }
-            }],
-            yAxes: [{
-                ticks: {
-                  display: false
-                },
-                gridLines: {
-                    drawBorder: false,
-                    display: false
-                }
-            }]
-          }
-        }
-      }) // End Pie Chart2
-      new Chart(pie3, {
-        type: 'pie',
-        data:{
-          labels: ["Total", "Sem EAN"],
-          datasets: [{
-              label: 'Label',
-              data: [obj.qtd_total_produto, obj.qtd_produto_sem_ean],
-              backgroundColor: [
-                  'rgba(237,123,0, 0.8)',
-                  'rgba(97,201,184, 0.8)',
-              ],
-          }]
-        },
-        options: {
-          legend: {
-            display: true,
-            position: 'bottom'
-          },
-          scales: {
-            xAxes: [{
-                ticks: {
-                  display: false
-                },
-                gridLines: {
-                    drawBorder: false,
-                    display: false
-                }
-            }],
-            yAxes: [{
-                ticks: {
-                  display: false
-                },
-                gridLines: {
-                    drawBorder: false,
-                    display: false
-                }
-            }]
-          }
-        }
-      }) // End Pie Chart3
-      this.barChart1 = new Chart(bars1, {
-        type: 'horizontalBar',
-        data:{},
-        options: {
-          legend: {
-            display: true,
-            position: 'bottom'
-          },
-          scales: {
-            xAxes: [{
-                ticks: {
-                  display: true
-                },
-                gridLines: {
-                    drawBorder: true,
-                    display: true
-                }
-            }],
-            yAxes: [{
-                ticks: {
-                  display: true
-                },
-                gridLines: {
-                    drawBorder: true,
-                    display: true
-                }
-            }]
-          }
-        }
-      }) // End Bar Chart 1
-      this.barChart2 = new Chart(bars2, {
-        type: 'horizontalBar',
-        data:{},
-        options: {
-          legend: {
-            display: true,
-            position: 'bottom',
-            "ticks": {
-              "beginAtZero": true
+          options: {
+            legend: {
+              display: true,
+              position: 'bottom',
+              "ticks": {
+                "beginAtZero": true
+              },
             },
-          },
-          scales: {
-            xAxes: [{
-                ticks: {
-                  display: true
-                },
-                gridLines: {
-                    drawBorder: true,
-                    display: true
-                }
-            }],
-            yAxes: [{
-                ticks: {
-                  display: true
-                },
-                gridLines: {
-                    drawBorder: true,
-                    display: true
-                }
-            }]
+            scales: {
+              xAxes: [{
+                  ticks: {
+                    display: false
+                  },
+                  gridLines: {
+                      drawBorder: false,
+                      display: false
+                  }
+              }],
+              yAxes: [{
+                  ticks: {
+                    display: false
+                  },
+                  gridLines: {
+                      drawBorder: false,
+                      display: false
+                  }
+              }]
+            }
           }
         }
-      }) // End Bar Chart 1
+      } else if (type == 'horizontalBar') {
+        graph = {
+          type: type,
+          data:{},
+          options: {
+            legend: {
+              display: true,
+              position: 'bottom',
+              "ticks": {
+                "beginAtZero": true
+              },
+            },
+            scales: {
+              xAxes: [{
+                  ticks: {
+                    display: true
+                  },
+                  gridLines: {
+                      drawBorder: true,
+                      display: true
+                  }
+              }],
+              yAxes: [{
+                  ticks: {
+                    display: true
+                  },
+                  gridLines: {
+                      drawBorder: true,
+                      display: true
+                  }
+              }]
+            }
+          }
+        }
+      }
+
+      return new Chart(el,graph) // End Pie Chart
+
     },
     rds(arr) {
       var seen = {};
@@ -487,21 +529,45 @@ export default {
         chart.update();
     },
     fetchUrl(obj){
-      this.startCharts(obj);
+      var arrI = [
+        [obj.qtd_total_produto, obj.qtd_produto_sem_categoria],
+        [obj.qtd_total_produto, obj.qtd_produto_sem_tag],
+        [obj.qtd_total_produto, obj.qtd_produto_sem_ean]
+      ]
+      for (var a = 0, lgtt = 3; a < lgtt; a++ ) {
+
+        this.startCharts('pie', 'piechart'+a,["Total", "Sem categoria"],arrI[a]);
+      }
+
+      // this.startCharts('piechart2',obj,[obj.qtd_total_produto, obj.qtd_produto_sem_tag]);
       this.date = gfn.formatDate(obj.ultimas_importacoes[0].dt_inclusao);
       var inds = obj.ultimas_importacoes;
-      // var colors = ['rgba(237,95,0, 0.8)','rgba(247,167,12, 0.8)','rgba(214,122,11, 0.8)','rgba(214,63,11, 0.8)','rgba(247,38,12, 0.8)'] //Laranja
+      // // var colors = ['rgba(237,95,0, 0.8)','rgba(247,167,12, 0.8)','rgba(214,122,11, 0.8)','rgba(214,63,11, 0.8)','rgba(247,38,12, 0.8)'] //Laranja
       var colors = ['rgba(97,201,184, 0.8)','rgba(23,137,126, 0.8)','rgba(237,95,0, 0.8)','rgba(237,123,0, 0.8)','rgba(250,168,0, 0.8)'] //Com azul
+      this.barChart1 = new this.startCharts('horizontalBar', 'barchart1','',[]);
+      this.barChart2 = new this.startCharts('horizontalBar', 'barchart2','',[]);
 
       for (var i = 0, lgt = inds.length; i < lgt; i++ ) {
         var ind = inds[i].industria
-        // ,   qtI = inds[i].qtd_inseridos
         ,   qtT = inds[i].qtd_total_produtos
+        // ,   qtI = inds[i].qtd_inseridos
         // ,   qtA = inds[i].qtd_atualizados
+        this.listCat.push({id:inds[i].id_industria,nome:inds[i].industria})
 
         this.addData(this.barChart1, ind, colors[i], [qtT])
         this.addData(this.barChart2, ind, colors[i], [qtT])
       }
+
+      this.fetchIds(this.listCat)
+    },
+    async fetchIds(ids){
+      for (var i = 0, lgt = ids.length; i < lgt; i++) {
+        await gfn.fApi({url:"https://api.construe.cf/dashboard?id_industria="+ids[i].id, options: {method: 'GET'}}, this.montaGraf);
+      }
+    },
+    montaGraf(obj) {
+      // this.teste.push(obj);
+      this.startCharts('pie', 'industria'+obj.ultimas_importacoes[0].id_industria,["Total de produtos", "Total de produtos associados"],[obj.qtd_total_produto,obj.qtd_produto_sellout_associado_catalogo]);
     },
   },
   async mounted() {
