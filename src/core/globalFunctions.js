@@ -2,10 +2,10 @@ import router from '../Routes';
 
 export default {
 	fApi(params, cb) {
-		var dados = JSON.parse(window.localStorage.getItem("account"));
+		let dados = JSON.parse(window.localStorage.getItem("account"));
 		params = {
 			'url': params.url || false,
-			'options': params.options
+			'options': params.options,
 		}
 		if (params.options) {
 			if (!params.options.headers) {
@@ -21,8 +21,11 @@ export default {
 				params.options
 			).then(function(response){
 				if (response.status == 401) {
+					let currentPath = (router.history ? router.history.current.path : '')
 					window.localStorage.clear();
-					router.push('/login');
+					if (currentPath.indexOf('login') < 0) {
+						router.push({path: '/login', query: {redirect: currentPath}});
+					}
 				}
 				response.json().then(function(data){
 					if (typeof(cb) == 'function'){
@@ -38,7 +41,7 @@ export default {
 	},
 	formatDate(valueDate,removeHour) {
 		removeHour = removeHour || false;
-		var t1, t2, t3, rDay, rMounth, rYear, rHour, rMin, rSec;
+		let t1, t2, t3, rDay, rMounth, rYear, rHour, rMin, rSec;
 		if (valueDate.indexOf('AM') > 0 || valueDate.indexOf('PM') > 0) {
 			t1 = valueDate.split('/')
 			t2 = t1[2].split(' ');
