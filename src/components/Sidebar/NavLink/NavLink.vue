@@ -15,7 +15,7 @@
 					<i :class="fullIconName"></i>
 				</span>
 				{{nome}}
-				<div v-if="childrenLinks.length > 0" :class="{caretWrapper: true, carretActive: isActive}" @click.prevent="openMenuList">
+				<div v-if="childrenLinks.length > 0" :class="{caretWrapper: true, carretActive: isActive}" @click.prevent="openMenuList" :data-index="index">
 					<i class="fa fa-angle-left" />
 				</div>
 			</router-link>
@@ -25,11 +25,12 @@
 				<NavLink v-for="clink in childrenLinks"
 				:activeItem="activeItem"
 				:nome="clink.nome"
+				:parentLink="parentLink"
 				:index="clink.id.toString()"
-				:link="link + '/' + clink.id.toString()"
+				:link="parentLink + '/' + clink.id.toString()"
 				:childrenLinks="clink.subcategorias"
 				:key="clink.link"
-				:level="(level + 1)"
+				:deep="(deep + 1)"
 				/>
 			</ul>
 		</b-collapse>
@@ -52,6 +53,7 @@
 			iconName: { type: String, default: '' },
 			headerLink: { type: String, default: '' },
 			link: { type: String, default: '' },
+			parentLink: { type: String, default: '' },
 			childrenLinks: { type: Array, default: null },
 			className: { type: String, default: '' },
 			isHeader: { type: Boolean, default: false },
@@ -59,13 +61,12 @@
 			activeItem: { type: String, default: '' },
 			label: { type: String },
 			index: { type: String },
-			level: { type: Number, default: 0 },
 		},
 		data() {
 			return {
 				headerLinkWasClicked: false,
 				navItens: [],
-				classLevel: 'level' + this.level,
+				classLevel: 'level' + this.deep,
 			};
 		},
 		methods: {

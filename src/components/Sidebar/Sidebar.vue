@@ -15,10 +15,11 @@
 			:activeItem="activeItem"
 			nome="Categorias"
 			link="/categorias"
+			parentLink="/categorias"
 			iconName="flaticon-list"
 			index="categorias"
 			:childrenLinks="navItens"
-			:level="0"
+			:deep="0"
 			/>
 		</ul>
 	</nav>

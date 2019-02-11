@@ -82,7 +82,7 @@
 </template>
 
 <script>
-	import $ from 'jquery';
+	// import $ from 'jquery';
 	import Vue from 'vue';
 	import Widget from '@/components/Widget/Widget';
 	import gfn from '@/core/globalFunctions';
@@ -127,16 +127,6 @@
 
 				return result;
 			},
-			initCharts() {
-				const colors = ['#547fff', '#9964e3', '#f55d5d', '#ffc247', '#3abf94'];
-
-				$.each($('.sparkline-chart'), (id, chart) => {
-					$(chart).sparkline(this.getRandomData(), {
-						type: 'bar',
-						barColor: colors[Math.floor(Math.random() * colors.length)],
-					});
-				});
-			},
 			fetchUrl(obj){
 				this.tableStyles = obj.data;
 				this.totalProdutos = obj.total_data_size;
@@ -154,22 +144,24 @@
 			},
 			mudaPagina(page) {
 				gfn.fApi({url:"https://api.construe.cf/produtos?tamanho_pagina=20&pagina="+(page - 1), options: {method: 'GET'}}, this.fetchUrl);
+			},
+			async loadCategorias(paramId) {
+				let urlList = `
+					https://api.construe.cf/produtos?tamanho_pagina=20
+					${(paramId.length > 0) ? (!this.categoriaId ? '' : `&id_categoria=${this.categoriaId}`) : ``}
+				`
+
+				await gfn.fApi({url:urlList.replace(/\n|\r|\t/g, ""), options: {method: 'GET'}}, this.fetchUrl);
 			}
 		},
 		async mounted() {
 			this.categoriaId = (this.$route.params.id ? this.$route.params.id : '');
-
-			let urlList = `
-				https://api.construe.cf/produtos?tamanho_pagina=20
-				${(!this.categoriaId ? '' : `&id_categoria=${this.categoriaId}`)}
-			`
-
-			await gfn.fApi({url:urlList.replace(/\n|\r|\t/g, ""), options: {method: 'GET'}}, this.fetchUrl);
-			this.initCharts();
+			this.loadCategorias(this.categoriaId)
 		},
 		watch: {
-			'$route' (to, from, next) {
-				console.log(to, from, next)
+			'$route' () {
+				this.categoriaId = (this.$route.params.id ? this.$route.params.id : '');
+				this.loadCategorias(this.categoriaId)
 			}
 		}
 	};

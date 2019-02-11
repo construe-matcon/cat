@@ -488,7 +488,7 @@ export default {
     },
     fetchUrl(obj){
       this.startCharts(obj);
-      this.date = obj.ultimas_importacoes[0].dt_inclusao;
+      this.date = gfn.formatDate(obj.ultimas_importacoes[0].dt_inclusao);
       var inds = obj.ultimas_importacoes;
       // var colors = ['rgba(237,95,0, 0.8)','rgba(247,167,12, 0.8)','rgba(214,122,11, 0.8)','rgba(214,63,11, 0.8)','rgba(247,38,12, 0.8)'] //Laranja
       var colors = ['rgba(97,201,184, 0.8)','rgba(23,137,126, 0.8)','rgba(237,95,0, 0.8)','rgba(237,123,0, 0.8)','rgba(250,168,0, 0.8)'] //Com azul
