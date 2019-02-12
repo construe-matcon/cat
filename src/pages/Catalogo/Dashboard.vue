@@ -402,7 +402,7 @@ export default {
     },
     montaGraf(obj) {
       // console.log(obj)
-      var lojas = obj.lojas_compram_industria
+      var lojas = obj.lojas_compram_industria.slice(0,15)
       console.log(obj.ultimas_importacoes[0].industria,lojas)
       // this.startCharts('pie', 'industria'+obj.ultimas_importacoes[0].id_industria,["Total de produtos", "Total de produtos associados"],[obj.qtd_total_produto,obj.qtd_produto_sellout_associado_catalogo]);
 
