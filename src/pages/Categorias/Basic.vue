@@ -1,6 +1,9 @@
 <template>
 	<div class="tables-basic">
-		<h2 class="page-title">Catálogo - <span class="fw-semi-bold">Produtos</span> {{categoriaId}}</h2>
+		<h2 class="page-title">Catálogo - <span class="fw-semi-bold">Produtos</span></h2>
+		<template v-if="nomeCategoria.length > 0">
+			<h5 class="page-title">Categoria: <span class="fw-semi-bold">{{nomeCategoria}}</span></h5>
+		</template>
 		<b-row>
 			<b-col>
 				<Widget>
@@ -36,7 +39,7 @@
 										</p>
 									</td>
 									<td>
-										<img class="img-rounded imgCat" :src="'https://images.construe.cf/fogo/'+row.ean+'.jpg'" alt="" />
+										<img class="img-rounded imgCat" :src="'https://images.construe.cf/'+row.industria+'/'+row.ean+'.jpg'" alt="" />
 									</td>
 									<td>
 										{{row.descricao}}
@@ -54,17 +57,19 @@
 										{{row.categoria}}
 									</td>
 									<td class="width-150">
-										<template v-if="row.tags.length > 0">
-											<span v-for="(tags, i) in row.tags" :key="i">
-												{{tags}}<br>
-											</span>
+										<template v-if="row.tags">
+											<template v-if="row.tags.length > 0">
+												<span v-for="(tags, i) in row.tags" :key="i">
+													{{tags}}<br>
+												</span>
+											</template>
 										</template>
 									</td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
-					<b-pagination
+					<b-pagination v-if="tamanho <= totalProdutos"
 						align="right"
 						size="md"
 						next-text="Proximo"
@@ -84,6 +89,7 @@
 <script>
 	// import $ from 'jquery';
 	import Vue from 'vue';
+	import $ from 'jquery';
 	import Widget from '@/components/Widget/Widget';
 	import gfn from '@/core/globalFunctions';
 	import 'imports-loader?jQuery=jquery,this=>window!jquery-sparkline'; // eslint-disable-line
@@ -98,7 +104,8 @@
 				tamanho: 1,
 				paginaAtual: 0,
 				ultimaPagina: true,
-				categoriaId: '',
+				categoriaId: (this.$route.params.id ? this.$route.params.id : ''),
+				nomeCategoria: '',
 				industriaId: '',
 			};
 		},
@@ -128,6 +135,7 @@
 				return result;
 			},
 			fetchUrl(obj){
+				this.nomeCategoria = ($('.router-link-exact-active').hasClass('level0') ? '' : $('.router-link-exact-active').text().trim())
 				this.tableStyles = obj.data;
 				this.totalProdutos = obj.total_data_size;
 				this.tamanho = obj.size;
@@ -148,14 +156,13 @@
 			async loadCategorias(paramId) {
 				let urlList = `
 					https://api.construe.cf/produtos?tamanho_pagina=20
-					${(paramId.length > 0) ? (!this.categoriaId ? '' : `&id_categoria=${this.categoriaId}`) : ``}
+					${(paramId ? (paramId.length > 0) ? (!this.categoriaId ? '' : `&id_categoria=${this.categoriaId}`) : `` : ``)}
 				`
 
 				await gfn.fApi({url:urlList.replace(/\n|\r|\t/g, ""), options: {method: 'GET'}}, this.fetchUrl);
 			}
 		},
 		async mounted() {
-			this.categoriaId = (this.$route.params.id ? this.$route.params.id : '');
 			this.loadCategorias(this.categoriaId)
 		},
 		watch: {
