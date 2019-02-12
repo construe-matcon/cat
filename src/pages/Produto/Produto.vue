@@ -95,6 +95,9 @@
           </b-col>
         </b-row>
       </b-tab>
+      <b-tab title="Outra">
+        X
+      </b-tab>
     </b-tabs>
   </section>
 </template>
