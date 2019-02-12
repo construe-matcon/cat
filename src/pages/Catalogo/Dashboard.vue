@@ -7,7 +7,7 @@
     <b-row>
       <b-col v-for="gra in listCat" class="min" v-bind:key="gra.id">
         <div class="pb-xlg h-100">
-          <Widget class="h-100 mb-0" :title="gra.nome">
+          <Widget class="h-100 mb-0" :title='"Top 15 Lojas que compram "+gra.nome'>
             <b-row>
               <canvas :id='"industria"+gra.id' height="350"></canvas>
             </b-row>
@@ -365,24 +365,26 @@ export default {
         chart.update();
     },
     fetchUrl(obj){
-      var arrI = {'labels':[],'datasets':[{'data':[],'backgroundColor':[],'borderColor':['transparent'],'borderWidth':[]}]};
-      // [obj.qtd_total_produto, obj.qtd_produto_sem_categoria],
-      // [obj.qtd_total_produto, obj.qtd_produto_sem_tag],
-      // [obj.qtd_total_produto, obj.qtd_produto_sem_ean]
+      var arrI = {'labels':["Total", "Sem categoria"],'datasets':[{'data':[],'backgroundColor':['rgba(237,123,0, 0.8)','rgba(97,201,184, 0.8)'],'borderColor':['transparent'],'borderWidth':[]}]};
 
       for (var a = 0, lgtt = 3; a < lgtt; a++ ) {
-        arrI.labels.push(["Total", "Sem categoria"])
-        arrI.datasets[0].data.push([obj.qtd_total_produto, obj.qtd_produto_sem_categoria])
-        arrI.datasets[0].backgroundColor.push('rgba(237,123,0, 0.8)','rgba(97,201,184, 0.8)')
-        arrI.datasets[0].borderWidth.push(0)
+        arrI.datasets[0].data = []
+        if (a == 0) {
+          arrI.datasets[0].data.push(obj.qtd_total_produto, obj.qtd_produto_sem_categoria)
+        } else if (a == 1) {
+          arrI.datasets[0].data.push(obj.qtd_total_produto, obj.qtd_produto_sem_tag)
+        } else if (a == 2) {
+          arrI.datasets[0].data.push(obj.qtd_total_produto, obj.qtd_produto_sem_ean)
+        }
+        this.startCharts('pie', 'piechart'+a,'',arrI, true);
       }
-      // this.startCharts('pie', 'piechart'+a,'',arrI, true);
+
 
       this.date = gfn.formatDate(obj.ultimas_importacoes[0].dt_inclusao);
       var inds = obj.ultimas_importacoes;
       var colors = ['rgba(97,201,184, 0.8)','rgba(23,137,126, 0.8)','rgba(237,95,0, 0.8)','rgba(237,123,0, 0.8)','rgba(250,168,0, 0.8)'] //Com azul
-      this.barChart1 = new this.startCharts('horizontalBar', 'barchart1','',[]);
-      this.barChart2 = new this.startCharts('horizontalBar', 'barchart2','',[]);
+      this.barChart1 = new this.startCharts('bar', 'barchart1','',[]);
+      this.barChart2 = new this.startCharts('bar', 'barchart2','',[]);
 
       for (var i = 0, lgt = inds.length; i < lgt; i++ ) {
         var ind = inds[i].industria
@@ -403,7 +405,6 @@ export default {
     montaGraf(obj) {
       // console.log(obj)
       var lojas = obj.lojas_compram_industria.slice(0,15)
-      console.log(obj.ultimas_importacoes[0].industria,lojas)
       // this.startCharts('pie', 'industria'+obj.ultimas_importacoes[0].id_industria,["Total de produtos", "Total de produtos associados"],[obj.qtd_total_produto,obj.qtd_produto_sellout_associado_catalogo]);
 
       var sellOut = {'labels':[],'datasets':[{'data':[],'backgroundColor':[],'borderColor':['transparent'],'borderWidth':[]}]}
