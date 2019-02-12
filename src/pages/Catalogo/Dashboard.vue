@@ -7,7 +7,7 @@
     <b-row>
       <b-col v-for="gra in listCat" class="min" v-bind:key="gra.id">
         <div class="pb-xlg h-100">
-          <Widget class="h-100 mb-0" :title='"Top 15 Lojas que compram "+gra.nome'>
+          <Widget class="h-100 mb-0" :title='"Top 15 Lojas que venderam "+gra.nome'>
             <b-row>
               <canvas :id='"industria"+gra.id' height="350"></canvas>
             </b-row>
