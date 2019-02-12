@@ -1,0 +1,19 @@
+@import '../../styles/app';
+
+.tables-basic {
+  .table th {
+    font-size: $font-size-sm;
+  }
+
+  .table tr {
+  	cursor: pointer;
+  }
+}
+
+.imgCat {
+	width: 100px;
+	height: 100px;
+	background: url('https://images.construe.cf/404.png') center center no-repeat;
+	background-size: contain;
+	display: block;
+}
