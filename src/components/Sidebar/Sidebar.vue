@@ -31,6 +31,15 @@
 			:childrenLinks="navItens"
 			:deep="0"
 			/>
+			<NavLink
+			:activeItem="activeItem"
+			nome="Importar"
+			link="/upload"
+			parentLink="/upload"
+			iconName="fa fa-upload"
+			index="categorias"
+			isHeader
+			/>
 		</ul>
 		<div class="bottom">
 			<small :title="'Leitura de Sellout: '+percent.sell" v-if="percent.sell">Leitura de Sellout: <span class='fw-semi-bold'>{{percent.sell}}</span></small>
@@ -92,7 +101,7 @@
 					total
 				}
 
-				console.log(obj)
+				// console.log(obj)
 			},
 		},
 		created() {

@@ -1,0 +1,32 @@
+@import '../../styles/app';
+
+// #dropzone {
+//   width: 70%;
+//   margin: 0 auto;
+// }
+
+.dropzone-custom-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: 100%;
+}
+
+.dropzone-custom-title {
+  margin-top: 0;
+  color: #00b782;
+}
+
+.subtitle {
+  color: #314b5f;
+}
+
+
+.status {
+  // width: 70%;
+  margin: 0 auto;
+  padding-top: 1rem;
+  text-align: center;
+}

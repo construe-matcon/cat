@@ -31,6 +31,9 @@ import CategoriasPage from '@/pages/Categorias/Basic';
 // Produto
 import ProdutoPage from '@/pages/Produto/Produto';
 
+// Importar
+import UploadPage from '@/pages/Upload/Upload';
+
 
 Vue.use(Router);
 
@@ -98,6 +101,11 @@ let router = new Router({
           path: 'typography',
           name: 'TypographyPage',
           component: TypographyPage,
+        },
+        {
+          path: 'upload',
+          name: 'UploadPage',
+          component: UploadPage,
         },
         {
           path: 'components/icons',
