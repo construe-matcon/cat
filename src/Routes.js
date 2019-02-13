@@ -14,7 +14,7 @@ import TablesBasicPage from '@/pages/Tables/Basic';
 import GoogleMapPage from '@/pages/Maps/Google';
 
 // Main
-import Catalogo from '@/pages/Catalogo/Dashboard';
+import Dashboard from '@/pages/Dashboard/Dashboard';
 
 // Charts
 import ChartsPage from '@/pages/Charts/Charts';
@@ -24,6 +24,9 @@ import IconsPage from '@/pages/Icons/Icons';
 import NotificationsPage from '@/pages/Notifications/Notifications';
 
 // Catalogo
+import Catalogo from '@/pages/Catalogo/Catalogo';
+
+// Categorias
 import CategoriasPage from '@/pages/Categorias/Basic';
 // Produto
 import ProdutoPage from '@/pages/Produto/Produto';
@@ -51,12 +54,26 @@ let router = new Router({
       children: [
         {
           path: '',
-          redirect: 'catalogo'
+          redirect: 'dashboard'
+        },
+        {
+          path: 'dashboard',
+          name: 'Dashboard',
+          component: Dashboard,
         },
         {
           path: 'catalogo',
           name: 'Catalogo',
           component: Catalogo,
+          children: [
+            {
+              path: ':id',
+              component: Catalogo,
+              params: {
+                id: ':id'
+              }
+            }
+          ]
         },
         {
           path: 'categorias',

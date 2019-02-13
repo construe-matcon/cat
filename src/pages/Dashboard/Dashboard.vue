@@ -1,8 +1,7 @@
 <template>
   <div>
-    <h1 class="page-title">Catálogo</h1>
+    <h1 class="page-title">Dashboard</h1>
     <h5 class="page-title"><small>Última atualização: <span class='fw-semi-bold'>{{date}}</span></small></h5>
-
 
     <b-row>
       <b-col v-for="gra in listCat" class="min" v-bind:key="gra.id">
