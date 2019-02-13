@@ -1,16 +1,16 @@
 <template>
-  <section>
+  <section v-if="prod.id">
     <h3 class="page-title">{{prod.id}} - <span class="fw-semi-bold">{{prod.descricao}}</span></h3>
     <b-tabs>
       <b-tab title="Geral" active>
         <b-row class="formProduto">
           <b-col lg="4" class="list-item">
-            <img class="img-rounded imgCat" :src="'https://images.construe.cf/fogo/'+prod.ean+'.jpg'" alt="" />
+            <img class="img-rounded imgCat" :src="'https://images.construe.cf/'+prod.industria+'/'+prod.ean+'.jpg'" alt="" />
             <!-- ADICIONAR IF PARA GALERIA AQUI -->
-            <b-col lg="12" class="thumb-gal">
-              <img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/fogo/'+prod.ean+'.jpg'" alt="" />
-              <img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/fogo/'+prod.ean+'.jpg'" alt="" />
-              <img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/fogo/'+prod.ean+'.jpg'" alt="" />
+            <b-col lg="12" class="thumb-gal" v-if="1 == 2">
+              <img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/'+prod.industria+'/'+prod.ean+'.jpg'" alt="" />
+              <img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/'+prod.industria+'/'+prod.ean+'.jpg'" alt="" />
+              <img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/'+prod.industria+'/'+prod.ean+'.jpg'" alt="" />
             </b-col>
             <!-- ADICIONAR IF PARA GALERIA AQUI -->
           </b-col>
@@ -46,57 +46,73 @@
                 </span>
               </template>
             </b-col>
-            <hr>
-            <b-col lg="6" class="interno">
-              <span>Detalhes: </span><br>
-              <template v-if="prod.detalhe.embalagem">
-                <span v-if="prod.detalhe.embalagem.volume">Volume: </span><span class="fw-semi-bold" v-if="prod.detalhe.embalagem.volume">{{prod.detalhe.embalagem.volume}} {{prod.detalhe.embalagem.unidade_medida}}<br></span>
-                <span v-if="prod.detalhe.embalagem.embalagem">Embalagem: </span><span class="fw-semi-bold" v-if="prod.detalhe.embalagem.embalagem">{{prod.detalhe.embalagem.embalagem}}<br></span>
-                <span v-if="prod.detalhe.embalagem.rendimento">Rendimento: </span><span class="fw-semi-bold" v-if="prod.detalhe.embalagem.rendimento">{{prod.detalhe.embalagem.rendimento}}<br></span>
-                <span v-if="prod.detalhe.embalagem.embalagem_embarque != ''">Embalagem Embarque: </span><span class="fw-semi-bold" v-if="prod.detalhe.embalagem.embalagem_embarque">{{prod.detalhe.embalagem.embalagem_embarque}}</span><br>
-                <span v-if="prod.detalhe.sku_embarque != ''">SKU Embarque: </span><span class="fw-semi-bold" v-if="prod.detalhe.sku_embarque">{{prod.detalhe.sku_embarque}}</span><br>
-                <span v-if="prod.detalhe.gtin">GTIN: </span><span class="fw-semi-bold" v-if="prod.detalhe.gtin">{{prod.detalhe.gtin}}<br></span>
-              </template>
-            </b-col>
-            <b-col lg="6" class="interno">
-              <span>Tamanho Embalagem Embarque: </span><br>
-              <template v-if="prod.detalhe.embalagem">
-                <span v-if="prod.detalhe.altura_embalagem_embarque != ''">Altura: </span><span class="fw-semi-bold" v-if="prod.detalhe.altura_embalagem_embarque">{{prod.detalhe.altura_embalagem_embarque}}</span><br>
-                <span v-if="prod.detalhe.largura_embalagem_embarque != ''">Largura: </span><span class="fw-semi-bold" v-if="prod.detalhe.largura_embalagem_embarque">{{prod.detalhe.largura_embalagem_embarque}}</span><br>
-                <span v-if="prod.detalhe.profundidade_embalagem_embarque != ''">Profundidade: </span><span class="fw-semi-bold" v-if="prod.detalhe.profundidade_embalagem_embarque">{{prod.detalhe.profundidade_embalagem_embarque}}</span><br>
-                <span v-if="prod.detalhe.peso_embalagem_embarque != ''">Peso: </span><span class="fw-semi-bold" v-if="prod.detalhe.peso_embalagem_embarque">{{prod.detalhe.peso_embalagem_embarque}}</span><br>
-              </template>
-            </b-col>
-            <hr>
-          </b-col>
-          <b-col lg="12" class="list-item">
-            <b-col lg="2" class="interno">
-              <span v-if="prod.detalhe.atributo.grupo_produto != ''">Grupo do Produto: </span><span class="fw-semi-bold" v-if="prod.detalhe.atributo.grupo_produto">{{prod.detalhe.atributo.grupo_produto}}</span>
-            </b-col>
-            <b-col lg="2" class="interno">
-              <span v-if="prod.detalhe.atributo.perfil_compra != ''">Perfil de Compra: </span><span class="fw-semi-bold" v-if="prod.detalhe.atributo.perfil_compra">{{prod.detalhe.atributo.perfil_compra}}</span>
-            </b-col>
-            <b-col lg="2" class="interno">
-              <span v-if="prod.detalhe.atributo.cor != ''">Cor: </span><span class="fw-semi-bold" v-if="prod.detalhe.atributo.cor">{{prod.detalhe.atributo.cor}}</span>
-            </b-col>
-            <b-col lg="2" class="interno">
-              <span v-if="prod.detalhe.atributo.codigo_cor != ''">Código Cor: </span><span class="fw-semi-bold" v-if="prod.detalhe.atributo.codigo_cor">{{prod.detalhe.atributo.codigo_cor}}</span>
-            </b-col>
-            <b-col lg="2" class="interno">
-              <span v-if="prod.detalhe.atributo.relevancia_pedido_certo != ''">Relevância Pedido Certo: </span><span class="fw-semi-bold" v-if="prod.detalhe.atributo.relevancia_pedido_certo">{{prod.detalhe.atributo.relevancia_pedido_certo}}</span>
-            </b-col>
-          </b-col>
-          <b-col lg="12" class="list-item">
-            <b-col lg="2" class="interno">
-              <span>Tributação: </span><br>
-              <span v-if="prod.detalhe.tributacao.ipi != ''">IPI: </span><span class="fw-semi-bold" v-if="prod.detalhe.tributacao.ipi">{{prod.detalhe.tributacao.ipi}}<br></span>
-              <span v-if="prod.detalhe.tributacao.st != ''">ST: </span><span class="fw-semi-bold" v-if="prod.detalhe.tributacao.st">{{prod.detalhe.tributacao.st}}</span>
-            </b-col>
           </b-col>
         </b-row>
       </b-tab>
-      <b-tab title="Outra">
-        X
+      <b-tab title="Detalhes">
+        <b-row class="formProduto">
+          <b-col lg="4" class="list-item">
+            <img class="img-rounded imgCat" :src="'https://images.construe.cf/'+prod.industria+'/'+prod.ean+'.jpg'" alt="" />
+            <!-- ADICIONAR IF PARA GALERIA AQUI -->
+            <b-col lg="12" class="thumb-gal" v-if="1 == 2">
+              <img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/'+prod.industria+'/'+prod.ean+'.jpg'" alt="" />
+              <img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/'+prod.industria+'/'+prod.ean+'.jpg'" alt="" />
+              <img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/'+prod.industria+'/'+prod.ean+'.jpg'" alt="" />
+            </b-col>
+            <!-- ADICIONAR IF PARA GALERIA AQUI -->
+          </b-col>
+          <b-col lg="8" class="list-item">
+            <template v-if="prod.detalhe">
+              <b-col lg="6" class="interno">
+                <span>Detalhes: </span><br>
+                <template v-if="prod.detalhe.embalagem">
+                  <span v-if="prod.detalhe.embalagem.volume">Volume: </span><span class="fw-semi-bold" v-if="prod.detalhe.embalagem.volume">{{prod.detalhe.embalagem.volume}} {{prod.detalhe.embalagem.unidade_medida}}<br></span>
+                  <span v-if="prod.detalhe.embalagem.embalagem">Embalagem: </span><span class="fw-semi-bold" v-if="prod.detalhe.embalagem.embalagem">{{prod.detalhe.embalagem.embalagem}}<br></span>
+                  <span v-if="prod.detalhe.embalagem.rendimento">Rendimento: </span><span class="fw-semi-bold" v-if="prod.detalhe.embalagem.rendimento">{{prod.detalhe.embalagem.rendimento}}<br></span>
+                  <span v-if="prod.detalhe.embalagem.embalagem_embarque != ''">Embalagem Embarque: </span><span class="fw-semi-bold" v-if="prod.detalhe.embalagem.embalagem_embarque">{{prod.detalhe.embalagem.embalagem_embarque}}</span><br>
+                  <span v-if="prod.detalhe.sku_embarque != ''">SKU Embarque: </span><span class="fw-semi-bold" v-if="prod.detalhe.sku_embarque">{{prod.detalhe.sku_embarque}}</span><br>
+                  <span v-if="prod.detalhe.gtin">GTIN: </span><span class="fw-semi-bold" v-if="prod.detalhe.gtin">{{prod.detalhe.gtin}}<br></span>
+                </template>
+              </b-col>
+            </template>
+            <template v-if="prod.detalhe">
+              <b-col lg="6" class="interno">
+                <span>Tamanho Embalagem Embarque: </span><br>
+                <template v-if="prod.detalhe.embalagem">
+                  <span v-if="prod.detalhe.altura_embalagem_embarque != ''">Altura: </span><span class="fw-semi-bold" v-if="prod.detalhe.altura_embalagem_embarque">{{prod.detalhe.altura_embalagem_embarque}}</span><br>
+                  <span v-if="prod.detalhe.largura_embalagem_embarque != ''">Largura: </span><span class="fw-semi-bold" v-if="prod.detalhe.largura_embalagem_embarque">{{prod.detalhe.largura_embalagem_embarque}}</span><br>
+                  <span v-if="prod.detalhe.profundidade_embalagem_embarque != ''">Profundidade: </span><span class="fw-semi-bold" v-if="prod.detalhe.profundidade_embalagem_embarque">{{prod.detalhe.profundidade_embalagem_embarque}}</span><br>
+                  <span v-if="prod.detalhe.peso_embalagem_embarque != ''">Peso: </span><span class="fw-semi-bold" v-if="prod.detalhe.peso_embalagem_embarque">{{prod.detalhe.peso_embalagem_embarque}}</span><br>
+                </template>
+              </b-col>
+            </template>
+            <hr>
+            <template v-if="prod.detalhe">
+              <b-col lg="6" class="interno">
+                <span v-if="prod.detalhe.atributo.grupo_produto != ''">Grupo do Produto: </span><span class="fw-semi-bold" v-if="prod.detalhe.atributo.grupo_produto">{{prod.detalhe.atributo.grupo_produto}}</span>
+              </b-col>
+              <b-col lg="6" class="interno">
+                <span v-if="prod.detalhe.atributo.perfil_compra != ''">Perfil de Compra: </span><span class="fw-semi-bold" v-if="prod.detalhe.atributo.perfil_compra">{{prod.detalhe.atributo.perfil_compra}}</span>
+              </b-col>
+              <b-col lg="6" class="interno">
+                <span v-if="prod.detalhe.atributo.cor != ''">Cor: </span><span class="fw-semi-bold" v-if="prod.detalhe.atributo.cor">{{prod.detalhe.atributo.cor}}</span>
+              </b-col>
+              <b-col lg="6" class="interno">
+                <span v-if="prod.detalhe.atributo.codigo_cor != ''">Código Cor: </span><span class="fw-semi-bold" v-if="prod.detalhe.atributo.codigo_cor">{{prod.detalhe.atributo.codigo_cor}}</span>
+              </b-col>
+              <b-col lg="6" class="interno">
+                <span v-if="prod.detalhe.atributo.relevancia_pedido_certo != ''">Relevância Pedido Certo: </span><span class="fw-semi-bold" v-if="prod.detalhe.atributo.relevancia_pedido_certo">{{prod.detalhe.atributo.relevancia_pedido_certo}}</span>
+              </b-col>
+            </template>
+            <template v-if="prod.detalhe">
+              <b-col lg="6" class="interno">
+                <span>Tributação: </span><br>
+                <span v-if="prod.detalhe.tributacao.ipi != ''">IPI: </span><span class="fw-semi-bold" v-if="prod.detalhe.tributacao.ipi">{{prod.detalhe.tributacao.ipi}}<br></span>
+                <span v-if="prod.detalhe.tributacao.st != ''">ST: </span><span class="fw-semi-bold" v-if="prod.detalhe.tributacao.st">{{prod.detalhe.tributacao.st}}</span>
+              </b-col>
+            </template>
+          </b-col>
+        </b-row>
       </b-tab>
     </b-tabs>
   </section>

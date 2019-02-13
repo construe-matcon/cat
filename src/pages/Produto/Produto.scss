@@ -9,11 +9,12 @@
   line-height: 32px;
 
   .imgCat {
+    display: block;
     width: 450px;
-    height: 450px;
+    max-width: 100%;
+    height: auto;
     background: url('https://images.construe.cf/404.png') center center no-repeat;
     background-size: cover;
-    display: block;
   }
 
   .thumb-gal {
