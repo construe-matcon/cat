@@ -22,6 +22,20 @@
 			:deep="0"
 			/>
 		</ul>
+		<div class="bottom">
+			<small :title="'Leitura de Sellout: '+percent.sell">Leitura de Sellout: <span class='fw-semi-bold'>{{percent.sell}}</span></small>
+			<br>
+			<small :title="'Produtos de Sellout Associados: '+percent.prod">Prod. de Sellout Assoc: <span class='fw-semi-bold'>{{percent.prod}}</span></small>
+			<br>
+			<small :title="'Porcentagem de Associação: '+percent.total">% de Associação: <span class='fw-semi-bold'>{{percent.total.toLocaleString("pt-br")}}%</span></small>
+			<br>
+			<b-progress
+				:value="(percent.total ? percent.total : 0)"
+				:variant="(percent.total > 75 ? 'success' : (percent.total >= 50 && percent.total <= 75 ? 'warning' : 'danger'))"
+				class="w-75"
+				:title="percent.total+'%'"
+			/>
+		</div>
 	</nav>
 </template>
 
@@ -40,6 +54,7 @@
 					picture: require('../../assets/img/construe.png'), // eslint-disable-line global-require
 				},
 				navItens: [],
+				percent: {},
 			};
 		},
 		methods: {
@@ -51,6 +66,19 @@
 			},
 			fetchUrl(obj){
 				this.navItens = obj.data;
+			},
+			fetchStats(obj){
+				var prod  = obj.qtd_produto_sellout_associado_catalogo.toLocaleString("pt-br")
+				,	sell  = obj.qtd_total_produto_sellout.toLocaleString("pt-br")
+				, 	total = Math.round(prod/sell*10000)/100
+
+				this.percent = {
+					sell,
+					prod,
+					total
+				}
+
+				console.log(obj)
 			},
 		},
 		created() {
@@ -64,6 +92,7 @@
 		},
 		async mounted() {
 			await gfn.fApi({url:"https://api.construe.cf/categorias?pagina=0&tamanho_pagina=20", options: {method: 'GET'}}, this.fetchUrl);
+			await gfn.fApi({url:"https://api.construe.cf/dashboard", options: {method: 'GET'}}, this.fetchStats);
 		}
 	};
 </script>

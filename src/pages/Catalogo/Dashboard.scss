@@ -19,6 +19,9 @@ table {
 .min {
   min-width: 25%;
   max-width: 50%;
+  .pointer {
+    cursor: pointer;
+  }
 }
 
 canvas {
