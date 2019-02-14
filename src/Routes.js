@@ -144,10 +144,6 @@ let router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-
-  console.log('location :: ',window.location)
-  console.log('de :: ',from)
-  console.log('para :: ',to)
   // document.title = 'Catálogos Matcon - Construe'
 
   if (to.name == 'Error' && to.path !== '/error') {
