@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 import Layout from '@/components/Layout/Layout';
 import Login from '@/pages/Login/Login';
+import CadUser from '@/pages/_CadUser/_CadUser';
 import ErrorPage from '@/pages/Error/Error';
 // Core
 import TypographyPage from '@/pages/Typography/Typography';
@@ -50,6 +51,11 @@ let router = new Router({
       path: '/login',
       name: 'login',
       component: Login,
+    },
+    {
+      path: '/admin/cadastro',
+      name: 'CadUser',
+      component: CadUser,
     },
     {
       path: '',
@@ -143,11 +149,11 @@ router.beforeEach((to, from, next) => {
 
   if (to.name == 'Error' && to.path !== '/error') {
     next('/error');
-  } else if(window.localStorage.getItem('authenticated') !== 'true' && to.name !== 'login') {
+  } else if(window.localStorage.getItem('authenticated') !== 'true' && (to.name !== 'login' && to.name !== 'CadUser')) {
     next('/login');
   } else if(window.localStorage.getItem('authenticated') === 'true' && to.name === 'login') {
     next(from.path);
-  } else if(window.localStorage.getItem("account") == null && to.name !== 'login') {
+  } else if(window.localStorage.getItem("account") == null && (to.name !== 'login' && to.name !== 'CadUser')) {
     window.localStorage.setItem('authenticated','false');
     next('/login');
   } else {
