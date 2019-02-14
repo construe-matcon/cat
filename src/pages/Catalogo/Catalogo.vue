@@ -73,11 +73,12 @@
 							size="md"
 							next-text="Proximo"
 							prev-text="Anterior"
+							v-model="currentPage"
 							:limit="10"
 							:hide-goto-end-buttons="true"
 							:total-rows="totalProdutos"
 							:per-page="tamanho"
-							@input="mudaPagina"
+							@input="loadCatalogo"
 						/>
 					</Widget>
 				</b-col>
@@ -120,6 +121,7 @@
 		components: { Widget },
 		data() {
 			return {
+				currentPage: 1,
 				totalProdutos: 0,
 				tamanho: 1,
 				paginaAtual: 0,
@@ -155,8 +157,8 @@
 					}
 				});
 			},
-			async loadCatalogo(id) {
-				await gfn.fApi({url:"https://api.construe.cf/produtos?id_industria="+id, options: {method: 'GET'}}, this.loadCat);
+			async loadCatalogo() {
+				await gfn.fApi({url:"https://api.construe.cf/produtos?id_industria="+this.idCatalogo+"&tamanho_pagina=20&pagina="+(this.currentPage - 1), options: {method: 'GET'}}, this.loadCat);
 			},
 			async loadCatalogos() {
 				await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}}, this.fetchUrl);
