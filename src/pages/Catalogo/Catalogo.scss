@@ -7,7 +7,7 @@
 	box-shadow: 6px 6px 32px -8px rgba(0,0,0,0.37);
 	background-color: #fafafa;
 	cursor: pointer;
-	
+
 	div {
 		text-align: center;
 	}
@@ -22,4 +22,21 @@
 		font-size: 11px;
 		transform: translate(-50%,0);
 	}
+}
+.tables-basic {
+  .table th {
+    font-size: $font-size-sm;
+  }
+
+  .table tr {
+  	cursor: pointer;
+  }
+}
+
+.imgCat {
+	width: 100px;
+	height: 100px;
+	background: url('https://images.construe.cf/404.png') center center no-repeat;
+	background-size: contain;
+	display: block;
 }
