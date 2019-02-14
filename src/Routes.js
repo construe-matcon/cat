@@ -145,6 +145,9 @@ let router = new Router({
 
 router.beforeEach((to, from, next) => {
 
+  console.log('location :: ',window.location)
+  console.log('de :: ',from)
+  console.log('para :: ',to)
   // document.title = 'Catálogos Matcon - Construe'
 
   if (to.name == 'Error' && to.path !== '/error') {
@@ -156,6 +159,8 @@ router.beforeEach((to, from, next) => {
   } else if(window.localStorage.getItem("account") == null && (to.name !== 'login' && to.name !== 'CadUser')) {
     window.localStorage.setItem('authenticated','false');
     next('/login');
+  } else if (window.location.pathname != '/') {
+    window.location = window.location.origin + '#' + window.location.pathname;
   } else {
     next();
   }
