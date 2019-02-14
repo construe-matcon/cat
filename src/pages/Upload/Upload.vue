@@ -6,28 +6,27 @@
         <b-row class="formProduto">
           <b-col lg="12" class="list-item">
             <div class="selInd">
-              <b-form-select v-model="selected" :options="selectInds" @change="getVal" class="mb-3" >
-                <option :value="null">Por favor selecione uma indústria antes de começar</option>
-              </b-form-select>
-
-              <strong>{{ selected }}</strong>
+              <b-form-select v-model="selected" :options="selectInds" @change="getVal" class="mb-3" />
             </div>
-            <vue-dropzone ref="myVueDropzone" id="dropzone"
-              :options="dropzoneOptions"
-              :useCustomSlot=true
-              :duplicateCheck=true
-              @vdropzone-max-files-reached="vMax"
-              @vdropzone-error="vError"
-              @vdropzone-file-added="vAdd"
-              @vdropzone-upload-progress="vProgress"
-              @vdropzone-queue-complete="vComplete"
-              @vdropzone-success="vSuccess"
-              >
-              <div class="dropzone-custom-content">
-                <h3 class="dropzone-custom-title">Arraste aqui seu arquivo</h3>
-                <div class="subtitle">...ou clique para selecionar do seu computador</div>
-              </div>
-            </vue-dropzone>
+            <template v-if="dropzoneOptions">
+              <vue-dropzone v-show="drop" ref="myVueDropzone" id="dropzone"
+                :options="dropzoneOptions"
+                :useCustomSlot=true
+                :duplicateCheck=true
+                @vdropzone-max-files-reached="vMax"
+                @vdropzone-error="vError"
+                @vdropzone-file-added="vAdd"
+                @vdropzone-upload-progress="vProgress"
+                @vdropzone-queue-complete="vComplete"
+                @vdropzone-success="vSuccess"
+                @vdropzone-sending="vBefore"
+                >
+                <div class="dropzone-custom-content">
+                  <h3 class="dropzone-custom-title">Arraste aqui seu arquivo</h3>
+                  <div class="subtitle">...ou clique para selecionar do seu computador</div>
+                </div>
+              </vue-dropzone>
+            </template>
             <b-col class="status">
               <div v-if="max">
                 <b-alert :show="dismissCountDown" fade @dismissed="dismissCountDown=0" variant="warning">Você atingiu o limite máximo de 1 arquivo</b-alert>
@@ -53,8 +52,14 @@
                 </b-alert>
                 <b-alert v-show="ok" show variant="success">O arquivo <span class="fw-semi-bold">{{status.name}}</span> foi enviado com sucesso!</b-alert>
               </div>
-              <button v-show="add" @click="vSend">Enviar</button>
+              <b-button variant="outline-success" v-show="add" @click="vSend">Enviar</b-button>
             </b-col>
+          </b-col>
+        </b-row>
+        <b-row v-show="drop">
+          <b-col>
+            <h4 class="page-title">Histórico de importações de <span class="fw-semi-bold">{{nomeInd}}</span></h4>
+            <b-table striped responsive hover bordered :items="hist" :fields="fields" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"></b-table>
           </b-col>
         </b-row>
       </b-tab>
@@ -63,6 +68,7 @@
 </template>
 
 <script>
+import $ from 'jquery';
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import gfn from '@/core/globalFunctions';
@@ -75,6 +81,8 @@ export default {
     },
     data() {
       return {
+        sortBy: "id",
+        sortDesc: true,
         prod: [],
         selectInds: [],
         selected: null,
@@ -82,7 +90,7 @@ export default {
         animate: true,
         idPost: '',
         dropzoneOptions: {
-          url: 'https://api.construe.cf/importacao/produtos/21',
+          url: 'https://api.construe.cf/importacao/produtos/',
           thumbnailWidth: 200,
           // addRemoveLinks: true,
           maxFilesize: 200,
@@ -100,32 +108,101 @@ export default {
         dis: false,
         add: false,
         ok: false,
+        drop: false,
         prog: 0,
         byte: 0,
+        nomeInd: '',
+        hist: [],
+        fields: {
+          id: {
+            label: 'ID',
+            sortable: true,
+          },
+          nome: {
+            label: 'Nome do arquivo',
+            sortable: false
+          },
+          qtIn: {
+            label: 'Itens Inseridos',
+            sortable: true
+          },
+          qtAt: {
+            label: 'Itens Atualizados',
+            sortable: true
+          },
+          user: {
+            label: 'Usuário que importou',
+            sortable: false
+          },
+          data: {
+            label: 'Data da importação',
+            sortable: true
+          }
+        }
       };
     },
     methods: {
-      getVal(value){
+      async getVal(value){
+        console.log(value)
+
+        var newURL = 'https://api.construe.cf/importacao/produtos/'+value
+        this.$refs.myVueDropzone.options.url = newURL
+        this.$refs.myVueDropzone.dropzone.options.url = newURL
+        this.dropzoneOptions.url = newURL
+
+        console.log(this.$refs.myVueDropzone)
+        await gfn.fApi({url:"https://api.construe.cf/importacao/produtos/"+value, options: {method: 'GET'}}, this.fetchHist);
+
         this.idPost = value
+        this.drop = true;
+
+
+        if ($('.selInd option:selected').attr('value') === 'null') {
+          this.drop = false;
+        } else {
+          this.nomeInd = $('.selInd option:selected').text()
+        }
+
       },
       fetchCat(obj){
         var ind      = obj.data
-        ,   dadosInd = []
-
+        this.selectInds.push({
+          "text": 'Por favor selecione uma indústria antes de começar',
+          "value": 'null'
+        })
         for (var i = 0, lgt = ind.length; i < lgt; i++ ) {
-          dadosInd.push({
+          this.selectInds.push({
             "text": ind[i].nome,
             "value": ind[i].id
           })
         }
-        this.selectInds = dadosInd;
       },
       fetchHist(obj){
-        console.log(obj)
+        var dt = obj.data
+        this.hist = []
+
+        for (var i = 0, lgt = dt.length; i < lgt; i++ ) {
+          this.hist.push({
+            'id': dt[i].id,
+            'nome': dt[i].nome_arquivo,
+            'qtIn': dt[i].qtd_inseridos,
+            'qtAt': dt[i].qtd_atualizados,
+            'user': dt[i].usuario,
+            'data': gfn.formatDate(dt[i].dt_inclusao),
+            'ind':  dt[i].industria,
+          })
+        }
       },
       vAdd(file){
-        this.add = true
         this.nome = file.name
+
+        if (file.name.toLowerCase().indexOf($('.selInd option:selected').text().toLowerCase()) < 0 ) {
+          this.add = false
+          alert('O arquivo escolhido não tem o mesmo nome da indústria selecionada.')
+          this.$refs.myVueDropzone.removeFile(file)
+        } else {
+          this.add = true
+        }
       },
       vError(file, msg, xhr){
         this.err = true
@@ -144,40 +221,25 @@ export default {
       vMax(){
         this.max = true
       },
+      vBefore(){
+        // var newURL = 'https://api.construe.cf/importacao/produtos/'+this.idPost
+        // this.$refs.myVueDropzone.options.url = newURL
+      },
       vSend(){
         this.$refs.myVueDropzone.processQueue()
       },
       vComplete(){
-        this.$refs.myVueDropzone.disable()
+        // this.$refs.myVueDropzone.disable()
 
         this.dis = false
       },
       vSuccess(file){
         this.status = file
         this.ok = true
-      }
-      // fetchUrl(){
-      //   var that = this
-      //   ,   dados = JSON.parse(window.localStorage.getItem("account"))
-      //   ,   url    = "https://api.construe.cf/produtos/"
-
-      //   fetch(url, {
-      //       headers: {
-      //         'Accept': 'application/json',
-      //         'Authorization': dados.token
-      //       }
-      //     }).then(function(response){
-      //     response.json().then(function(data){
-      //       console.log(data)
-      //     });
-      //   }).catch(function(err){
-      //     console.error('Erro na chamada', err);
-      //   });
-      // },
+      },
     },
     async mounted() {
       await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}}, this.fetchCat);
-      await gfn.fApi({url:"https://api.construe.cf/importacao/produtos/19", options: {method: 'GET'}}, this.fetchHist);
     },
   };
 </script>
