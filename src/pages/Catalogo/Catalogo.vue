@@ -21,7 +21,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-for="row in listCatalogo" :key="row.id" @click="ir(row.id)">
+									<tr v-for="row in listCatalogo" :key="row.id" @click="goToProduct(row.id)">
 										<td>{{row.id}}</td>
 										<td>
 											<p class="mb-0">
@@ -83,6 +83,9 @@
 				</b-col>
 			</b-row>
 		</template>
+		<template v-else-if="listCatalogo">
+
+		</template>
 		<template v-else>
 			Dados não encontrados
 		</template>
@@ -121,7 +124,7 @@
 				tamanho: 1,
 				paginaAtual: 0,
 				ultimaPagina: true,
-				listCatalogo: [],
+				listCatalogo: true,
 				idCatalogo: this.$route.params.id,
 				listImgCatalogo: {},
 			};
@@ -138,7 +141,7 @@
 				})
 			},
 			loadCat(obj) {
-				this.listCatalogo = obj.data
+				this.listCatalogo = (obj.data.length > 0 ? obj.data : false)
 				this.totalProdutos = obj.total_data_size;
 				this.tamanho = obj.size;
 				this.paginaAtual = obj.number;
@@ -157,7 +160,15 @@
 			},
 			async loadCatalogos() {
 				await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}}, this.fetchUrl);
-			}
+			},
+			goToProduct(id){
+				this.$router.push({
+					path: "/produto/"+id,
+					params: {
+						row: id
+					}
+				});
+			},
 		},
 		async mounted() {
 			this.idCatalogo = (this.$route.params.id ? this.$route.params.id : '');
