@@ -443,27 +443,14 @@ export default {
       var lojas = obj.lojas_compram_industria.slice(0,15)
       // this.startCharts('pie', 'industria'+obj.ultimas_importacoes[0].id_industria,["Total de produtos", "Total de produtos associados"],[obj.qtd_total_produto,obj.qtd_produto_sellout_associado_catalogo]);
 
-      var sellOut = {'labels':[],'datasets':[{'data':[],'pointBackgroundColor':'rgba(237,123,0, 1)','fill':true, 'backgroundColor':'rgba(97,201,184, 0.4)' }]}
+      var sellOut = {'labels':[],'datasets':[{'data':[],'backgroundColor':[] }]}
 
       for (var i = 0, lgt = lojas.length; i < lgt; i++ ) {
         sellOut.labels.push(((/\s*-\s\d{2}.\d{3}.\d{3}\/\d{4}-\d{2}/).test(lojas[i].razao_social) ? lojas[i].razao_social.substr(0, lojas[i].razao_social.length - 20) : lojas[i].razao_social))
         sellOut.datasets[0].data.push(lojas[i].qtd_produtos_industria)
-        // sellOut.datasets[0].pointBackgroundColor.push(this.getRandomRgb())
+        sellOut.datasets[0].backgroundColor.push(this.getRandomRgb())
       }
-      this.startCharts('line', 'industria'+obj.ultimas_importacoes[0].id_industria,'',sellOut,false);
-
-
-      // {
-      //       labels: label,
-      //       datasets: [{
-      //           data: datax,
-      //           backgroundColor: [
-      //               'rgba(237,123,0, 0.8)',
-      //               'rgba(97,201,184, 0.8)',
-      //           ],
-      //       }]
-      //     },
-      // this.startCharts('bar', 'industria'+obj.ultimas_importacoes[0].id_industria,'',sellOut);
+      this.startCharts('bar', 'industria'+obj.ultimas_importacoes[0].id_industria,'',sellOut,false);
     },
   },
   async mounted() {
