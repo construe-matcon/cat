@@ -26,6 +26,7 @@
                 <span v-if="prod.preco.preco_capital">Preço Capital: </span><span class="fw-semi-bold" v-if="prod.preco.preco_capital">R$ {{prod.preco.preco_capital}}</span><br>
                 <span v-if="prod.preco.preco_interior">Preço Interior: </span><span class="fw-semi-bold" v-if="prod.preco.preco_interior">R$ {{prod.preco.preco_interior}}</span><br>
                 <span>Código Interno: </span><span class="fw-semi-bold">{{prod.codigo_interno}}</span><br>
+                <span>Industria: </span><span class="fw-semi-bold">{{prod.industria}}</span><br>
                 <span>ID: </span><span class="fw-semi-bold">{{prod.id}}</span><br>
               </template>
             </b-col>
@@ -41,7 +42,7 @@
             <b-col lg="6" class="interno">
               <template v-if="prod.tags">
                 <span>Tags: </span><br>
-                <span v-for="tags in prod.tags" :key="tags">
+                <span v-for="(tags,i) in prod.tags" :key="'tg-'+i">
                   <span v-if="tags.length > 0" class="fw-semi-bold" style="text-transform: capitalize;">{{tags}}<br></span>
                 </span>
               </template>
@@ -61,8 +62,7 @@
             </b-col>
             <!-- ADICIONAR IF PARA GALERIA AQUI -->
           </b-col>
-          <b-col lg="8" class="list-item">
-            <template v-if="prod.detalhe">
+          <b-col lg="8" class="list-item" v-if="prod.detalhe">
               <b-col lg="6" class="interno">
                 <span>Detalhes: </span><br>
                 <template v-if="prod.detalhe.embalagem">
@@ -74,8 +74,6 @@
                   <span v-if="prod.detalhe.gtin">GTIN: </span><span class="fw-semi-bold" v-if="prod.detalhe.gtin">{{prod.detalhe.gtin}}<br></span>
                 </template>
               </b-col>
-            </template>
-            <template v-if="prod.detalhe">
               <b-col lg="6" class="interno">
                 <span>Tamanho Embalagem Embarque: </span><br>
                 <template v-if="prod.detalhe.embalagem">
@@ -85,9 +83,7 @@
                   <span v-if="prod.detalhe.peso_embalagem_embarque != ''">Peso: </span><span class="fw-semi-bold" v-if="prod.detalhe.peso_embalagem_embarque">{{prod.detalhe.peso_embalagem_embarque}}</span><br>
                 </template>
               </b-col>
-            </template>
             <hr>
-            <template v-if="prod.detalhe">
               <b-col lg="6" class="interno">
                 <span v-if="prod.detalhe.atributo.grupo_produto != ''">Grupo do Produto: </span><span class="fw-semi-bold" v-if="prod.detalhe.atributo.grupo_produto">{{prod.detalhe.atributo.grupo_produto}}</span>
               </b-col>
@@ -103,54 +99,38 @@
               <b-col lg="6" class="interno">
                 <span v-if="prod.detalhe.atributo.relevancia_pedido_certo != ''">Relevância Pedido Certo: </span><span class="fw-semi-bold" v-if="prod.detalhe.atributo.relevancia_pedido_certo">{{prod.detalhe.atributo.relevancia_pedido_certo}}</span>
               </b-col>
-            </template>
-            <template v-if="prod.detalhe">
               <b-col lg="6" class="interno">
                 <span>Tributação: </span><br>
                 <span v-if="prod.detalhe.tributacao.ipi != ''">IPI: </span><span class="fw-semi-bold" v-if="prod.detalhe.tributacao.ipi">{{prod.detalhe.tributacao.ipi}}<br></span>
                 <span v-if="prod.detalhe.tributacao.st != ''">ST: </span><span class="fw-semi-bold" v-if="prod.detalhe.tributacao.st">{{prod.detalhe.tributacao.st}}</span>
               </b-col>
-            </template>
           </b-col>
         </b-row>
       </b-tab>
     </b-tabs>
   </section>
+  <section v-else>
+    Produto não encontrado...
+  </section>
 </template>
 
 <script>
+  import gfn from '@/core/globalFunctions';
 export default {
     name: 'Produto',
     data() {
       return {
-        prod: [],
+        prod: {},
       };
     },
     methods: {
-      fetchUrl(){
-        var that = this
-        ,   dados = JSON.parse(window.localStorage.getItem("account"))
-        ,   url    = "https://api.construe.cf/produtos/"+that.$route.params.id
-
-        fetch(url, {
-            headers: {
-              'Accept': 'application/json',
-              'Authorization': dados.token
-            }
-          }).then(function(response){
-          response.json().then(function(data){
-            var ran = data
-            that.prod = ran;
-            console.log(that.prod)
-          });
-        }).catch(function(err){
-          console.error('Erro na chamada', err);
-        });
+      fetchUrl(obj){
+        this.prod = obj;
       },
     },
-    mounted() {
-      this.fetchUrl();
-    },
+    async mounted() {
+      await gfn.fApi({url:"https://api.construe.cf/produtos/"+this.$route.params.id, options: {method: 'GET'}}, this.fetchUrl);
+    }
   };
 </script>
 

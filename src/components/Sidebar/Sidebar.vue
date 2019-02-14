@@ -91,8 +91,6 @@
 					prod,
 					total
 				}
-
-				console.log(obj)
 			},
 		},
 		created() {
