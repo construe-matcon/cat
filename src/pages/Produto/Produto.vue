@@ -107,6 +107,26 @@
 					</b-col>
 				</b-row>
 			</b-tab>
+			<b-tab title="Editar">
+				<b-row class="formProduto">
+					<b-col lg="4" class="list-item">
+						<img class="img-rounded imgCat" :src="'https://images.construe.cf/'+prod.industria+'/'+prod.ean+'.jpg'" alt="" />
+						<!-- ADICIONAR IF PARA GALERIA AQUI -->
+						<b-col lg="12" class="thumb-gal" v-if="1 == 2">
+							<img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/'+prod.industria+'/'+prod.ean+'.jpg'" alt="" />
+							<img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/'+prod.industria+'/'+prod.ean+'.jpg'" alt="" />
+							<img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/'+prod.industria+'/'+prod.ean+'.jpg'" alt="" />
+						</b-col>
+						<!-- ADICIONAR IF PARA GALERIA AQUI -->
+					</b-col>
+					<b-col lg="8" class="list-item">
+						{{prod}}
+						<b-form @submit="sendForm">
+							
+						</b-form>
+					</b-col>
+				</b-row>
+			</b-tab>
 		</b-tabs>
 	</section>
 	<section v-else-if="prod.mensagens">
@@ -133,6 +153,9 @@
 			fetchUrl(obj){
 				this.prod = obj;
 			},
+			sendForm() {
+				return true
+			}
 		},
 		async mounted() {
 			await this.loadProducts(this.$route.params.id);

@@ -53,17 +53,17 @@ let router = new Router({
       component: Login,
     },
     {
-      path: '/admin/cadastro',
-      name: 'CadUser',
-      component: CadUser,
-    },
-    {
       path: '',
       component: Layout,
       children: [
         {
           path: '',
           redirect: 'dashboard'
+        },
+        {
+          path: '/admin/cadastro',
+          name: 'CadUser',
+          component: CadUser,
         },
         {
           path: 'dashboard',
@@ -148,11 +148,11 @@ router.beforeEach((to, from, next) => {
 
   if (to.name == 'Error' && to.path !== '/error') {
     next('/error');
-  } else if(window.localStorage.getItem('authenticated') !== 'true' && (to.name !== 'login' && to.name !== 'CadUser')) {
+  } else if(window.localStorage.getItem('authenticated') !== 'true' && to.name !== 'login') {
     next('/login');
   } else if(window.localStorage.getItem('authenticated') === 'true' && to.name === 'login') {
     next(from.path);
-  } else if(window.localStorage.getItem("account") == null && (to.name !== 'login' && to.name !== 'CadUser')) {
+  } else if(window.localStorage.getItem("account") == null && to.name !== 'login') {
     window.localStorage.setItem('authenticated','false');
     next('/login');
   } else if (window.location.pathname != '/') {
