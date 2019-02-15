@@ -8,7 +8,16 @@
             <div class="selInd">
               <b-form-select v-model="selected" :options="selectInds" @change="getVal" class="mb-3" />
             </div>
-            <template v-if="dropzoneOptions">
+            <b-form-file
+              v-model="file"
+              v-show="drop"
+              :state="Boolean(file)"
+              accept=".xls,.xlsx"
+              placeholder="Clique para escolher o arquivo."
+              drop-placeholder="Arraste aqui seu arquivo."
+              browse-text="Procurar"
+            />
+            <!-- <template v-if="dropzoneOptions">
               <vue-dropzone v-show="drop" ref="myVueDropzone" id="dropzone"
                 :options="dropzoneOptions"
                 :useCustomSlot=true
@@ -26,7 +35,7 @@
                   <div class="subtitle">...ou clique para selecionar do seu computador</div>
                 </div>
               </vue-dropzone>
-            </template>
+            </template> -->
             <b-col class="status">
               <div v-if="max">
                 <b-alert :show="dismissCountDown" fade @dismissed="dismissCountDown=0" variant="warning">Você atingiu o limite máximo de 1 arquivo</b-alert>
@@ -52,7 +61,8 @@
                 </b-alert>
                 <b-alert v-show="ok" show variant="success">O arquivo <span class="fw-semi-bold">{{status.name}}</span> foi enviado com sucesso!</b-alert>
               </div>
-              <b-button variant="outline-success" v-show="add" @click="vSend">Enviar</b-button>
+              <!-- <b-button variant="outline-success" v-show="add" @click="vSend">Enviar</b-button> -->
+              <b-button variant="outline-success" @click="vSend">Enviar</b-button>
             </b-col>
           </b-col>
         </b-row>
@@ -81,6 +91,7 @@ export default {
     },
     data() {
       return {
+        file: null,
         sortBy: "id",
         sortDesc: true,
         prod: [],
@@ -144,10 +155,10 @@ export default {
     methods: {
       async getVal(value){
 
-        var newURL = 'https://api.construe.cf/importacao/produtos/'+value
-        this.$refs.myVueDropzone.options.url = newURL
-        this.$refs.myVueDropzone.dropzone.options.url = newURL
-        this.dropzoneOptions.url = newURL
+        // var newURL = 'https://api.construe.cf/importacao/produtos/'+value
+        // this.$refs.myVueDropzone.options.url = newURL
+        // this.$refs.myVueDropzone.dropzone.options.url = newURL
+        // this.dropzoneOptions.url = newURL
         await gfn.fApi({url:"https://api.construe.cf/importacao/produtos/"+value, options: {method: 'GET'}}, this.fetchHist);
 
         this.idPost = value
@@ -224,7 +235,8 @@ export default {
         console.log(JSON.stringify(formData))
       },
       vSend(){
-        this.$refs.myVueDropzone.processQueue()
+        // this.$refs.myVueDropzone.processQueue()
+        console.log(this.file)
       },
       vComplete(){
         // this.$refs.myVueDropzone.disable()
