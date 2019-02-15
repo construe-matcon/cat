@@ -1,60 +1,94 @@
 <template>
-	<div class="login-page">
+	<div class="cadastro-page">
 		<b-container>
-			<h1>Cadastro Usuario</h1>
-			<h5 class="logo">
-				<img :src="icon.picture" alt="Construe" class="icon-title">
-			</h5>
-			<Widget class="mx-auto" title="<h3 class='mt-0'>Faça login para continuar</h3>" customHeader>
-				<form class="mt" @submit.prevent="login">
-					<b-alert class="alert-sm" variant="danger" :show="!!errorMessage">
-						{{errorMessage}}
-					</b-alert>
+			<Widget class="mx-auto" title="<h3 class='mt-0'>Cadastro de novo usuário</h3>" customHeader>
+				<form class="mt" @submit.prevent="cadastro">
 					<div class="form-group">
-						<input class="form-control no-border" v-model="input.username" ref="username"
-						required type="text" name="username" placeholder="Usuário" />
+						<input class="form-control no-border" v-model="dados.nome" ref="fullname"
+						required type="text" name="fullname" placeholder="Nome Completo" />
 					</div>
 					<div class="form-group">
-						<input class="form-control no-border" v-model="input.password" ref="password"
+						<input class="form-control no-border" v-model="dados.email" ref="email"
+						required type="text" name="email" placeholder="Email" />
+					</div>
+					<div class="form-group">
+						<input class="form-control no-border" v-model="dados.senha" ref="password"
 						required type="password" name="password" placeholder="Senha" />
 					</div>
+					<b-alert class="alert-sm" variant="danger" :show="!!errorMessage">
+						<span v-html="errorMessage"></span>
+					</b-alert>
+					<b-alert class="alert-sm" variant="success" :show="!!successMessage">
+						{{successMessage}}
+					</b-alert>
 					<div class="clearfix">
 						<div class="btn-toolbar float-right">
-							<b-button type="submit" size="sm" variant="inverse">Entrar</b-button>
+							<b-button type="submit" size="sm" variant="success">Salvar</b-button>
 						</div>
 					</div>
 				</form>
 			</Widget>
 		</b-container>
-		<footer class="footer">
-			2019 - MatCon Construe
-		</footer>
 	</div>
 </template>
 
 <script>
+	// import $ from 'jquery';
 	import Widget from '@/components/Widget/Widget';
+	import gfn from '@/core/globalFunctions';
 
 	export default {
-		name: 'login',
+		name: 'cadastro',
 		components: { Widget },
 		data() {
 			return {
-				input: {
-					username: "",
-					password: ""
-				},
-				user: '',
 				icon: {
 					picture: require('../../assets/img/construe.png'), // eslint-disable-line global-require
 				},
-				errorMessage: null,
+				dados: {
+					'email': '',
+					'nome': '',
+					'senha': ''
+				},
+				errorMessage: '',
+				successMessage: '',
 			};
 		},
 		methods: {
-			login(){
-				console.log('cadastro Usuario')
-			}
+			async cadastro(){
+				var email = this.dados.email
+				this.errorMessage = ''
+				this.successMessage = ''
+
+				if (email.split('@')[1].indexOf('construe') >= 0 || email.split('@')[1].indexOf('yandeh') >= 0) {
+					await gfn.fApi({url:"https://api.construe.cf/usuarios", options: {method: 'POST', body: JSON.stringify(this.dados)}}, this.sendData);
+				} else {
+					this.errorMessage = 'O email precisa ser Yandeh ou Construe para poder efetuar o cadastro'
+				}
+			},
+			sendData(obj){
+				if(obj.mensagens) {
+					console.log(obj)
+					this.errorMessage = ''
+
+					for (var i = 0, lgt = obj.mensagens.length; i < lgt; i++ ) {
+						this.errorMessage += (i != 0 ? '<br>'+obj.mensagens[i] : obj.mensagens[i])
+					}
+				} else {
+					this.successMessage = 'Cadastro realizado com sucesso!'
+					this.dados = {
+						'email': '',
+						'nome': '',
+						'senha': ''
+					}
+					// this.$router.push({
+					// 	path: "/produto/"+id,
+					// 	params: {
+					// 		row: id
+					// 	}
+					// });
+				}
+			},
 		},
 	};
 </script>

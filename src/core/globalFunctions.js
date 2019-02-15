@@ -1,6 +1,9 @@
 import router from '../Routes';
 
 export default {
+	gColors(){
+		return ["#FBC14B", "#FAA800", "#ED7B00", "#ED5F00", "#A02B13", "#BA8113", "#5DBA78", "#13A06A", "#17897E", "#0CAD14", "#61C9B8", "#5CA8D6", "#125C96", "#093C7A", "#0C3D63"]
+	},
 	fApi(params, cb) {
 		let dados = JSON.parse(window.localStorage.getItem("account"));
 		params = {
@@ -11,6 +14,7 @@ export default {
 			if (!params.options.headers) {
 				params.options.headers = {
 					'Accept': 'application/json',
+					'Content-type': 'application/json',
 					'Authorization': dados.token
 				}
 			}

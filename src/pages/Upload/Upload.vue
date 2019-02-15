@@ -98,7 +98,7 @@ export default {
           thumbnail: false,
           autoProcessQueue: false,
           acceptedFiles: ".xls,.xlsx",
-          headers: { "Content-type": "application/json; charset=UTF-8", 'Authorization': JSON.parse(window.localStorage.getItem("account")).token }
+          headers: { "Content-type": "application/json; charset=UTF-8",  'Authorization': JSON.parse(window.localStorage.getItem("account")).token }
         },
         status: {},
         error: {},
@@ -143,14 +143,11 @@ export default {
     },
     methods: {
       async getVal(value){
-        console.log(value)
 
         var newURL = 'https://api.construe.cf/importacao/produtos/'+value
         this.$refs.myVueDropzone.options.url = newURL
         this.$refs.myVueDropzone.dropzone.options.url = newURL
         this.dropzoneOptions.url = newURL
-
-        console.log(this.$refs.myVueDropzone)
         await gfn.fApi({url:"https://api.construe.cf/importacao/produtos/"+value, options: {method: 'GET'}}, this.fetchHist);
 
         this.idPost = value
@@ -221,9 +218,10 @@ export default {
       vMax(){
         this.max = true
       },
-      vBefore(){
-        // var newURL = 'https://api.construe.cf/importacao/produtos/'+this.idPost
-        // this.$refs.myVueDropzone.options.url = newURL
+      vBefore(file, xhr, formData){
+        formData.append('arquivo', file)
+
+        console.log(JSON.stringify(formData))
       },
       vSend(){
         this.$refs.myVueDropzone.processQueue()

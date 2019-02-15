@@ -401,24 +401,28 @@ export default {
         chart.update();
     },
     fetchUrl(obj){
-      var arrI = {'labels':["Total", "Sem categoria"],'datasets':[{'data':[],'backgroundColor':['rgba(237,123,0, 0.8)','rgba(97,201,184, 0.8)'],'borderColor':['transparent'],'borderWidth':[]}]};
+      var colors = gfn.gColors()
 
-      for (var a = 0, lgtt = 3; a < lgtt; a++ ) {
-        arrI.datasets[0].data = []
-        if (a == 0) {
-          arrI.datasets[0].data.push(obj.qtd_total_produto, obj.qtd_produto_sem_categoria)
-        } else if (a == 1) {
-          arrI.datasets[0].data.push(obj.qtd_total_produto, obj.qtd_produto_sem_tag)
-        } else if (a == 2) {
-          arrI.datasets[0].data.push(obj.qtd_total_produto, obj.qtd_produto_sem_ean)
-        }
-        this.startCharts('pie', 'piechart'+a,'',arrI, true);
-      }
+      var arrI = JSON.stringify({'labels':[],'datasets':[{'data':[],'backgroundColor':[colors[1],colors[6]],'borderColor':['transparent'],'borderWidth':[]}]})
+      ,   arr1 = JSON.parse(arrI)
+      ,   arr2 = JSON.parse(arrI)
+      ,   arr3 = JSON.parse(arrI);
+
+      arr1.datasets[0].data.push(obj.qtd_total_produto, obj.qtd_produto_sem_categoria)
+      arr1.labels.push("Total", "Sem Categoria")
+      arr2.datasets[0].data.push(obj.qtd_total_produto, obj.qtd_produto_sem_tag)
+      arr2.labels.push("Total", "Sem Tags")
+      arr3.datasets[0].data.push(obj.qtd_total_produto, obj.qtd_produto_sem_ean)
+      arr3.labels.push("Total", "Sem Ean")
+
+      this.startCharts('pie', 'piechart0','',arr1, true);
+      this.startCharts('pie', 'piechart1','',arr2, true);
+      this.startCharts('pie', 'piechart2','',arr3, true);
 
 
       this.date = gfn.formatDate(obj.ultimas_importacoes[0].dt_inclusao);
       var inds = obj.ultimas_importacoes;
-      var colors = ['rgba(97,201,184, 0.8)','rgba(23,137,126, 0.8)','rgba(237,95,0, 0.8)','rgba(237,123,0, 0.8)','rgba(250,168,0, 0.8)'] //Com azul
+      // var colors = ['rgba(97,201,184, 0.8)','rgba(23,137,126, 0.8)','rgba(237,95,0, 0.8)','rgba(237,123,0, 0.8)','rgba(250,168,0, 0.8)'] //Com azul
       this.barChart1 = new this.startCharts('bar', 'barchart1','',[]);
       this.barChart2 = new this.startCharts('bar', 'barchart2','',[]);
 
@@ -441,14 +445,15 @@ export default {
     montaGraf(obj) {
       // console.log(obj)
       var lojas = obj.lojas_compram_industria.slice(0,15)
+      var bgs = gfn.gColors()
       // this.startCharts('pie', 'industria'+obj.ultimas_importacoes[0].id_industria,["Total de produtos", "Total de produtos associados"],[obj.qtd_total_produto,obj.qtd_produto_sellout_associado_catalogo]);
 
-      var sellOut = {'labels':[],'datasets':[{'data':[],'backgroundColor':[] }]}
+      var sellOut = {'labels':[],'datasets':[{'data':[],'backgroundColor':bgs }]}
 
       for (var i = 0, lgt = lojas.length; i < lgt; i++ ) {
         sellOut.labels.push(((/\s*-\s\d{2}.\d{3}.\d{3}\/\d{4}-\d{2}/).test(lojas[i].razao_social) ? lojas[i].razao_social.substr(0, lojas[i].razao_social.length - 20) : lojas[i].razao_social))
         sellOut.datasets[0].data.push(lojas[i].qtd_produtos_industria)
-        sellOut.datasets[0].backgroundColor.push(this.getRandomRgb())
+        // sellOut.datasets[0].backgroundColor.push(bgs)
       }
       this.startCharts('bar', 'industria'+obj.ultimas_importacoes[0].id_industria,'',sellOut,false);
     },

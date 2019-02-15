@@ -70,7 +70,9 @@
           <span class="fw-semi-bold" v-text="account.name"></span>
           <!-- <span class="ml-1 circle bg-warning text-white fw-bold">13</span> -->
         </template>
-        <b-dropdown-item><i class="la la-user" /> Minha Conta</b-dropdown-item>
+        <b-dropdown-item><i class="fa fa-user" /> Minha Conta</b-dropdown-item>
+        <b-dropdown-divider />
+        <b-dropdown-item-button @click="goToCadastro"><i class="fa fa-user-plus" /> Criar Usuário</b-dropdown-item-button>
         <b-dropdown-divider />
         <!-- <b-dropdown-item>Calendar</b-dropdown-item>
         <b-dropdown-item>
@@ -78,7 +80,7 @@
         </b-dropdown-item>
         <b-dropdown-divider /> -->
         <b-dropdown-item-button @click="logout">
-          <i class="la la-sign-out" /> Sair
+          <i class="fa fa-sign-out" /> Sair
         </b-dropdown-item-button>
       </b-nav-item-dropdown>
       <!-- <b-nav-item>
@@ -163,6 +165,11 @@ export default {
     logout() {
       window.localStorage.clear();
       this.$router.push('/login');
+    },
+    goToCadastro(){
+      this.$router.push({
+        path: "/admin/cadastro/"
+      });
     },
   },
   created() {
