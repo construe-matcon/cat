@@ -8,15 +8,20 @@
             <div class="selInd">
               <b-form-select v-model="selected" :options="selectInds" @change="getVal" class="mb-3" />
             </div>
-            <b-form-file
-              v-model="file"
-              v-show="drop"
-              :state="Boolean(file)"
-              accept=".xls,.xlsx"
-              placeholder="Clique para escolher o arquivo."
-              drop-placeholder="Arraste aqui seu arquivo."
-              browse-text="Procurar"
-            />
+            <form enctype="multipart/form-data" method="post" id="myForm">
+              <b-form-file
+                v-model="file"
+                v-show="drop"
+                :state="Boolean(file)"
+                accept=".xls,.xlsx"
+                placeholder="Clique para escolher o arquivo."
+                drop-placeholder="Arraste aqui seu arquivo."
+                browse-text="Procurar"
+                @change="vAdd"
+                ref="fileinput"
+              />
+            </form>
+            <!-- <input type="file" v-show="drop" placeholder="Clique para escolher o arquivo." ref="fileupload" @change="vAdd"/> -->
             <!-- <template v-if="dropzoneOptions">
               <vue-dropzone v-show="drop" ref="myVueDropzone" id="dropzone"
                 :options="dropzoneOptions"
@@ -60,9 +65,10 @@
                   Mensagem de erro: <span class="fw-semi-bold">{{error.msg}}</span>
                 </b-alert>
                 <b-alert v-show="ok" show variant="success">O arquivo <span class="fw-semi-bold">{{status.name}}</span> foi enviado com sucesso!</b-alert>
+                <b-alert v-show="nOk" show variant="danger">O seguinte erro foi retornado: <span class="fw-semi-bold" v-html="errorMessage"></span></b-alert>
               </div>
-              <!-- <b-button variant="outline-success" v-show="add" @click="vSend">Enviar</b-button> -->
-              <b-button variant="outline-success" @click="vSend">Enviar</b-button>
+              <b-button variant="outline-success" v-show="add" @click="vSend">Enviar</b-button>
+              <!-- <b-button variant="outline-success" v-show="send" @click="vSend">Enviar</b-button> -->
             </b-col>
           </b-col>
         </b-row>
@@ -82,6 +88,7 @@ import $ from 'jquery';
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import gfn from '@/core/globalFunctions';
+import axios from 'axios';
 
 
 export default {
@@ -100,6 +107,7 @@ export default {
         dismissCountDown: 1.5,
         animate: true,
         idPost: '',
+        errorMessage: '',
         dropzoneOptions: {
           url: 'https://api.construe.cf/importacao/produtos/',
           thumbnailWidth: 200,
@@ -119,7 +127,9 @@ export default {
         dis: false,
         add: false,
         ok: false,
+        nOk: false,
         drop: false,
+        send: false,
         prog: 0,
         byte: 0,
         nomeInd: '',
@@ -154,15 +164,17 @@ export default {
     },
     methods: {
       async getVal(value){
-
-        // var newURL = 'https://api.construe.cf/importacao/produtos/'+value
-        // this.$refs.myVueDropzone.options.url = newURL
-        // this.$refs.myVueDropzone.dropzone.options.url = newURL
-        // this.dropzoneOptions.url = newURL
         await gfn.fApi({url:"https://api.construe.cf/importacao/produtos/"+value, options: {method: 'GET'}}, this.fetchHist);
+
+        this.ok = false
+        this.add = false
+        this.nOk = false
+        this.errorMessage = ''
 
         this.idPost = value
         this.drop = true;
+
+        this.$refs.fileinput.reset()
 
 
         if ($('.selInd option:selected').attr('value') === 'null') {
@@ -170,7 +182,6 @@ export default {
         } else {
           this.nomeInd = $('.selInd option:selected').text()
         }
-
       },
       fetchCat(obj){
         var ind      = obj.data
@@ -201,51 +212,90 @@ export default {
           })
         }
       },
-      vAdd(file){
-        this.nome = file.name
+      vAdd(){
+        var nome = $('.custom-file-input')
 
-        if (file.name.toLowerCase().indexOf($('.selInd option:selected').text().toLowerCase()) < 0 ) {
+        this.ok = false
+        this.nOk = false
+        this.add = false
+        this.errorMessage = ''
+
+        if (nome.val().toLowerCase().indexOf($('.selInd option:selected').text().toLowerCase()) < 0 ) {
           this.add = false
+
+          // $('.custom-file-input + label').text('Clique para escolher o arquivo.')
+          // $('.custom-file-input').removeClass('is-valid').addClass('is-invalid')
+          this.reset()
+
           alert('O arquivo escolhido não tem o mesmo nome da indústria selecionada.')
-          this.$refs.myVueDropzone.removeFile(file)
+          // this.$refs.myVueDropzone.removeFile(file)
         } else {
           this.add = true
         }
       },
-      vError(file, msg, xhr){
-        this.err = true
+      // vError(file, msg, xhr){
+      //   this.err = true
 
-        this.error = {
-          file,
-          msg,
-          xhr
-        }
-      },
-      vProgress(file, progress, bytesSent){
-        this.dis = true
-        this.prog = progress
-        this.byte = bytesSent
-      },
-      vMax(){
-        this.max = true
-      },
-      vBefore(file, xhr, formData){
-        formData.append('arquivo', file)
-
-        console.log(JSON.stringify(formData))
+      //   this.error = {
+      //     file,
+      //     msg,
+      //     xhr
+      //   }
+      // },
+      // vProgress(file, progress, bytesSent){
+      //   this.dis = true
+      //   this.prog = progress
+      //   this.byte = bytesSent
+      // },
+      // vMax(){
+      //   this.max = true
+      // },
+      // vBefore(file, xhr, formData){
+      //   formData.append('arquivo', file)
+      //   console.log(JSON.stringify(formData))
+      // },
+      // vComplete(){
+      //   this.$refs.myVueDropzone.disable()
+      //   this.dis = false
+      // },
+      reset() {
+        this.$refs.fileinput.reset()
       },
       vSend(){
-        // this.$refs.myVueDropzone.processQueue()
-        console.log(this.file)
-      },
-      vComplete(){
-        // this.$refs.myVueDropzone.disable()
+        var id = this.idPost
+        // var myForm = document.getElementById('myForm');
+        // var formData = new FormData(myForm)
+        // formData.append('arquivo', this.file)
+        // await gfn.fApi({url:"https://api.construe.cf/importacao/produtos/"+id, data: formData, options: {method: 'POST'}}, this.sendData);
 
-        this.dis = false
+        this.ok = false
+        this.nOk = false
+        this.add = false
+        this.errorMessage = ''
+
+        var headers = { "Content-type": "application/json; charset=UTF-8",  'Authorization': JSON.parse(window.localStorage.getItem("account")).token }
+        var formData = new FormData()
+
+        formData.append('arquivo', this.file)
+        axios.post('https://api.construe.cf/importacao/produtos/'+id, formData, {headers: headers}).then((response) => {
+        // axios.post('https://jsonplaceholder.typicode.com/posts', formData, {headers: headers}).then((response) => {
+          this.sendData(response)
+          this.add = false
+        }).catch((error) => {
+          this.sendData(error.response.data)
+          this.add = false
+        })
       },
-      vSuccess(file){
-        this.status = file
-        this.ok = true
+      sendData(obj){
+        if(obj.mensagens) {
+
+          for (var i = 0, lgt = obj.mensagens.length; i < lgt; i++ ) {
+            this.nOk = true
+            this.errorMessage += (i != 0 ? '<br>'+obj.mensagens[i] : obj.mensagens[i])
+          }
+        } else {
+          this.ok = true
+        }
       },
     },
     async mounted() {
