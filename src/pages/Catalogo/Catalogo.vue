@@ -2,7 +2,7 @@
 	<div v-if="idCatalogo">
 		<template v-if="listCatalogo.length > 0">
 			<h1 class="page-title">Catálogo - {{listCatalogo[0].industria}}</h1>
-			<h5 class="page-title"><small>Última atualização: <span class='fw-semi-bold'>{{idCatalogo}}</span></small></h5>
+			<!-- <h5 class="page-title"><small>Última atualização: <span class='fw-semi-bold'>{{date}}</span></small></h5> -->
 			<b-row>
 				<b-col>
 					<Widget>
@@ -148,6 +148,7 @@
 				this.tamanho = obj.size;
 				this.paginaAtual = obj.number;
 				this.ultimaPagina = obj.last_page;
+
 			},
 			goToCat(id) {
 				this.$router.push({
