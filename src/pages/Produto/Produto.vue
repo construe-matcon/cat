@@ -122,72 +122,83 @@
 					<b-col lg="8" class="list-item">
 						<b-form @submit="sendForm">
 							<div class="form-group row">
-								<label for="inputCategoria" class="col-3 col-form-label">Categoria</label>
-								<div class="col-9">
-									<b-input class="form-control-plaintext" id="inputCategoria" v-model="prod.categoria" readonly />
-								</div>
+								<b-form-group class="col">
+									<label for="inputIndustria" class="col-form-label">Industria</label>
+									<div class="">
+										<b-input class="form-control-plaintext" id="inputIndustria" v-model="prod.industria" readonly />
+									</div>
+								</b-form-group>
+								<b-form-group class="col">
+									<label for="inputFabricante" class="col-form-label">Fabricante</label>
+									<div class="">
+										<b-input class="form-control-plaintext" id="inputFabricante" v-model="prod.fabricante" readonly />
+									</div>
+								</b-form-group>
+								<b-form-group class="col">
+									<label for="inputCategoria" class="col-form-label">Categoria</label>
+									<div class="">
+										<b-input class="form-control-plaintext" id="inputCategoria" v-model="prod.categoria" readonly />
+									</div>
+								</b-form-group>
 							</div>
 							<div class="form-group row">
-								<label for="inputEan" class="col-3 col-form-label">EAN</label>
-								<div class="col-9">
-									<b-input class="form-control-plaintext" id="inputEan" v-model="prod.ean" readonly />
-								</div>
+								<b-form-group class="col">
+									<label for="inputEan" class="col-form-label">EAN</label>
+									<div class="">
+										<template v-if="prod.ean.length == 13">
+											<b-input class="form-control-plaintext" id="inputEan" v-model="prod.ean" readonly />
+										</template>
+										<template v-else>
+											<b-input class="form-control-plaintext" autocomplete="off" id="inputEan" v-model="prod.ean" pattern="\d{13}" maxlength="13" />
+										</template>
+									</div>
+								</b-form-group>
+								<b-form-group class="col">
+									<label for="inputCodInterno" class="col-form-label">Cod. Interno</label>
+									<div class="">
+										<b-input class="form-control-plaintext" id="inputCodInterno" v-model="prod.codigo_interno" readonly />
+									</div>
+								</b-form-group>
+								<b-form-group class="col">
+									<label for="inputNcm" class="col-form-label">NCM</label>
+									<div class="">
+										<b-input class="form-control-plaintext" id="inputNcm" v-model="prod.ncm" readonly />
+									</div>
+								</b-form-group>
+								<b-form-group class="col">
+									<label for="inputMarca" class="col-form-label">Marca</label>
+									<div class="">
+										<b-input class="form-control-plaintext" id="inputMarca" v-model="prod.marca" readonly />
+									</div>
+								</b-form-group>
 							</div>
 							<div class="form-group row">
-								<label for="inputCodInterno" class="col-3 col-form-label">Cod. Interno</label>
-								<div class="col-9">
-									<b-input class="form-control-plaintext" id="inputCodInterno" v-model="prod.codigo_interno" readonly />
-								</div>
-							</div>
-							<div class="form-group row">
-								<label for="inputDescricao" class="col-3 col-form-label">Descrição</label>
-								<div class="col-9">
-									<b-input class="form-control-plaintext" id="inputDescricao" v-model="prod.descricao" readonly />
-								</div>
-							</div>
-							<div class="form-group row">
-								<label for="inputDescInd" class="col-3 col-form-label">Descrição Ind.</label>
-								<div class="col-9">
-									<b-input class="form-control-plaintext" id="inputDescInd" v-model="prod.descricao_industria" readonly />
-								</div>
-							</div>
-							<div class="form-group row">
-								<label for="inputIndustria" class="col-3 col-form-label">Industria</label>
-								<div class="col-9">
-									<b-input class="form-control-plaintext" id="inputIndustria" v-model="prod.industria" readonly />
-								</div>
-							</div>
-							<div class="form-group row">
-								<label for="inputFabricante" class="col-3 col-form-label">Fabricante</label>
-								<div class="col-9">
-									<b-input class="form-control-plaintext" id="inputFabricante" v-model="prod.fabricante" readonly />
-								</div>
-							</div>
-							<div class="form-group row">
-								<label for="inputMarca" class="col-3 col-form-label">Marca</label>
-								<div class="col-9">
-									<b-input class="form-control-plaintext" id="inputMarca" v-model="prod.marca" readonly />
-								</div>
-							</div>
-							<div class="form-group row">
-								<label for="inputNcm" class="col-3 col-form-label">NCM</label>
-								<div class="col-9">
-									<b-input class="form-control-plaintext" id="inputNcm" v-model="prod.ncm" readonly />
-								</div>
+								<b-form-group class="col">
+									<label for="inputDescricao" class="col-form-label">Descrição</label>
+									<div class="">
+										<b-form-textarea class="form-control-plaintext" id="inputDescricao" v-model="prod.descricao" readonly rows="3" max-rows="3" />
+									</div>
+								</b-form-group>
+								<b-form-group class="col">
+									<label for="inputDescInd" class="col-form-label">Descrição Ind.</label>
+									<div class="">
+										<b-form-textarea class="form-control-plaintext" id="inputDescInd" v-model="prod.descricao_industria" readonly rows="3" max-rows="3" />
+									</div>
+								</b-form-group>
 							</div>
 							<div class="form-group row">
 								<label for="inputTags" class="col-3 col-form-label">Tags</label>
 								<div class="col-9">
-									<b-input class="form-control-plaintext" id="inputTags" placeholder="Adicionar tags" />
-									<span class="badge badge-primary" v-for="tag in prod.tags" :key="'tag-'+tag">{{tag}}</span>
+									<input type="text" class="form-control-plaintext" id="inputTags" placeholder="Adicionar tags" @keyup.enter="addTag" @keydown.prevent.tab="addTag" />
+									<span class="badge badge-primary" v-for="tag in prod.tags" v-if="tag != ''" :key="'tag-'+tag">{{tag}}</span>
 								</div>
 							</div>
 							<h3>Detalhes</h3>
 							<h5>Atributos</h5>
 							<div class="form-group row">
 								<template v-for="(value, key) in prod.detalhe.atributo">
-									<label class="col-3 col-form-label" style="text-transform: capitalize;">{{key.replace(/\_/g,' ')}}</label>
-									<div class="col-9">
+									<label class="col-3 col-form-label" :key="'atributo-1-'+key" style="text-transform: capitalize;">{{key.replace(/\_/g,' ')}}</label>
+									<div class="col-9" :key="'atributo-2-'+key">
 										<b-input class="form-control-plaintext" :value="value" readonly />
 									</div>
 								</template>
@@ -195,12 +206,13 @@
 							<h5>Embalagem</h5>
 							<div class="form-group row">
 								<template v-for="(value, key) in prod.detalhe.embalagem">
-									<label class="col-3 col-form-label" style="text-transform: capitalize;">{{key.replace(/\_/g,' ')}}</label>
-									<div class="col-9">
+									<label class="col-3 col-form-label" :key="'embalagem-1-'+key" style="text-transform: capitalize;">{{key.replace(/\_/g,' ')}}</label>
+									<div class="col-9" :key="'embalagem-2'+key">
 										<b-input class="form-control-plaintext" :value="value" readonly />
 									</div>
 								</template>
 							</div>
+							<b-button variant="outline-success float-right">Salvar</b-button>
 						</b-form>
 					</b-col>
 				</b-row>
@@ -216,7 +228,7 @@
 </template>
 
 <script>
-	import $ from 'jquery';
+	// import $ from 'jquery';
 	import gfn from '@/core/globalFunctions';
 	export default {
 		name: 'Produto',
@@ -231,10 +243,18 @@
 			},
 			fetchUrl(obj){
 				this.prod = obj;
-				console.log($('#selectM'))
 			},
 			sendForm() {
 				return true
+			},
+			addTag(event) {
+				let inputVal = event.target.value
+				if (this.prod.tags.indexOf(inputVal) < 0) {
+					this.prod.tags.push(inputVal)
+				}
+				event.target.value = ''
+				console.log(this.prod)
+				console.log(this.prod.tags)
 			}
 		},
 		async mounted() {

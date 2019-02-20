@@ -38,4 +38,14 @@
   .interno {
     display: inline-table;
   }
+
+  .formProduto & {
+    input, textarea {
+      border: 1px solid #ccc;
+    }
+    h5 {
+      color: $matcon;
+      border-bottom: 1px solid $matcon;
+    }
+  }
 }
