@@ -169,6 +169,7 @@ export default {
         this.ok = false
         this.add = false
         this.nOk = false
+        this.dis = false
         this.errorMessage = ''
 
         this.idPost = value
@@ -218,6 +219,7 @@ export default {
         this.ok = false
         this.nOk = false
         this.add = false
+        this.dis = false
         this.errorMessage = ''
 
         if (nome.val().toLowerCase().indexOf($('.selInd option:selected').text().toLowerCase()) < 0 ) {
@@ -271,14 +273,22 @@ export default {
         this.ok = false
         this.nOk = false
         this.add = false
+        this.dis = false
         this.errorMessage = ''
 
-        var headers = { "Content-type": "application/json; charset=UTF-8",  'Authorization': JSON.parse(window.localStorage.getItem("account")).token }
         var formData = new FormData()
 
         formData.append('arquivo', this.file)
-        axios.post('https://api.construe.cf/importacao/produtos/'+id, formData, {headers: headers}).then((response) => {
         // axios.post('https://jsonplaceholder.typicode.com/posts', formData, {headers: headers}).then((response) => {
+        axios.post('https://api.construe.cf/importacao/produtos/'+id, formData, {
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            "Authorization": JSON.parse(window.localStorage.getItem("account")).token
+          },onUploadProgress: function( progressEvent ) {
+              this.dis = true
+              this.prog = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
+            }.bind(this)
+        }).then((response) => {
           this.sendData(response)
           this.add = false
         }).catch((error) => {
@@ -287,6 +297,8 @@ export default {
         })
       },
       sendData(obj){
+        this.dis = false
+
         if(obj.mensagens) {
 
           for (var i = 0, lgt = obj.mensagens.length; i < lgt; i++ ) {
