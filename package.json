@@ -13,6 +13,7 @@
     "animate.css": "^3.6.1",
     "awesome-bootstrap-checkbox": "^1.0.1",
     "bootstrap": "^4.1.1",
+    "bootstrap-tagsinput": "^0.7.1",
     "bootstrap-vue": "^2.0.0-rc.11",
     "chart.js": "^2.7.3",
     "connect-history-api-fallback": "^1.5.0",
