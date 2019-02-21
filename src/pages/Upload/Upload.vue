@@ -204,7 +204,7 @@ export default {
         for (var i = 0, lgt = dt.length; i < lgt; i++ ) {
           this.hist.push({
             'id': dt[i].id,
-            'nome': dt[i].nome_arquivo,
+            'nome': (dt[i].nome_arquivo).split('/')[dt[i].nome_arquivo.split('/').length - 1],
             'qtIn': dt[i].qtd_inseridos,
             'qtAt': dt[i].qtd_atualizados,
             'user': dt[i].usuario,
@@ -212,6 +212,7 @@ export default {
             'ind':  dt[i].industria,
           })
         }
+        // .replace('./datalake-temp/', '')
       },
       vAdd(){
         var nome = $('.custom-file-input')
