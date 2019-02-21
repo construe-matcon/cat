@@ -80,7 +80,16 @@ let router = new Router({
               component: Catalogo,
               params: {
                 id: ':id'
+              },
+              children: [
+              {
+                path: ':idc',
+                component: Catalogo,
+                params: {
+                  id: ':idc'
+                }
               }
+              ]
             }
           ]
         },

@@ -218,6 +218,117 @@
 					</b-col>
 				</b-row>
 			</b-tab>
+			<b-tab title="Associações">
+				<b-row class="formProduto">
+					<b-col lg="4" class="list-item">
+						<img class="img-rounded imgCat" :src="'https://images.construe.cf/'+prod.industria+'/'+prod.ean+'.jpg'" alt="" />
+						<!-- ADICIONAR IF PARA GALERIA AQUI -->
+						<b-col lg="12" class="thumb-gal" v-if="1 == 2">
+							<img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/'+prod.industria+'/'+prod.ean+'.jpg'" alt="" />
+							<img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/'+prod.industria+'/'+prod.ean+'.jpg'" alt="" />
+							<img class="img-rounded thumb-imgCat" :src="'https://images.construe.cf/'+prod.industria+'/'+prod.ean+'.jpg'" alt="" />
+						</b-col>
+						<!-- ADICIONAR IF PARA GALERIA AQUI -->
+					</b-col>
+					<b-col lg="8" class="list-item">
+						<b-form @submit.prevent="">
+							<div class="form-group row">
+								<b-form-group class="col">
+									<label for="inputIndustria" class="col-form-label">Industria</label>
+									<div class="">
+										<b-input class="form-control-plaintext" id="inputIndustria" v-model="prod.industria" readonly />
+									</div>
+								</b-form-group>
+								<b-form-group class="col">
+									<label for="inputFabricante" class="col-form-label">Fabricante</label>
+									<div class="">
+										<b-input class="form-control-plaintext" id="inputFabricante" v-model="prod.fabricante" readonly />
+									</div>
+								</b-form-group>
+								<b-form-group class="col">
+									<label for="inputCategoria" class="col-form-label">Categoria</label>
+									<div class="">
+										<b-input class="form-control-plaintext" id="inputCategoria" v-model="prod.categoria" readonly />
+									</div>
+								</b-form-group>
+							</div>
+							<div class="form-group row">
+								<b-form-group class="col">
+									<label for="inputEan" class="col-form-label">EAN</label>
+									<div class="">
+										<template v-if="prod.ean.length == 13">
+											<b-input class="form-control-plaintext" id="inputEan" v-model="prod.ean" readonly />
+										</template>
+										<template v-else>
+											<b-input class="form-control-plaintext" autocomplete="off" id="inputEan" v-model="prod.ean" pattern="\d{13}" maxlength="13" />
+										</template>
+									</div>
+								</b-form-group>
+								<b-form-group class="col">
+									<label for="inputCodInterno" class="col-form-label">Cod. Interno</label>
+									<div class="">
+										<b-input class="form-control-plaintext" id="inputCodInterno" v-model="prod.codigo_interno" readonly />
+									</div>
+								</b-form-group>
+								<b-form-group class="col">
+									<label for="inputNcm" class="col-form-label">NCM</label>
+									<div class="">
+										<b-input class="form-control-plaintext" id="inputNcm" v-model="prod.ncm" readonly />
+									</div>
+								</b-form-group>
+								<b-form-group class="col">
+									<label for="inputMarca" class="col-form-label">Marca</label>
+									<div class="">
+										<b-input class="form-control-plaintext" id="inputMarca" v-model="prod.marca" readonly />
+									</div>
+								</b-form-group>
+							</div>
+							<div class="form-group row">
+								<b-form-group class="col">
+									<label for="inputDescricao" class="col-form-label">Descrição</label>
+									<div class="">
+										<b-form-textarea class="form-control-plaintext" id="inputDescricao" v-model="prod.descricao" readonly rows="3" max-rows="3" />
+									</div>
+								</b-form-group>
+								<b-form-group class="col">
+									<label for="inputDescInd" class="col-form-label">Descrição Ind.</label>
+									<div class="">
+										<b-form-textarea class="form-control-plaintext" id="inputDescInd" v-model="prod.descricao_industria" readonly rows="3" max-rows="3" />
+									</div>
+								</b-form-group>
+							</div>
+							<div class="form-group row">
+								<label for="inputTags" class="col-3 col-form-label">Tags</label>
+								<div class="col-9">
+									<input type="text" class="form-control-plaintext" id="inputTags" placeholder="Adicionar tags" @keyup.enter="addTag" @keydown.prevent.tab="addTag" maxlength="35" />
+									<b-badge variant="success" v-for="tag in prod.tags" v-if="tag != ''" :key="'tag-'+tag">{{tag.toLowerCase()}}<b-button-close @click.prevent="removeTag" /></b-badge>
+								</div>
+							</div>
+							<h3>Detalhes</h3>
+							<h5>Atributos</h5>
+							<div class="form-group row">
+								<template v-for="(value, key) in prod.detalhe.atributo">
+									<label class="col-3 col-form-label" :key="'atributo-1-'+key" style="text-transform: capitalize;">{{key.replace(/\_/g,' ')}}</label>
+									<div class="col-9" :key="'atributo-2-'+key">
+										<b-input class="form-control-plaintext" v-model="prod.detalhe.atributo[key]" />
+									</div>
+								</template>
+							</div>
+							<h5>Embalagem</h5>
+							<div class="form-group row">
+								<template v-for="(value, key) in prod.detalhe.embalagem">
+									<label class="col-3 col-form-label" :key="'embalagem-1-'+key" style="text-transform: capitalize;">{{key.replace(/\_/g,' ')}}</label>
+									<div class="col-9" :key="'embalagem-2'+key">
+										<b-input class="form-control-plaintext" v-model="prod.detalhe.embalagem[key]" />
+									</div>
+								</template>
+							</div>
+							<b-button variant="outline-danger float-left" @click.prevent="resetForm">Cancelar</b-button>
+							<b-button variant="outline-success float-right" @click.prevent="sendForm">Salvar</b-button>
+						</b-form>
+					</b-col>
+				</b-row>
+			</b-tab>
 		</b-tabs>
 	</section>
 	<section v-else-if="prod.mensagens">

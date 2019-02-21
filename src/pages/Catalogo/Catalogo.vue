@@ -1,5 +1,31 @@
 <template>
 	<div v-if="idCatalogo">
+		<template v-if="listProdConstrue.length > 0">
+			<h1 class="page-title">Produtos Construe - {{listCatalogo[0].industria}}</h1>
+			<!-- <h5 class="page-title"><small>Última atualização: <span class='fw-semi-bold'>{{date}}</span></small></h5> -->
+			<b-row>
+				<b-col>
+					<Widget>
+						<div class="table-resposive table-hover">
+							<table class="table">
+								<thead>
+									<tr>
+										<th class="hidden-sm-down">Nome</th>
+										<th class="hidden-sm-down">Quantidade de SKUs</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="row in listProdConstrue" :key="row.id" @click="goToProdConstrue(row.id)">
+										<td><h5>{{row.nome}}</h5></td>
+										<td><h5>{{row.qtd_produtos}}</h5></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</Widget>
+				</b-col>
+			</b-row>
+		</template>
 		<template v-if="listCatalogo.length > 0">
 			<h1 class="page-title">Catálogo - {{listCatalogo[0].industria}}</h1>
 			<!-- <h5 class="page-title"><small>Última atualização: <span class='fw-semi-bold'>{{date}}</span></small></h5> -->
@@ -84,9 +110,6 @@
 				</b-col>
 			</b-row>
 		</template>
-		<template v-else-if="listCatalogo">
-
-		</template>
 		<template v-else>
 			Dados não encontrados
 		</template>
@@ -121,6 +144,8 @@
 		components: { Widget },
 		data() {
 			return {
+				teste: true,
+				teste2: false,
 				currentPage: 1,
 				totalProdutos: 0,
 				tamanho: 1,
@@ -128,7 +153,11 @@
 				ultimaPagina: true,
 				listCatalogo: true,
 				idCatalogo: this.$route.params.id,
+				idProdCons: this.$route.params.idc,
 				listImgCatalogo: {},
+				listProdConstrue: true,
+				listCatProd: true,
+				idCategoria: 277,
 			};
 		},
 		methods: {
@@ -142,12 +171,16 @@
 					}
 				})
 			},
-			loadCat(obj) {
+			async loadCat(obj) {
 				this.listCatalogo = (obj.data.length > 0 ? obj.data : false)
 				this.totalProdutos = obj.total_data_size;
 				this.tamanho = obj.size;
 				this.paginaAtual = obj.number;
 				this.ultimaPagina = obj.last_page;
+
+				await gfn.fApi({url:"https://api.construe.cf/categorias/industria/"+this.idCatalogo, options: {method: 'GET'}}, this.goToConstrue);
+				await gfn.fApi({url:"https://api.construe.cf/produtos?id_industria="+this.idCatalogo+"&id_categoria="+this.idCategoria, options: {method: 'GET'}}, this.openProdConstrue);
+
 
 			},
 			goToCat(id) {
@@ -158,11 +191,30 @@
 					}
 				});
 			},
+			goToConstrue(obj){
+				this.listProdConstrue = (obj.data.length > 0 ? obj.data : false)
+			},
+			openProdConstrue(obj){
+				this.listCatProd = (obj.data.length > 0 ? obj.data : false)
+
+				console.log(obj)
+			},
 			async loadCatalogo() {
 				await gfn.fApi({url:"https://api.construe.cf/produtos?id_industria="+this.idCatalogo+"&tamanho_pagina=20&pagina="+(this.currentPage - 1), options: {method: 'GET'}}, this.loadCat);
 			},
 			async loadCatalogos() {
 				await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}}, this.fetchUrl);
+			},
+			async loadProdConstrue() {
+				await gfn.fApi({url:"https://api.construe.cf/categorias/industria/"+this.idCatalogo, options: {method: 'GET'}}, this.goToConstrue);
+			},
+			goToProdConstrue(idc) {
+				this.$router.push({
+					path: "/catalogo/"+this.idCatalogo+"/"+idc,
+					params: {
+						row: idc
+					}
+				});
 			},
 			goToProduct(id){
 				this.$router.push({
