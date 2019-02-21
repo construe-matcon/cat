@@ -248,10 +248,14 @@
 				this.bkpprod = JSON.stringify(obj);
 			},
 			sendForm() {
-				this.prod.tags = this.prod.tags.filter(tag => {
-					return tag != ""
-				})
-				console.log(this.prod)
+
+				if (this.prod.tags != undefined) {
+					this.prod.tags = this.prod.tags.filter(tag => {
+						return tag != ""
+					})
+				}
+
+
 			},
 			resetForm() {
 				this.prod = JSON.parse(this.bkpprod)
@@ -259,6 +263,9 @@
 			},
 			addTag(event) {
 				let inputVal = event.target.value
+				if (this.prod.tags == undefined) {
+					this.prod["tags"] = []
+				}
 				if (this.prod.tags.indexOf(inputVal) < 0) {
 					this.prod.tags.push(inputVal.toLowerCase())
 				}
