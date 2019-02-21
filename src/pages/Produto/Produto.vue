@@ -262,16 +262,17 @@
 				console.log(this.prod)
 			},
 			addTag(event) {
-				let inputVal = event.target.value
+				let inputVal = event.target.value.trim().replace(/\s+/g," ")
 				if (this.prod.tags == undefined) {
 					this.prod["tags"] = []
 				}
-				if (this.prod.tags.indexOf(inputVal) < 0) {
+				if (this.prod.tags.indexOf(inputVal) < 0 && inputVal.replace(/\s/g,'').length > 0) {
 					this.prod.tags.push(inputVal.toLowerCase())
 				}
 				event.target.value = ''
 			},
 			removeTag(event) {
+				console.log(event.path[1].innerText.split('\n')[0])
 				this.prod.tags = this.prod.tags.filter(tag => {
 					return (tag != event.path[1].innerText.split('\n')[0] && tag != "")
 				})
