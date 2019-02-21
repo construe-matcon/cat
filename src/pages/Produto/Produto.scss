@@ -47,5 +47,18 @@
       color: $matcon;
       border-bottom: 1px solid $matcon;
     }
+    .form-group {
+      .badge {
+        margin-right: 7px;
+        line-height: 1.9;
+        font-weight: 100;
+        .close {
+          margin-left: 7px;
+          color: #fff;
+          opacity: 1;
+          font-weight: 100;
+        }
+      }
+    }
   }
 }

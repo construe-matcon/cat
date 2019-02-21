@@ -120,7 +120,7 @@
 						<!-- ADICIONAR IF PARA GALERIA AQUI -->
 					</b-col>
 					<b-col lg="8" class="list-item">
-						<b-form @submit="sendForm">
+						<b-form @submit.prevent="">
 							<div class="form-group row">
 								<b-form-group class="col">
 									<label for="inputIndustria" class="col-form-label">Industria</label>
@@ -189,8 +189,8 @@
 							<div class="form-group row">
 								<label for="inputTags" class="col-3 col-form-label">Tags</label>
 								<div class="col-9">
-									<input type="text" class="form-control-plaintext" id="inputTags" placeholder="Adicionar tags" @keyup.enter="addTag" @keydown.prevent.tab="addTag" />
-									<span class="badge badge-primary" v-for="tag in prod.tags" v-if="tag != ''" :key="'tag-'+tag">{{tag}}</span>
+									<input type="text" class="form-control-plaintext" id="inputTags" placeholder="Adicionar tags" @keyup.enter="addTag" @keydown.prevent.tab="addTag" maxlength="35" />
+									<b-badge variant="success" v-for="tag in prod.tags" v-if="tag != ''" :key="'tag-'+tag">{{tag.toLowerCase()}}<b-button-close @click.prevent="removeTag" /></b-badge>
 								</div>
 							</div>
 							<h3>Detalhes</h3>
@@ -199,7 +199,7 @@
 								<template v-for="(value, key) in prod.detalhe.atributo">
 									<label class="col-3 col-form-label" :key="'atributo-1-'+key" style="text-transform: capitalize;">{{key.replace(/\_/g,' ')}}</label>
 									<div class="col-9" :key="'atributo-2-'+key">
-										<b-input class="form-control-plaintext" :value="value" readonly />
+										<b-input class="form-control-plaintext" v-model="prod.detalhe.atributo[key]" />
 									</div>
 								</template>
 							</div>
@@ -208,11 +208,12 @@
 								<template v-for="(value, key) in prod.detalhe.embalagem">
 									<label class="col-3 col-form-label" :key="'embalagem-1-'+key" style="text-transform: capitalize;">{{key.replace(/\_/g,' ')}}</label>
 									<div class="col-9" :key="'embalagem-2'+key">
-										<b-input class="form-control-plaintext" :value="value" readonly />
+										<b-input class="form-control-plaintext" v-model="prod.detalhe.embalagem[key]" />
 									</div>
 								</template>
 							</div>
-							<b-button variant="outline-success float-right">Salvar</b-button>
+							<b-button variant="outline-danger float-left" @click.prevent="resetForm">Cancelar</b-button>
+							<b-button variant="outline-success float-right" @click.prevent="sendForm">Salvar</b-button>
 						</b-form>
 					</b-col>
 				</b-row>
@@ -235,6 +236,7 @@
 		data() {
 			return {
 				prod: {},
+				bkpprod: {},
 			};
 		},
 		methods: {
@@ -243,18 +245,29 @@
 			},
 			fetchUrl(obj){
 				this.prod = obj;
+				this.bkpprod = JSON.stringify(obj);
 			},
 			sendForm() {
-				return true
+				this.prod.tags = this.prod.tags.filter(tag => {
+					return tag != ""
+				})
+				console.log(this.prod)
+			},
+			resetForm() {
+				this.prod = JSON.parse(this.bkpprod)
+				console.log(this.prod)
 			},
 			addTag(event) {
 				let inputVal = event.target.value
 				if (this.prod.tags.indexOf(inputVal) < 0) {
-					this.prod.tags.push(inputVal)
+					this.prod.tags.push(inputVal.toLowerCase())
 				}
 				event.target.value = ''
-				console.log(this.prod)
-				console.log(this.prod.tags)
+			},
+			removeTag(event) {
+				this.prod.tags = this.prod.tags.filter(tag => {
+					return (tag != event.path[1].innerText.split('\n')[0] && tag != "")
+				})
 			}
 		},
 		async mounted() {
