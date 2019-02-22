@@ -88,7 +88,7 @@
 									id: loggedUser.id,
 									token: data.token
 								}));
-								
+
 								that.$router.push({path:redirectPath || '/'});
 							}
 						});
@@ -98,7 +98,7 @@
 				} else {
 					alert('É obrigatório preencher usuário e senha')
 				}
-			}
+			},
 		},
 	};
 </script>

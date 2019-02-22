@@ -1,13 +1,12 @@
 <template>
   <div>
-    <h1 class="page-title">Catálogo</h1>
+    <h1 class="page-title">Dashboard</h1>
     <h5 class="page-title"><small>Última atualização: <span class='fw-semi-bold'>{{date}}</span></small></h5>
-
 
     <b-row>
       <b-col v-for="gra in listCat" class="min" v-bind:key="gra.id">
-        <div class="pb-xlg h-100">
-          <Widget class="h-100 mb-0" :title="gra.nome">
+        <div class="pb-xlg h-100 pointer" @click="clickGraph()">
+          <Widget class="h-100 mb-0" :title='"Top 15 Lojas que venderam "+gra.nome'>
             <b-row>
               <canvas :id='"industria"+gra.id' height="350"></canvas>
             </b-row>
@@ -187,6 +186,9 @@ export default {
     };
   },
   methods: {
+    clickGraph(){
+      console.log('Clicou no Gráfico')
+    },
     getRandomData() {
       const arr = [];
 
@@ -227,215 +229,17 @@ export default {
         },
       });
     },
-    startCharts(type, idEl, label, datax) {
-      // var pie   = document.getElementById('piechart').getContext('2d')
-      // ,   pie2  = document.getElementById('piechart2').getContext('2d')
-      // ,   pie3  = document.getElementById('piechart3').getContext('2d')
-      // ,   bars1 = document.getElementById('barchart1').getContext('2d')
-      // ,   bars2 = document.getElementById('barchart2').getContext('2d')
-      // new Chart(pie, {
-      //   type: 'pie',
-      //   data:{
-      //     labels: ["Total", "Sem categoria"],
-      //     datasets: [{
-      //         label: 'Label',
-      //         data: [obj.qtd_total_produto, obj.qtd_produto_sem_categoria],
-      //         backgroundColor: [
-      //             'rgba(237,123,0, 0.8)',
-      //             'rgba(97,201,184, 0.8)',
-      //         ],
-      //     }]
-      //   },
-      //   options: {
-      //     legend: {
-      //       display: true,
-      //       position: 'bottom'
-      //     },
-      //     scales: {
-      //       xAxes: [{
-      //           ticks: {
-      //             display: false
-      //           },
-      //           gridLines: {
-      //               drawBorder: false,
-      //               display: false
-      //           }
-      //       }],
-      //       yAxes: [{
-      //           ticks: {
-      //             display: false
-      //           },
-      //           gridLines: {
-      //               drawBorder: false,
-      //               display: false
-      //           }
-      //       }]
-      //     }
-      //   }
-      // }) // End Pie Chart
-      // new Chart(pie2, {
-      //   type: 'pie',
-      //   data:{
-      //     labels: ["Total", "Sem Tags"],
-      //     datasets: [{
-      //         label: 'Label',
-      //         data: [obj.qtd_total_produto, obj.qtd_produto_sem_tag],
-      //         backgroundColor: [
-      //             'rgba(237,123,0, 0.8)',
-      //             'rgba(97,201,184, 0.8)',
-      //         ],
-      //     }]
-      //   },
-      //   options: {
-      //     legend: {
-      //       display: true,
-      //       position: 'bottom'
-      //     },
-      //     scales: {
-      //       xAxes: [{
-      //           ticks: {
-      //             display: false
-      //           },
-      //           gridLines: {
-      //               drawBorder: false,
-      //               display: false
-      //           }
-      //       }],
-      //       yAxes: [{
-      //           ticks: {
-      //             display: false
-      //           },
-      //           gridLines: {
-      //               drawBorder: false,
-      //               display: false
-      //           }
-      //       }]
-      //     }
-      //   }
-      // }) // End Pie Chart2
-      // new Chart(pie3, {
-      //   type: 'pie',
-      //   data:{
-      //     labels: ["Total", "Sem EAN"],
-      //     datasets: [{
-      //         label: 'Label',
-      //         data: [obj.qtd_total_produto, obj.qtd_produto_sem_ean],
-      //         backgroundColor: [
-      //             'rgba(237,123,0, 0.8)',
-      //             'rgba(97,201,184, 0.8)',
-      //         ],
-      //     }]
-      //   },
-      //   options: {
-      //     legend: {
-      //       display: true,
-      //       position: 'bottom'
-      //     },
-      //     scales: {
-      //       xAxes: [{
-      //           ticks: {
-      //             display: false
-      //           },
-      //           gridLines: {
-      //               drawBorder: false,
-      //               display: false
-      //           }
-      //       }],
-      //       yAxes: [{
-      //           ticks: {
-      //             display: false
-      //           },
-      //           gridLines: {
-      //               drawBorder: false,
-      //               display: false
-      //           }
-      //       }]
-      //     }
-      //   }
-      // }) // End Pie Chart3
-      // this.barChart1 = new Chart(bars1, {
-      //   type: 'horizontalBar',
-      //   data:{},
-      //   options: {
-      //     legend: {
-      //       display: true,
-      //       position: 'bottom'
-      //     },
-      //     scales: {
-      //       xAxes: [{
-      //           ticks: {
-      //             display: true
-      //           },
-      //           gridLines: {
-      //               drawBorder: true,
-      //               display: true
-      //           }
-      //       }],
-      //       yAxes: [{
-      //           ticks: {
-      //             display: true
-      //           },
-      //           gridLines: {
-      //               drawBorder: true,
-      //               display: true
-      //           }
-      //       }]
-      //     }
-      //   }
-      // }) // End Bar Chart 1
-      // this.barChart2 = new Chart(bars2, {
-      //   type: 'horizontalBar',
-      //   data:{},
-      //   options: {
-      //     legend: {
-      //       display: true,
-      //       position: 'bottom',
-      //       "ticks": {
-      //         "beginAtZero": true
-      //       },
-      //     },
-      //     scales: {
-      //       xAxes: [{
-      //           ticks: {
-      //             display: true
-      //           },
-      //           gridLines: {
-      //               drawBorder: true,
-      //               display: true
-      //           }
-      //       }],
-      //       yAxes: [{
-      //           ticks: {
-      //             display: true
-      //           },
-      //           gridLines: {
-      //               drawBorder: true,
-      //               display: true
-      //           }
-      //       }]
-      //     }
-      //   }
-      // }) // End Bar Chart 1
-
+    startCharts(type, idEl, label, datax,displayLegend=true) {
       var el = document.getElementById(idEl).getContext('2d')
       var graph;
 
       if (type == 'pie') {
         graph = {
           type: type,
-          data:{
-            labels: label,
-            datasets: [{
-                data: datax,
-                backgroundColor: [
-                    'rgba(237,123,0, 0.8)',
-                    'rgba(97,201,184, 0.8)',
-                ],
-            }]
-          },
+          data:datax,
           options: {
             legend: {
-              display: true,
+              display: displayLegend,
               position: 'bottom',
               "ticks": {
                 "beginAtZero": true
@@ -469,7 +273,7 @@ export default {
           data:{},
           options: {
             legend: {
-              display: true,
+              display: displayLegend,
               position: 'bottom',
               "ticks": {
                 "beginAtZero": true
@@ -500,10 +304,10 @@ export default {
       } else if (type == 'bar') {
         graph = {
           type: type,
-          data:{},
+          data: datax,
           options: {
             legend: {
-              display: true,
+              display: displayLegend,
               position: 'bottom',
               "ticks": {
                 "beginAtZero": true
@@ -512,7 +316,41 @@ export default {
             scales: {
               xAxes: [{
                   ticks: {
+                    display: false
+                  },
+                  gridLines: {
+                      drawBorder: true,
+                      display: true
+                  }
+              }],
+              yAxes: [{
+                  ticks: {
                     display: true
+                  },
+                  gridLines: {
+                      drawBorder: true,
+                      display: true
+                  }
+              }]
+            }
+          }
+        }
+      } else {
+        graph = {
+          type: type,
+          data: datax,
+          options: {
+            legend: {
+              display: displayLegend,
+              position: 'bottom',
+              "ticks": {
+                "beginAtZero": true
+              },
+            },
+            scales: {
+              xAxes: [{
+                  ticks: {
+                    display: false
                   },
                   gridLines: {
                       drawBorder: true,
@@ -563,29 +401,34 @@ export default {
         chart.update();
     },
     fetchUrl(obj){
-      var arrI = [
-        [obj.qtd_total_produto, obj.qtd_produto_sem_categoria],
-        [obj.qtd_total_produto, obj.qtd_produto_sem_tag],
-        [obj.qtd_total_produto, obj.qtd_produto_sem_ean]
-      ]
-      for (var a = 0, lgtt = 3; a < lgtt; a++ ) {
+      var colors = gfn.gColors()
 
-        this.startCharts('pie', 'piechart'+a,["Total", "Sem categoria"],arrI[a]);
-      }
+      var arrI = JSON.stringify({'labels':[],'datasets':[{'data':[],'backgroundColor':[colors[1],colors[6]],'borderColor':['transparent'],'borderWidth':[]}]})
+      ,   arr1 = JSON.parse(arrI)
+      ,   arr2 = JSON.parse(arrI)
+      ,   arr3 = JSON.parse(arrI);
 
-      // this.startCharts('piechart2',obj,[obj.qtd_total_produto, obj.qtd_produto_sem_tag]);
+      arr1.datasets[0].data.push(obj.qtd_total_produto, obj.qtd_produto_sem_categoria)
+      arr1.labels.push("Total", "Sem Categoria")
+      arr2.datasets[0].data.push(obj.qtd_total_produto, obj.qtd_produto_sem_tag)
+      arr2.labels.push("Total", "Sem Tags")
+      arr3.datasets[0].data.push(obj.qtd_total_produto, obj.qtd_produto_sem_ean)
+      arr3.labels.push("Total", "Sem Ean")
+
+      this.startCharts('pie', 'piechart0','',arr1, true);
+      this.startCharts('pie', 'piechart1','',arr2, true);
+      this.startCharts('pie', 'piechart2','',arr3, true);
+
+
       this.date = gfn.formatDate(obj.ultimas_importacoes[0].dt_inclusao);
       var inds = obj.ultimas_importacoes;
-      // // var colors = ['rgba(237,95,0, 0.8)','rgba(247,167,12, 0.8)','rgba(214,122,11, 0.8)','rgba(214,63,11, 0.8)','rgba(247,38,12, 0.8)'] //Laranja
-      var colors = ['rgba(97,201,184, 0.8)','rgba(23,137,126, 0.8)','rgba(237,95,0, 0.8)','rgba(237,123,0, 0.8)','rgba(250,168,0, 0.8)'] //Com azul
-      this.barChart1 = new this.startCharts('horizontalBar', 'barchart1','',[]);
-      this.barChart2 = new this.startCharts('horizontalBar', 'barchart2','',[]);
+      // var colors = ['rgba(97,201,184, 0.8)','rgba(23,137,126, 0.8)','rgba(237,95,0, 0.8)','rgba(237,123,0, 0.8)','rgba(250,168,0, 0.8)'] //Com azul
+      this.barChart1 = new this.startCharts('bar', 'barchart1','',[]);
+      this.barChart2 = new this.startCharts('bar', 'barchart2','',[]);
 
       for (var i = 0, lgt = inds.length; i < lgt; i++ ) {
         var ind = inds[i].industria
         ,   qtT = inds[i].qtd_total_produtos
-        // ,   qtI = inds[i].qtd_inseridos
-        // ,   qtA = inds[i].qtd_atualizados
         this.listCat.push({id:inds[i].id_industria,nome:inds[i].industria})
 
         this.addData(this.barChart1, ind, colors[i], [qtT])
@@ -600,20 +443,26 @@ export default {
       }
     },
     montaGraf(obj) {
-      // this.teste.push(obj);
-      console.log(obj)
-      this.startCharts('pie', 'industria'+obj.ultimas_importacoes[0].id_industria,["Total de produtos", "Total de produtos associados"],[obj.qtd_total_produto,obj.qtd_produto_sellout_associado_catalogo]);
+      // console.log(obj)
+      var lojas = obj.lojas_compram_industria.slice(0,15)
+      var bgs = gfn.gColors()
+      // this.startCharts('pie', 'industria'+obj.ultimas_importacoes[0].id_industria,["Total de produtos", "Total de produtos associados"],[obj.qtd_total_produto,obj.qtd_produto_sellout_associado_catalogo]);
+
+      var sellOut = {'labels':[],'datasets':[{'data':[],'backgroundColor':bgs }]}
+
+      for (var i = 0, lgt = lojas.length; i < lgt; i++ ) {
+        sellOut.labels.push(((/\s*-\s\d{2}.\d{3}.\d{3}\/\d{4}-\d{2}/).test(lojas[i].razao_social) ? lojas[i].razao_social.substr(0, lojas[i].razao_social.length - 20) : lojas[i].razao_social))
+        sellOut.datasets[0].data.push(lojas[i].qtd_produtos_industria)
+        // sellOut.datasets[0].backgroundColor.push(bgs)
+      }
+      this.startCharts('bar', 'industria'+obj.ultimas_importacoes[0].id_industria,'',sellOut,false);
     },
   },
   async mounted() {
-    // this.initChart();
     window.addEventListener('resize', this.initChart);
     await gfn.fApi({url:"https://api.construe.cf/dashboard", options: {method: 'GET'}}, this.fetchUrl);
   },
   created() {
-    // if (window.localStorage.getItem('authenticated') === 'false') {
-    //   this.$router.push('/login');
-    // }
   }
 };
 </script>

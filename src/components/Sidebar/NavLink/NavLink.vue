@@ -83,7 +83,7 @@
 		},
 		computed: {
 			fullIconName() {
-				return (this.iconName) ? `fi ${this.iconName}` : ``;
+				return (this.iconName) ? `${this.iconName}` : ``;
 			},
 			isActive() {
 				return (this.activeItem

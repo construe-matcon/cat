@@ -5,6 +5,7 @@
   left: 0;
   top: 0;
   bottom: 0;
+  padding-bottom: 8rem;
   background-color: $sidebar-bg-color;
   color: $sidebar-color;
   overflow-y: auto;
@@ -158,3 +159,22 @@
 .groupTitle {
   margin-bottom: 15px;
 }
+
+.bottom {
+  position: fixed;
+  height: 8rem;
+  bottom: 0;
+  left: 0;
+  padding-top: 1rem;
+  background-color: $sidebar-bg-color;
+  width: $sidebar-width-open;
+  text-align: center;
+  cursor: default;
+
+  .progress {
+    margin: 0 auto;
+  }
+}
+
+
+

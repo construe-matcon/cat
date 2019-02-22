@@ -5,23 +5,56 @@
 		</header>
 		<ul class="nav">
 			<NavLink
+			nome="Dashboard"
+			link="/dashboard"
+			iconName="fa fa-bar-chart"
+			index="dashboard"
+			isHeader
+			/>
+			<NavLink
+			:activeItem="activeItem"
 			nome="Catálogo"
 			link="/catalogo"
-			iconName="flaticon-list-1"
+			parentLink="/catalogo"
+			iconName="fi flaticon-list-1"
 			index="catalogo"
-			isHeader
+			:childrenLinks="catNavItens"
+			:deep="0"
 			/>
 			<NavLink
 			:activeItem="activeItem"
 			nome="Categorias"
 			link="/categorias"
 			parentLink="/categorias"
-			iconName="flaticon-list"
+			iconName="fi flaticon-list"
 			index="categorias"
 			:childrenLinks="navItens"
 			:deep="0"
 			/>
+			<NavLink
+			:activeItem="activeItem"
+			nome="Importar"
+			link="/upload"
+			parentLink="/upload"
+			iconName="fa fa-upload"
+			index="categorias"
+			isHeader
+			/>
 		</ul>
+		<div class="bottom">
+			<small :title="'Leitura de Sellout: '+percent.sell" v-if="percent.sell">Leitura de Sellout: <span class='fw-semi-bold'>{{percent.sell}}</span></small>
+			<br>
+			<small :title="'Produtos de Sellout Associados: '+percent.prod" v-if="percent.prod">Prod. de Sellout Assoc: <span class='fw-semi-bold'>{{percent.prod}}</span></small>
+			<br>
+			<small :title="'Porcentagem de Associação: '+percent.total" v-if="percent.total">% de Associação: <span class='fw-semi-bold'>{{percent.total.toLocaleString("pt-br")}}%</span></small>
+			<br>
+			<b-progress
+				:value="(percent.total ? percent.total : 0)"
+				:variant="(percent.total > 75 ? 'success' : (percent.total >= 50 && percent.total <= 75 ? 'warning' : 'danger'))"
+				class="w-75"
+				:title="percent.total+'%'"
+			/>
+		</div>
 	</nav>
 </template>
 
@@ -40,6 +73,8 @@
 					picture: require('../../assets/img/construe.png'), // eslint-disable-line global-require
 				},
 				navItens: [],
+				catNavItens: [],
+				percent: {},
 			};
 		},
 		methods: {
@@ -52,6 +87,20 @@
 			fetchUrl(obj){
 				this.navItens = obj.data;
 			},
+			fetchCat(obj){
+				this.catNavItens = obj.data;
+			},
+			fetchStats(obj){
+				var prod  = obj.qtd_produto_sellout_associado_catalogo.toLocaleString("pt-br")
+				,	sell  = obj.qtd_total_produto_sellout.toLocaleString("pt-br")
+				, 	total = Math.round(prod/sell*10000)/100
+
+				this.percent = {
+					sell,
+					prod,
+					total
+				}
+			},
 		},
 		created() {
 		},
@@ -63,7 +112,9 @@
 			}),
 		},
 		async mounted() {
-			await gfn.fApi({url:"https://api.construe.cf/categorias?pagina=0&tamanho_pagina=20", options: {method: 'GET'}}, this.fetchUrl);
+			await gfn.fApi({url:"https://api.construe.cf/categorias?tamanho_pagina=20", options: {method: 'GET'}}, this.fetchUrl);
+			await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}}, this.fetchCat);
+			await gfn.fApi({url:"https://api.construe.cf/dashboard", options: {method: 'GET'}}, this.fetchStats);
 		}
 	};
 </script>

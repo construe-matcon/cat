@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 import Layout from '@/components/Layout/Layout';
 import Login from '@/pages/Login/Login';
+import CadUser from '@/pages/_CadUser/_CadUser';
 import ErrorPage from '@/pages/Error/Error';
 // Core
 import TypographyPage from '@/pages/Typography/Typography';
@@ -14,7 +15,7 @@ import TablesBasicPage from '@/pages/Tables/Basic';
 import GoogleMapPage from '@/pages/Maps/Google';
 
 // Main
-import Catalogo from '@/pages/Catalogo/Dashboard';
+import Dashboard from '@/pages/Dashboard/Dashboard';
 
 // Charts
 import ChartsPage from '@/pages/Charts/Charts';
@@ -24,9 +25,15 @@ import IconsPage from '@/pages/Icons/Icons';
 import NotificationsPage from '@/pages/Notifications/Notifications';
 
 // Catalogo
+import Catalogo from '@/pages/Catalogo/Catalogo';
+
+// Categorias
 import CategoriasPage from '@/pages/Categorias/Basic';
 // Produto
 import ProdutoPage from '@/pages/Produto/Produto';
+
+// Importar
+import UploadPage from '@/pages/Upload/Upload';
 
 
 Vue.use(Router);
@@ -51,12 +58,40 @@ let router = new Router({
       children: [
         {
           path: '',
-          redirect: 'catalogo'
+          redirect: 'dashboard'
+        },
+        {
+          path: '/admin/cadastro',
+          name: 'CadUser',
+          component: CadUser,
+        },
+        {
+          path: 'dashboard',
+          name: 'Dashboard',
+          component: Dashboard,
         },
         {
           path: 'catalogo',
           name: 'Catalogo',
           component: Catalogo,
+          children: [
+            {
+              path: ':id',
+              component: Catalogo,
+              params: {
+                id: ':id'
+              },
+              children: [
+              {
+                path: ':idc',
+                component: Catalogo,
+                params: {
+                  id: ':idc'
+                }
+              }
+              ]
+            }
+          ]
         },
         {
           path: 'categorias',
@@ -81,6 +116,11 @@ let router = new Router({
           path: 'typography',
           name: 'TypographyPage',
           component: TypographyPage,
+        },
+        {
+          path: 'upload',
+          name: 'UploadPage',
+          component: UploadPage,
         },
         {
           path: 'components/icons',
@@ -113,7 +153,6 @@ let router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-
   // document.title = 'Catálogos Matcon - Construe'
 
   if (to.name == 'Error' && to.path !== '/error') {
@@ -125,6 +164,8 @@ router.beforeEach((to, from, next) => {
   } else if(window.localStorage.getItem("account") == null && to.name !== 'login') {
     window.localStorage.setItem('authenticated','false');
     next('/login');
+  } else if (window.location.pathname != '/') {
+    window.location = window.location.origin + '#' + window.location.pathname;
   } else {
     next();
   }
