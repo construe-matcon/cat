@@ -218,7 +218,7 @@
 					</b-col>
 				</b-row>
 			</b-tab>
-			<b-tab title="Associações">
+			<b-tab title="Associações" v-if="1 == 2">
 				<b-row class="formProduto">
 					<b-col lg="4" class="list-item">
 						<img class="img-rounded imgCat" :src="'https://images.construe.cf/'+prod.industria+'/'+prod.ean+'.jpg'" alt="" />
@@ -323,13 +323,28 @@
 									</div>
 								</template>
 							</div>
-							<b-button variant="outline-danger float-left" @click.prevent="resetForm">Cancelar</b-button>
-							<b-button variant="outline-success float-right" @click.prevent="sendForm">Salvar</b-button>
+							<b-button variant="outline-danger float-left">Cancelar</b-button>
+							<b-button variant="outline-success float-right">Salvar</b-button>
 						</b-form>
 					</b-col>
 				</b-row>
 			</b-tab>
 		</b-tabs>
+		<b-modal
+			ref="completeEdit"
+			:title="avisoModalTitle"
+			:header-bg-variant="avisoModalTipo"
+			:header-text-variant="'light'"
+			:body-bg-variant="'light'"
+			:body-text-variant="'dark'"
+			:footer-bg-variant="'light'"
+			:footer-text-variant="'dark'"
+			ok-only
+		>
+			<div class="d-block text-left">
+				<p v-html="avisoModal"></p>
+			</div>
+		</b-modal>
 	</section>
 	<section v-else-if="prod.mensagens">
 		Produto não encontrado...
@@ -348,6 +363,9 @@
 			return {
 				prod: {},
 				bkpprod: {},
+				avisoModal: 'Prodtuo Alterado com sucesso',
+				avisoModalTipo: 'light',
+				avisoModalTitle: 'Atualização de produto',
 			};
 		},
 		methods: {
@@ -359,18 +377,33 @@
 				this.bkpprod = JSON.stringify(obj);
 			},
 			sendForm() {
-
+				this.avisoModal = ''
 				if (this.prod.tags != undefined) {
 					this.prod.tags = this.prod.tags.filter(tag => {
 						return tag != ""
 					})
 				}
+				gfn.fApi({url:"https://api.construe.cf/produtos/"+this.$route.params.id, options: {method: 'PUT', body: JSON.stringify(this.prod)}}, this.completeForm);
+			},
+			completeForm(data) {
+				if (data != null) {
+					this.avisoModal =''
+					this.avisoModalTipo = 'danger'
+					this.avisoModalTitle ='Erro ao atualizar o produto'
 
-
+					data.mensagens.forEach(msg => {
+						this.avisoModal += msg + '<br />'
+					})
+				} else {
+					this.avisoModal = 'Produto atualizado com sucesso!'
+					this.avisoModalTipo = 'success'
+					this.avisoModalTitle ='Atualização do produto'
+					this.bkpprod = JSON.stringify(this.prod)
+				}
+				this.$refs.completeEdit.show()
 			},
 			resetForm() {
 				this.prod = JSON.parse(this.bkpprod)
-				console.log(this.prod)
 			},
 			addTag(event) {
 				let inputVal = event.target.value.trim().replace(/\s+/g," ")
@@ -383,7 +416,6 @@
 				event.target.value = ''
 			},
 			removeTag(event) {
-				console.log(event.path[1].innerText.split('\n')[0])
 				this.prod.tags = this.prod.tags.filter(tag => {
 					return (tag != event.path[1].innerText.split('\n')[0] && tag != "")
 				})
