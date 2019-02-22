@@ -1,7 +1,7 @@
 <template>
 	<div v-if="idCatalogo">
 		<template v-if="listProdConstrue.length > 0">
-			<h1 class="page-title">Produtos Construe - {{listCatalogo[0].industria}}</h1>
+			<h1 class="page-title">Produtos Construe - {{listProdConstrue[0].industria}}</h1>
 			<!-- <h5 class="page-title"><small>Última atualização: <span class='fw-semi-bold'>{{date}}</span></small></h5> -->
 			<b-row>
 				<b-col>
@@ -26,9 +26,9 @@
 				</b-col>
 			</b-row>
 		</template>
-		<template v-if="listCatalogo.length > 0">
+		<template v-else-if="listCatalogo.length > 0">
 			<h1 class="page-title">Catálogo - {{listCatalogo[0].industria}}</h1>
-			<!-- <h5 class="page-title"><small>Última atualização: <span class='fw-semi-bold'>{{date}}</span></small></h5> -->
+			<h5 class="page-title"><small>Produto Construe: <span class='fw-semi-bold'>{{listCatalogo[0].categoria}}</span></small></h5>
 			<b-row>
 				<b-col>
 					<Widget>
@@ -172,14 +172,15 @@
 				})
 			},
 			async loadCat(obj) {
+				this.listProdConstrue = ""
 				this.listCatalogo = (obj.data.length > 0 ? obj.data : false)
 				this.totalProdutos = obj.total_data_size;
 				this.tamanho = obj.size;
 				this.paginaAtual = obj.number;
 				this.ultimaPagina = obj.last_page;
 
-				await gfn.fApi({url:"https://api.construe.cf/categorias/industria/"+this.idCatalogo, options: {method: 'GET'}}, this.goToConstrue);
-				await gfn.fApi({url:"https://api.construe.cf/produtos?id_industria="+this.idCatalogo+"&id_categoria="+this.idCategoria, options: {method: 'GET'}}, this.openProdConstrue);
+				// await gfn.fApi({url:"https://api.construe.cf/categorias/industria/"+this.idCatalogo, options: {method: 'GET'}}, this.goToConstrue);
+				// await gfn.fApi({url:"https://api.construe.cf/produtos?id_industria="+this.idCatalogo+"&id_categoria="+this.idCategoria, options: {method: 'GET'}}, this.openProdConstrue);
 
 
 			},
@@ -193,6 +194,7 @@
 			},
 			goToConstrue(obj){
 				this.listProdConstrue = (obj.data.length > 0 ? obj.data : false)
+				console.log(obj)
 			},
 			openProdConstrue(obj){
 				this.listCatProd = (obj.data.length > 0 ? obj.data : false)
@@ -200,13 +202,17 @@
 				console.log(obj)
 			},
 			async loadCatalogo() {
-				await gfn.fApi({url:"https://api.construe.cf/produtos?id_industria="+this.idCatalogo+"&tamanho_pagina=20&pagina="+(this.currentPage - 1), options: {method: 'GET'}}, this.loadCat);
+				await gfn.fApi({url:"https://api.construe.cf/produtos?id_industria="+this.idCatalogo+"&id_categoria="+this.idProdCons+"&tamanho_pagina=20&pagina="+(this.currentPage - 1), options: {method: 'GET'}}, this.loadCat);
 			},
 			async loadCatalogos() {
 				await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}}, this.fetchUrl);
 			},
 			async loadProdConstrue() {
 				await gfn.fApi({url:"https://api.construe.cf/categorias/industria/"+this.idCatalogo, options: {method: 'GET'}}, this.goToConstrue);
+			},
+			async loadProdByCategory(id,idc) {
+				this.currentPage = 1;
+				await gfn.fApi({url:'https://api.construe.cf/produtos?tamanho_pagina=20&id_categoria='+idc+'&id_industria='+id, options: {method: 'GET'}}, this.loadCat);
 			},
 			goToProdConstrue(idc) {
 				this.$router.push({
@@ -227,9 +233,15 @@
 		},
 		async mounted() {
 			this.idCatalogo = (this.$route.params.id ? this.$route.params.id : '');
-			if (this.idCatalogo.length > 0) {
-				this.loadCatalogo(this.idCatalogo)
+			this.idProdCons = (this.$route.params.idc ? this.$route.params.idc : '');
+
+			if (this.idProdCons.length > 0) {
+				this.loadProdByCategory(this.idCatalogo,this.idProdCons)
+			} else if (this.idCatalogo.length > 0) {
+				this.loadProdConstrue(this.idCatalogo)
 			} else {
+				this.listProdConstrue = ""
+				this.listCatalogo = ""
 				this.loadCatalogos()
 			}
 		},
@@ -238,9 +250,15 @@
 		watch: {
 			'$route' () {
 				this.idCatalogo = (this.$route.params.id ? this.$route.params.id : '');
-				if (this.idCatalogo.length > 0) {
-					this.loadCatalogo(this.idCatalogo)
+				this.idProdCons = (this.$route.params.idc ? this.$route.params.idc : '');
+				
+				if (this.idProdCons.length > 0) {
+					this.loadProdByCategory(this.idCatalogo,this.idProdCons)
+				} else if (this.idCatalogo.length > 0) {
+					this.loadProdConstrue(this.idCatalogo)
 				} else {
+					this.listProdConstrue = ""
+					this.listCatalogo = ""
 					this.loadCatalogos()
 				}
 			}
