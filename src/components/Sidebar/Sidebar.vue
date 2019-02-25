@@ -45,7 +45,7 @@
 			nome="Rejeitados"
 			link="/rejeitados"
 			parentLink="/rejeitados"
-			iconName="fa fa-sitemap"
+			iconName="fa fa-archive"
 			index="rejeitados"
 			isHeader
 			/>
