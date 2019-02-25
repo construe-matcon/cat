@@ -117,7 +117,7 @@
 	<div v-else>
 		<h1 class="page-title">Catálogos</h1>
 		<b-row>
-			<b-col col xs="12" lg="2" align-v="center" v-for="cat in listCatalogo" :key="`cat-${cat.id}`" class="holder-catalogo d-flex align-items-center" @click="goToCat(cat.id)">
+			<b-col col xs="12" lg="2" align-v="center" v-for="cat in listCatalogos" :key="`cat-${cat.id}`" class="holder-catalogo d-flex align-items-center" @click="goToCat(cat.id)">
 				<div>
 					<img :src="listImgCatalogo[cat.id]" width="50%" :alt="cat.nome.toLowerCase()">
 					<br>
@@ -144,25 +144,24 @@
 		components: { Widget },
 		data() {
 			return {
-				teste: true,
-				teste2: false,
 				currentPage: 1,
 				totalProdutos: 0,
 				tamanho: 1,
 				paginaAtual: 0,
 				ultimaPagina: true,
-				listCatalogo: true,
+				listCatalogo: false,
+				listCatalogos: false,
 				idCatalogo: this.$route.params.id,
 				idProdCons: this.$route.params.idc,
 				listImgCatalogo: {},
-				listProdConstrue: true,
-				listCatProd: true,
+				listProdConstrue: false,
+				listCatProd: false,
 				idCategoria: 277,
 			};
 		},
 		methods: {
 			fetchUrl(obj){
-				this.listCatalogo = obj.data
+				this.listCatalogos = obj.data
 				obj.data.forEach(cat => {
 					try {
 						this.listImgCatalogo[cat.id] = require(`../../assets/img/logos/logo-${cat.nome.toLowerCase()}.png`)
