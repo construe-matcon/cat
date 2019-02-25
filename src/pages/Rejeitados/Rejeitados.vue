@@ -273,7 +273,7 @@
 	// import $ from 'jquery';
 	import gfn from '@/core/globalFunctions';
 	export default {
-		name: 'Produto',
+		name: 'Rejeitados',
 		data() {
 			return {
 				prod: {},
@@ -348,5 +348,5 @@
 </script>
 
 <style lang="scss" scoped>
-@import './Produto.scss';
+@import './Rejeitados.scss';
 </style>

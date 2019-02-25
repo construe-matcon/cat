@@ -31,6 +31,8 @@ import Catalogo from '@/pages/Catalogo/Catalogo';
 import CategoriasPage from '@/pages/Categorias/Basic';
 // Produto
 import ProdutoPage from '@/pages/Produto/Produto';
+// Rejeitados
+import RejeitadoPage from '@/pages/Rejeitados/Rejeitados';
 
 // Importar
 import UploadPage from '@/pages/Upload/Upload';
@@ -111,6 +113,11 @@ let router = new Router({
           path: 'produto/:id',
           name: 'ProdutoPage',
           component: ProdutoPage,
+        },
+        {
+          path: 'rejeitados',
+          name: 'RejeitadoPage',
+          component: RejeitadoPage,
         },
         {
           path: 'typography',

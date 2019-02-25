@@ -40,6 +40,15 @@
 			index="categorias"
 			isHeader
 			/>
+			<NavLink
+			:activeItem="activeItem"
+			nome="Rejeitados"
+			link="/rejeitados"
+			parentLink="/rejeitados"
+			iconName="fa fa-sitemap"
+			index="rejeitados"
+			isHeader
+			/>
 		</ul>
 		<div class="bottom">
 			<small :title="'Leitura de Sellout: '+percent.sell" v-if="percent.sell">Leitura de Sellout: <span class='fw-semi-bold'>{{percent.sell}}</span></small>
