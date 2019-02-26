@@ -31,8 +31,8 @@ import Catalogo from '@/pages/Catalogo/Catalogo';
 import CategoriasPage from '@/pages/Categorias/Basic';
 // Produto
 import ProdutoPage from '@/pages/Produto/Produto';
-// Rejeitados
-import RejeitadoPage from '@/pages/Rejeitados/Rejeitados';
+// Associacoes
+import RejeitadoPage from '@/pages/Associacoes/Associacoes';
 
 // Importar
 import UploadPage from '@/pages/Upload/Upload';
@@ -115,7 +115,7 @@ let router = new Router({
           component: ProdutoPage,
         },
         {
-          path: 'rejeitados',
+          path: 'associacoes',
           name: 'RejeitadoPage',
           component: RejeitadoPage,
         },

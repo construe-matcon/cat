@@ -42,11 +42,11 @@
 			/>
 			<NavLink
 			:activeItem="activeItem"
-			nome="Rejeitados"
-			link="/rejeitados"
-			parentLink="/rejeitados"
+			nome="Associações"
+			link="/associacoes"
+			parentLink="/associacoes"
 			iconName="fa fa-archive"
-			index="rejeitados"
+			index="associacoes"
 			isHeader
 			/>
 		</ul>
