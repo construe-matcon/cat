@@ -27,6 +27,9 @@ import NotificationsPage from '@/pages/Notifications/Notifications';
 // Catalogo
 import Catalogo from '@/pages/Catalogo/Catalogo';
 
+// Lojas
+import Lojas from '@/pages/Lojas/Lojas';
+
 // Categorias
 import CategoriasPage from '@/pages/Categorias/Basic';
 // Produto
@@ -92,6 +95,20 @@ let router = new Router({
                 }
               }
               ]
+            }
+          ]
+        },
+        {
+          path: 'lojas',
+          name: 'Lojas',
+          component: Lojas,
+          children: [
+            {
+              path: ':cnpj',
+              component: Lojas,
+              params: {
+                id: ':cnpj'
+              }
             }
           ]
         },

@@ -172,6 +172,7 @@ export default {
 			animate: true,
 			prog: 0,
 			dis: false,
+			cnpj: '',
 		};
 	},
 	methods: {
@@ -185,12 +186,12 @@ export default {
 		},
 		async pages(){
 			this.resetAll()
-			await gfn.fApi({url:"https://api.construe.cf/produtos-rejeitados?tamanho_pagina="+this.itensRej+"&pagina="+(this.currentPage - 1)+"&descricao="+this.filtroInds, options: {method: 'GET'}}, this.loadRej);
+			await gfn.fApi({url:"https://api.construe.cf/produtos-rejeitados?tamanho_pagina="+this.itensRej+this.cnpj+"&pagina="+(this.currentPage - 1)+"&descricao="+this.filtroInds, options: {method: 'GET'}}, this.loadRej);
 		},
 		async onSubmit() {
 			this.currentPage = 1
 			this.resetAll()
-			await gfn.fApi({url:"https://api.construe.cf/produtos-rejeitados?tamanho_pagina="+this.itensRej+"&descricao="+this.filtroInds, options: {method: 'GET'}}, this.loadRej);
+			await gfn.fApi({url:"https://api.construe.cf/produtos-rejeitados?tamanho_pagina="+this.itensRej+this.cnpj+"&descricao="+this.filtroInds, options: {method: 'GET'}}, this.loadRej);
 
 		},
 		async loadRej(obj) {
@@ -258,7 +259,7 @@ export default {
 							this.dis = true
 							this.add = false
 							this.prog = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
-						}.bind(this)
+						}
 					}).then(() => {
 						this.hideModal()
 						this.titleModal = "Associação de Sell Out"
@@ -279,7 +280,8 @@ export default {
 				},
 			},
 			async mounted() {
-				await gfn.fApi({url:"https://api.construe.cf/produtos-rejeitados?tamanho_pagina=20", options: {method: 'GET'}}, this.loadRej);
+				this.cnpj = (this.$route.query.cnpj ? '&cnpj='+this.$route.query.cnpj : '')
+				await gfn.fApi({url:"https://api.construe.cf/produtos-rejeitados?tamanho_pagina=20"+this.cnpj, options: {method: 'GET'}}, this.loadRej);
 			},
 	};
 </script>
