@@ -5,12 +5,23 @@
 				<b-col>
 					<h1>Minha conta</h1>
 					<hr />
-					{{user}}
 				</b-col>
 			</b-row>
-			<b-form @submit.prevent="" id="userUpdate" class="row formUser col-12">
+			<b-form @submit.prevent="sendForm" id="userUpdate" class="row formUser col-12">
 				<b-col lg="3" class="list-item">
-					<input type="file" ref="photo" name="photo" id="userPhoto" style="display: none;" @change="newPhoto">
+					<b-form-file
+						v-model="userP"
+						v-show="false"
+						:state="Boolean(userP)"
+						accept=".png,.jpeg,.jpg,.gif"
+						placeholder=""
+						drop-placeholder=""
+						browse-text=""
+						@change="newPhoto"
+						ref="photo"
+						name="photo"
+						id="userPhoto"
+					/>
 					<div class="holder-img" @click.prevent="changePhoto">
 						<img class="img-rounded" :src="userpic" alt="" />
 					</div>
@@ -25,7 +36,7 @@
 						<div class="form-group row">
 							<label for="inputNome" class="col-4 col-form-label text-right">Nome</label>
 							<div class="col-8">
-								<b-input class="form-control-plaintext" id="inputNome" v-model="user.nome"  />
+								<b-input class="form-control-plaintext" id="inputNome" v-model="user.nome" readonly />
 							</div>
 						</div>
 						<div class="form-group row">
@@ -54,11 +65,26 @@
 							<div class="col-4"></div>
 							<div class="col-8">
 								<b-button variant="outline-danger float-left" @click.prevent="resetForm">Cancelar</b-button>
-								<b-button variant="outline-success float-right" @click.prevent="sendForm">Salvar</b-button>
+								<b-button variant="outline-success float-right" type="submit">Salvar</b-button>
 							</div>
 						</div>
 				</b-col>
 			</b-form>
+			<b-modal
+				ref="changeUserProfile"
+				:title="avisoModalTitle"
+				:header-bg-variant="avisoModalTipo"
+				:header-text-variant="'light'"
+				:body-bg-variant="'light'"
+				:body-text-variant="'dark'"
+				:footer-bg-variant="'light'"
+				:footer-text-variant="'dark'"
+				ok-only
+			>
+				<div class="d-block text-left">
+					<p v-html="avisoModal"></p>
+				</div>
+			</b-modal>
 		</b-container>
 	</div>
 </template>
@@ -77,37 +103,62 @@
 			return {
 				user: jwt.decode(JSON.parse(window.localStorage.getItem('account')).token).usuario,
 				userpic: '',
+				userP: '',
 				bkpUser: jwt.decode(JSON.parse(window.localStorage.getItem('account')).token).usuario,
 				tooltipShow: false,
 				popoverText: 'A senha está diferente da digitada',
-				igfn: gfn
+				igfn: gfn,
+				avisoModal: 'Usuário alterado com sucesso',
+				avisoModalTipo: 'light',
+				avisoModalTitle: 'Usuário',
 			};
 		},
 		methods: {
 			resetForm: function() {
 				this.user = this.bkpUser
 			},
-			sendForm: function() {
+			sendForm: function(event) {
+				this.avisoModal = ''
 				this.tooltipShow = false;
-				console.log(this.user.novapass)
-				console.log(this.user.repass)
 				if ((this.user.novapass == this.user.repass) && (this.user.novapass.length >= 8 && this.user.repass.length >= 8)) {
 					let formData = new FormData()
-					console.log(formData)
+					formData.append('nome',this.user.nome)
+					formData.append('senha_antiga',this.user.pass)
+					formData.append('senha_nova',this.user.novapass)
+					formData.append('arquivo',this.userP)
+
+					axios.put('https://api.construe.cf/usuarios/minha-conta/'+this.user.id, formData, {
+						headers: {
+							"Content-type": "application/json; charset=UTF-8",
+							"Authorization": JSON.parse(window.localStorage.getItem("account")).token
+						}
+					}).then((response) => {
+						this.bkpUseruser = this.user
+						this.avisoModal = 'Usuário atualizado com sucesso!'
+						this.avisoModalTipo = 'success'
+						this.avisoModalTitle = 'Sucesso Usuário'
+					}).catch((error) => {
+						this.avisoModal = ''
+						this.avisoModalTipo = 'danger'
+						this.avisoModalTitle = 'Erro ao editar usuário'
+						error.response.data.mensagens.forEach((msg, i) => {
+							this.avisoModal += (i != 0 ? '<br>'+msg : msg)
+						})
+					})
+					this.$refs.changeUserProfile.show()
 				} else {
 					this.tooltipShow = true
 				}
 			},
 			changePhoto: function() {
 				let elm = this.$refs.photo
-				elm.click()
+				elm.$refs.input.click()
 			},
 			newPhoto: function(event) {
 				let input = event.target
 				,	reader = new FileReader();
 
 				reader.onload = function(e) {
-					console.log(e.target.result)
 					document.querySelector('.list-item .img-rounded').setAttribute('src', e.target.result);
 				}
 
@@ -115,13 +166,17 @@
 			},
 			hasImage: function(foto) {
 				/* eslint-disable */
-				axios.get('https://images.construe.cf/usuarios/'+foto).then((response) => {
-					//response
-					this.userpic = 'https://images.construe.cf/usuarios/'+foto
-				}).catch((error) => {
-					//error
+				if (foto != null) {
+					axios.get('https://images.construe.cf/usuarios/'+foto).then((response) => {
+						//response
+						this.userpic = 'https://images.construe.cf/usuarios/'+foto
+					}).catch((error) => {
+						//error
+						this.userpic = require('../../assets/people/upload.png')
+					})
+				} else {
 					this.userpic = require('../../assets/people/upload.png')
-				})
+				}
 				/* eslint-enable */
 			},
 		},
