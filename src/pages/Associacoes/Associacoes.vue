@@ -259,7 +259,7 @@ export default {
 							this.dis = true
 							this.add = false
 							this.prog = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
-						}
+						}.bind(this)
 					}).then(() => {
 						this.hideModal()
 						this.titleModal = "Associação de Sell Out"
