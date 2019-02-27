@@ -24,3 +24,11 @@
 .prodRelacionado {
 	margin-top: 50px;
 }
+
+/deep/ .modal {
+  .modal-content {
+    .modal-header.text-light {
+      color: #f8f9fa !important;
+    }
+  }
+}
