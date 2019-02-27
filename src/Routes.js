@@ -88,7 +88,7 @@ let router = new Router({
 			name: 'CadUser',
 			component: CadUser,
 			beforeEnter(to, from, next) {
-				validateUser('TELA_ADMIN', next)
+				validateUser('USUARIOS', next)
 			},
 		},
 		{
@@ -96,7 +96,7 @@ let router = new Router({
 			name: 'Dashboard',
 			component: Dashboard,
 			beforeEnter(to, from, next) {
-				validateUser('TELA_DASHBOARD', next)
+				validateUser('DASHBOARD', next)
 			},
 		},
 		{
@@ -104,7 +104,7 @@ let router = new Router({
 			name: 'Catalogo',
 			component: Catalogo,
 			beforeEnter(to, from, next) {
-				validateUser('TELA_CATALOGO', next)
+				validateUser('CATALOGOS', next)
 			},
 			children: [
 			{
@@ -130,7 +130,7 @@ let router = new Router({
 			name: 'AllCategoriasPage',
 			component: CategoriasPage,
 			beforeEnter(to, from, next) {
-				validateUser('TELA_CATEGORIAS', next)
+				validateUser('CATEGORIAS', next)
 			},
 			children: [
 			{
@@ -166,7 +166,7 @@ let router = new Router({
 			name: 'RejeitadoPage',
 			component: RejeitadoPage,
 			beforeEnter(to, from, next) {
-				validateUser('TELA_REJEITADOS', next)
+				validateUser('REJEITADOS', next)
 			},
 		},
 		{
@@ -179,7 +179,7 @@ let router = new Router({
 			name: 'UploadPage',
 			component: UploadPage,
 			beforeEnter(to, from, next) {
-				validateUser('TELA_IMPORTAR_CATALOGO', next)
+				validateUser('IMPORTAR_CATALOGO', next)
 			},
 		},
 		{
