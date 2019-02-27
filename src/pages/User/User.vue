@@ -111,13 +111,14 @@
 				avisoModal: 'Usuário alterado com sucesso',
 				avisoModalTipo: 'light',
 				avisoModalTitle: 'Usuário',
+				ddV: ''
 			};
 		},
 		methods: {
 			resetForm: function() {
 				this.user = this.bkpUser
 			},
-			sendForm: function(event) {
+			sendForm: function() {
 				this.avisoModal = ''
 				this.tooltipShow = false;
 				if ((this.user.novapass == this.user.repass) && (this.user.novapass.length >= 8 && this.user.repass.length >= 8)) {
@@ -133,6 +134,7 @@
 							"Authorization": JSON.parse(window.localStorage.getItem("account")).token
 						}
 					}).then((response) => {
+						this.ddV = response
 						this.bkpUseruser = this.user
 						this.avisoModal = 'Usuário atualizado com sucesso!'
 						this.avisoModalTipo = 'success'
