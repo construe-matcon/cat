@@ -71,5 +71,10 @@ export default {
 		} else {
 			return valueDate;
 		}
+	},
+	formatCNPJ(cnpj) {
+		cnpj = cnpj.replace(/\D/g,'');
+		// return cnpj = cnpj.replace(/(\d{2})(\d{1})\.?(\d{2})(\d{1})\.?(\d{2})(\d{1})\-?(\d{0,3})(\d{0,2})/,"$1.$2$3.$4$5/$6$7-$8")
+		return cnpj = cnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,"$1.$2.$3/$4-$5")
 	}
 }

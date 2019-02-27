@@ -68,9 +68,9 @@
 					</span>
 					<span class="fw-semi-bold" v-text="account.name"></span>
 				</template>
-				<b-dropdown-item><i class="fa fa-user" /> Minha Conta</b-dropdown-item>
+				<b-dropdown-item :to="'/minha-conta'"><i class="fa fa-user" /> Minha Conta</b-dropdown-item>
 				<b-dropdown-divider />
-					<b-dropdown-item-button @click="goToCadastro"><i class="fa fa-user-plus" /> Criar Usuário</b-dropdown-item-button>
+					<b-dropdown-item :to="'/admin/cadastro/'"><i class="fa fa-user-plus" /> Criar Usuário</b-dropdown-item>
 				<b-dropdown-divider />
 				<!-- <b-dropdown-item>Calendar</b-dropdown-item>
 				<b-dropdown-item>

@@ -278,7 +278,7 @@
 			return {
 				prod: {},
 				bkpprod: {},
-				avisoModal: 'Prodtuo Alterado com sucesso',
+				avisoModal: 'Produto Alterado com sucesso',
 				avisoModalTipo: 'light',
 				avisoModalTitle: 'Atualização de produto',
 			};
