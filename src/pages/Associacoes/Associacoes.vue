@@ -1,6 +1,9 @@
 <template>
 	<section v-if="1 == 1">
 		<h3 class="page-title">Associação de <span class="fw-semi-bold">Sell Out</span></h3>
+		<template v-if="nome">
+			<h5 class="page-title">Loja: <span class="fw-semi-bold">{{nome}}</span></h5>
+		</template>
 		<b-tabs>
 			<b-tab title="Rejeitados">
 				<b-row class="filterRejeitado">
@@ -173,6 +176,7 @@ export default {
 			prog: 0,
 			dis: false,
 			cnpj: '',
+			nome: '',
 		};
 	},
 	methods: {
@@ -199,6 +203,11 @@ export default {
 			this.itensRej = obj.size
 			this.totalItensRej = obj.total_data_size
 
+			if(this.cnpj) {
+				this.nome = this.listaDesc[0].loja
+			} else {
+				this.nome = ''
+			}
 		},
 		sugestao(){
 			this.detailRej = false
@@ -241,8 +250,6 @@ export default {
 					'codigo_produto': this.listaDesc[this.selDesc].codigo_produto,
 					'sku': this.listaDesc[this.selDesc].sku,
 				}
-
-				console.log(this.listaAssociar)
 			},
 			vSend() {
 					// axios.post('https://jsonplaceholder.typicode.com/posts', {
@@ -259,7 +266,7 @@ export default {
 							this.dis = true
 							this.add = false
 							this.prog = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
-						}.bind(this)
+						}
 					}).then(() => {
 						this.hideModal()
 						this.titleModal = "Associação de Sell Out"
@@ -289,6 +296,13 @@ export default {
 				this.cnpj = (this.$route.query.cnpj ? '&cnpj='+this.$route.query.cnpj : '')
 				await gfn.fApi({url:"https://api.construe.cf/produtos-rejeitados?tamanho_pagina=20"+this.cnpj, options: {method: 'GET'}}, this.loadRej);
 			},
+			watch: {
+			'$route' () {
+				this.nome = ''
+				this.cnpj = (this.$route.query.cnpj ? '&cnpj='+this.$route.query.cnpj : '')
+				this.onSubmit()
+			}
+		}
 	};
 </script>
 
