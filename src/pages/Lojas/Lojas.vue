@@ -13,14 +13,21 @@
 										<th class="hidden-sm-down">Razão Social</th>
 										<th class="hidden-sm-down">Prod Assc.</th>
 										<th class="hidden-sm-down">Prod Sem Assc.</th>
+										<th class="hidden-sm-down">Total</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-for="row in storeInfos" :key="row.cnpj">
-										<td><h5>{{row.razao_social}}</h5></td>
-										<td><h5>{{(row.qtd_match_catalogo ? row.qtd_match_catalogo : '0')}}</h5></td>
-										<td @click="goToAssoc(row.cnpj)"><h5>{{(row.qtd_total_produtos - row.qtd_match_catalogo)}}</h5></td>
-									</tr>
+									<template v-for="(row, index) in storeInfos">
+										<tr :key="'listas'+index">
+											<td><h5>{{row.razao_social}}</h5><span class="small">Ultima atualização: {{(row.data_leitura != null ? fDate(row.data_leitura) : 'Sem dados')}}</span></td>
+											<td><h5>{{(row.qtd_match_catalogo != null ? row.qtd_match_catalogo : '-')}}</h5></td>
+											<td class="cpointer" @click="goToAssoc(row.cnpj)"><h5>{{(row.qtd_total_produtos ? row.qtd_total_produtos - row.qtd_match_catalogo : '-')}}</h5></td>
+											<td><h5>{{(row.qtd_total_produtos != null ? row.qtd_total_produtos : '-')}}</h5></td>
+										</tr>
+										<!-- <tr class="ultima-atualizacao text-right">
+											<td class="small" colspan="4">Ultima atualização: {{(row.data_leitura != null ? fDate(row.data_leitura) : 'Sem dados')}}</td>
+										</tr> -->
+									</template>
 								</tbody>
 							</table>
 							<b-pagination v-if="lojas <= totalLojas"
@@ -83,7 +90,12 @@
 			listStores(obj){
 				this.storeInfos = obj.data
 				this.totalLojas = obj.total_data_size
+
+				console.log(obj)
 			},
+			fDate(date) {
+				return gfn.formatDate(date)
+			}
 		},
 		async mounted() {
 			await gfn.fApi({url:'https://api.construe.cf/dashboard/lojas', options: {method: 'GET'}}, this.listStores);

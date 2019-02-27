@@ -53,7 +53,7 @@
 						<div class="detalhes">
 							<span>Descrição: </span><span class="fw-semi-bold">{{listaDesc[selDesc].descricao}}</span><br>
 							<span>Loja: </span><span class="fw-semi-bold">{{listaDesc[selDesc].loja}}</span><br>
-							<span>CNPJ Loja: </span><span class="fw-semi-bold">{{listaDesc[selDesc].cnpj}}</span><br>
+							<span>CNPJ Loja: </span><span class="fw-semi-bold">{{fCNPJ(listaDesc[selDesc].cnpj)}}</span><br>
 							<span>Código do Produto: </span><span class="fw-semi-bold">{{listaDesc[selDesc].codigo_produto}}</span><br>
 							<span>SKU: </span><span class="fw-semi-bold">{{listaDesc[selDesc].sku}}</span><br>
 							<span>Indústria Possui Sell In? </span><span class="fw-semi-bold">{{(listaDesc[selDesc].ind_possui_sellin ? 'Sim' : 'Não')}}</span><br>
@@ -93,8 +93,8 @@
 							<span>EAN: </span><span class="fw-semi-bold">{{listaProds[selProd].ean}}</span><br>
 							<span>Código Interno: </span><span class="fw-semi-bold">{{listaProds[selProd].codigo_interno}}</span><br>
 							<span>NCM: </span><span class="fw-semi-bold">{{listaProds[selProd].ncm}}</span><br>
-							<span>Data de Criação: </span><span class="fw-semi-bold">{{(listaProds[selProd].dt_criacao ? listaProds[selProd].dt_criacao.toLocaleString('pt-br') : 'Data não informada')}}</span><br>
-							<span>Data de Atualização: </span><span class="fw-semi-bold">{{(listaProds[selProd].dt_ultima_alteracao ? listaProds[selProd].dt_ultima_alteracao.toLocaleString("pt-br") : 'Data não informada')}}</span><br>
+							<span>Data de Criação: </span><span class="fw-semi-bold">{{(listaProds[selProd].dt_criacao ? fDate(listaProds[selProd].dt_criacao) : 'Data não informada')}}</span><br>
+							<span>Data de Atualização: </span><span class="fw-semi-bold">{{(listaProds[selProd].dt_ultima_alteracao ? fDate(listaProds[selProd].dt_ultima_alteracao) : 'Data não informada')}}</span><br>
 						</div>
 					</template>
 					<b-button variant="outline-success" class="saveRej float-right" v-show="add" v-b-modal.modal-center>Salvar</b-button>
@@ -278,6 +278,12 @@ export default {
 					this.$refs.myModalRef.hide()
 					this.$refs.modalInfo.hide()
 				},
+				fCNPJ(cnpj) {
+					return gfn.formatCNPJ(cnpj)
+				},
+				fDate(date) {
+					return gfn.formatDate(date)
+				}
 			},
 			async mounted() {
 				this.cnpj = (this.$route.query.cnpj ? '&cnpj='+this.$route.query.cnpj : '')
