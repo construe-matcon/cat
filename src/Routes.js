@@ -45,8 +45,8 @@ import UploadPage from '@/pages/Upload/Upload';
 
 //beforeEnter
 
-let user = jwt.decode(JSON.parse(window.localStorage.getItem('account')).token).usuario
-,   validateUser = function(page, cb) {
+let validateUser = function(page, cb) {
+	let user = (JSON.parse(window.localStorage.getItem('account')) ? jwt.decode(JSON.parse(window.localStorage.getItem('account')).token).usuario : '')
 		if (user.id_perfil == 1) {
 			cb();
 		} else {
