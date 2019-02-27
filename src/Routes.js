@@ -28,15 +28,18 @@ import NotificationsPage from '@/pages/Notifications/Notifications';
 // Catalogo
 import Catalogo from '@/pages/Catalogo/Catalogo';
 
+// Lojas
+import Lojas from '@/pages/Lojas/Lojas';
+
 // Categorias
 import CategoriasPage from '@/pages/Categorias/Basic';
 // Produto
 import ProdutoPage from '@/pages/Produto/Produto';
-// Rejeitados
-import RejeitadoPage from '@/pages/Rejeitados/Rejeitados';
+
+// Associacoes
+import RejeitadoPage from '@/pages/Associacoes/Associacoes';
 // Usuario
 import UserPage from '@/pages/User/User';
-
 // Importar
 import UploadPage from '@/pages/Upload/Upload';
 
@@ -144,8 +147,22 @@ let router = new Router({
 			name: 'ProdutoPage',
 			component: ProdutoPage,
 		},
+        {
+          path: 'lojas',
+          name: 'Lojas',
+          component: Lojas,
+          children: [
+            {
+              path: ':cnpj',
+              component: Lojas,
+              params: {
+                id: ':cnpj'
+              }
+            }
+          ]
+        },
 		{
-			path: 'rejeitados',
+			path: 'associacoes',
 			name: 'RejeitadoPage',
 			component: RejeitadoPage,
 			beforeEnter(to, from, next) {

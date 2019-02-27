@@ -1,0 +1,42 @@
+@import '../../styles/app';
+
+.holder-catalogo {
+	min-height: 9rem;
+	text-align: center;
+	margin: 1rem;
+	box-shadow: 6px 6px 32px -8px rgba(0,0,0,0.37);
+	background-color: #fafafa;
+	cursor: pointer;
+
+	div {
+		text-align: center;
+	}
+	img {
+		filter: grayscale(100%);
+		max-width: 90%;
+	}
+	span {
+		position: absolute;
+		bottom: 0.1rem;
+		left: 50%;
+		font-size: 11px;
+		transform: translate(-50%,0);
+	}
+}
+.table-resposive {
+  .table th {
+    font-size: $font-size-sm;
+  }
+
+  .table td:last-child {
+  	cursor: pointer;
+  }
+}
+
+.imgCat {
+	width: 100px;
+	height: 100px;
+	background: url('https://images.construe.cf/404.png') center center no-repeat;
+	background-size: contain;
+	display: block;
+}

@@ -42,11 +42,20 @@
 			/>
 			<NavLink
 			:activeItem="activeItem"
-			nome="Rejeitados"
-			link="/rejeitados"
-			parentLink="/rejeitados"
-			iconName="fa fa-sitemap"
-			index="rejeitados"
+			nome="Associações"
+			link="/associacoes"
+			parentLink="/associacoes"
+			iconName="fa fa-archive"
+			index="associacoes"
+			isHeader
+			/>
+			<NavLink
+			:activeItem="activeItem"
+			nome="Lojas"
+			link="/lojas"
+			parentLink="/lojas"
+			iconName="fa fa-industry"
+			index="lojas"
 			isHeader
 			/>
 		</ul>
