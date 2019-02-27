@@ -3,7 +3,7 @@
 		<h1 class="page-title">Lojas</h1>
 		<b-row class="filterLojas">
 			<b-col lg="4">
-				<b-form>
+				<b-form @submit.prevent="filter">
 					<b-form-group
 					id="form"
 					label-for="buscaInd"

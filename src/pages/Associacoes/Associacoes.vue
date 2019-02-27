@@ -8,7 +8,7 @@
 			<b-tab title="Rejeitados">
 				<b-row class="filterRejeitado">
 					<b-col lg="6">
-						<b-form>
+						<b-form  @submit.prevent="onSubmit">
 							<b-form-group
 							id="form"
 							label-for="buscaInd"
