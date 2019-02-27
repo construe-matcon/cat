@@ -1,7 +1,7 @@
 <template>
 	<div v-if="idCatalogo">
 		<template v-if="listProdConstrue.length > 0">
-			<h1 class="page-title">Produtos Construe - {{listProdConstrue[0].industria}}</h1>
+			<h1 class="page-title">Produtos Construe - <span class="fw-semi-bold">{{listProdConstrue[0].industria}}</span></h1>
 			<!-- <h5 class="page-title"><small>Última atualização: <span class='fw-semi-bold'>{{date}}</span></small></h5> -->
 			<b-row>
 				<b-col>
@@ -27,7 +27,7 @@
 			</b-row>
 		</template>
 		<template v-else-if="listCatalogo.length > 0">
-			<h1 class="page-title">Catálogo - {{listCatalogo[0].industria}}</h1>
+			<h1 class="page-title">Catálogo - <span class="fw-semi-bold">{{listCatalogo[0].industria}}</span></h1>
 			<h5 class="page-title"><small>Produto Construe: <span class='fw-semi-bold'>{{listCatalogo[0].categoria}}</span></small></h5>
 			<b-row>
 				<b-col>
@@ -193,12 +193,10 @@
 			},
 			goToConstrue(obj){
 				this.listProdConstrue = (obj.data.length > 0 ? obj.data : false)
-				console.log(obj)
 			},
 			openProdConstrue(obj){
 				this.listCatProd = (obj.data.length > 0 ? obj.data : false)
 
-				console.log(obj)
 			},
 			async loadCatalogo() {
 				await gfn.fApi({url:"https://api.construe.cf/produtos?id_industria="+this.idCatalogo+"&id_categoria="+this.idProdCons+"&tamanho_pagina=20&pagina="+(this.currentPage - 1), options: {method: 'GET'}}, this.loadCat);
@@ -207,7 +205,7 @@
 				await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}}, this.fetchUrl);
 			},
 			async loadProdConstrue() {
-				await gfn.fApi({url:"https://api.construe.cf/categorias/industria/"+this.idCatalogo, options: {method: 'GET'}}, this.goToConstrue);
+				await gfn.fApi({url:"https://api.construe.cf/categorias/industria/"+this.idCatalogo+"?tamanho_pagina=200", options: {method: 'GET'}}, this.goToConstrue);
 			},
 			async loadProdByCategory(id,idc) {
 				this.currentPage = 1;
@@ -250,7 +248,7 @@
 			'$route' () {
 				this.idCatalogo = (this.$route.params.id ? this.$route.params.id : '');
 				this.idProdCons = (this.$route.params.idc ? this.$route.params.idc : '');
-				
+
 				if (this.idProdCons.length > 0) {
 					this.loadProdByCategory(this.idCatalogo,this.idProdCons)
 				} else if (this.idCatalogo.length > 0) {
