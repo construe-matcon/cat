@@ -115,48 +115,70 @@
 			};
 		},
 		methods: {
-			resetForm: function() {
+			resetForm() {
 				this.user = this.bkpUser
 			},
-			sendForm: function() {
+			async sendForm() {
 				this.avisoModal = ''
 				this.tooltipShow = false;
-				if ((this.user.novapass == this.user.repass) && (this.user.novapass.length >= 8 && this.user.repass.length >= 8)) {
+				// if (
+				// 	(!this.user.pass && !this.user.novapass && !this.user.repass) || 
+				// 	((this.user.novapass == this.user.repass) && (this.user.novapass.length >= 8 && this.user.repass.length >= 8))
+				// ) {
 					let formData = new FormData()
 					formData.append('nome',this.user.nome)
-					formData.append('senha_antiga',this.user.pass)
-					formData.append('senha_nova',this.user.novapass)
+					// if (!this.user.pass || this.user.pass == '') {
+						formData.append('senha_antiga',this.user.pass)
+					// }
+					// if (!this.user.novapass || this.user.novapass == '') {
+						formData.append('senha_nova',this.user.novapass)
+					// }
 					formData.append('arquivo',this.userP)
 
-					axios.put('https://api.construe.cf/usuarios/minha-conta/'+this.user.id, formData, {
-						headers: {
-							"Content-type": "application/json; charset=UTF-8",
-							"Authorization": JSON.parse(window.localStorage.getItem("account")).token
-						}
-					}).then((response) => {
-						this.ddV = response
+					let rApi = await gfn.aApi({url: 'https://api.construe.cf/usuarios/minha-conta/'+this.user.id, method: 'put', data: formData})
+
+					if (rApi.response != undefined) {
+						this.avisoModal = ''
+						this.avisoModalTipo = 'danger'
+						this.avisoModalTitle = 'Erro ao editar usuário'
+						rApi.response.data.mensagens.forEach((msg, i) => {
+							this.avisoModal += (i != 0 ? '<br>'+msg : msg)
+						})
+					} else {
 						this.bkpUseruser = this.user
 						this.avisoModal = 'Usuário atualizado com sucesso!'
 						this.avisoModalTipo = 'success'
 						this.avisoModalTitle = 'Sucesso Usuário'
-					}).catch((error) => {
-						this.avisoModal = ''
-						this.avisoModalTipo = 'danger'
-						this.avisoModalTitle = 'Erro ao editar usuário'
-						error.response.data.mensagens.forEach((msg, i) => {
-							this.avisoModal += (i != 0 ? '<br>'+msg : msg)
-						})
-					})
+					}
+
+					// axios.put('https://api.construe.cf/usuarios/minha-conta/'+this.user.id, formData, {
+					// 	headers: {
+					// 		"Content-type": "application/json; charset=UTF-8",
+					// 		"Authorization": JSON.parse(window.localStorage.getItem("account")).token
+					// 	}
+					// }).then((response) => {
+						// this.ddV = response
+						// this.bkpUseruser = this.user
+						// this.avisoModal = 'Usuário atualizado com sucesso!'
+						// this.avisoModalTipo = 'success'
+						// this.avisoModalTitle = 'Sucesso Usuário'
+					// }).catch((error) => {
+
+					// })
+
 					this.$refs.changeUserProfile.show()
-				} else {
-					this.tooltipShow = true
-				}
+				// } else {
+				// 	this.tooltipShow = true
+				// }
 			},
-			changePhoto: function() {
+			completeForm(obj) {
+				console.log(obj)
+			},
+			changePhoto() {
 				let elm = this.$refs.photo
 				elm.$refs.input.click()
 			},
-			newPhoto: function(event) {
+			newPhoto(event) {
 				let input = event.target
 				,	reader = new FileReader();
 
@@ -166,7 +188,7 @@
 
 				reader.readAsDataURL(input.files[0])
 			},
-			hasImage: function(foto) {
+			async hasImage(foto) {
 				/* eslint-disable */
 				if (foto != null) {
 					axios.get('https://images.construe.cf/usuarios/'+foto).then((response) => {
@@ -191,5 +213,5 @@
 </script>
 
 <style lang="scss" scoped>
-@import './User.scss';
+	@import './User.scss';
 </style>

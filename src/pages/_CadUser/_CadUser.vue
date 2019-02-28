@@ -81,12 +81,6 @@
 						'nome': '',
 						'senha': ''
 					}
-					// this.$router.push({
-					// 	path: "/produto/"+id,
-					// 	params: {
-					// 		row: id
-					// 	}
-					// });
 				}
 			},
 		},

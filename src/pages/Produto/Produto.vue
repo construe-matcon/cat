@@ -284,10 +284,8 @@
 			};
 		},
 		methods: {
-			loadProducts(id) {
-				gfn.fApi({url:"https://api.construe.cf/produtos/"+id, options: {method: 'GET'}}, this.fetchUrl);
-			},
-			fetchUrl(obj){
+			async loadProducts(id) {
+				let obj = await gfn.fApi({url:"https://api.construe.cf/produtos/"+id, options: {method: 'GET'}});
 				this.prod = obj;
 				this.bkpprod = JSON.stringify(obj);
 			},

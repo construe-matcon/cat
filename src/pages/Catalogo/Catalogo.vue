@@ -160,16 +160,6 @@
 			};
 		},
 		methods: {
-			fetchUrl(obj){
-				this.listCatalogos = obj.data
-				obj.data.forEach(cat => {
-					try {
-						this.listImgCatalogo[cat.id] = require(`../../assets/img/logos/logo-${cat.nome.toLowerCase()}.png`)
-					} catch(error) {
-						this.listImgCatalogo[cat.id] = require(`../../assets/img/logos/logo-default.png`)
-					}
-				})
-			},
 			async loadCat(obj) {
 				this.listProdConstrue = ""
 				this.listCatalogo = (obj.data.length > 0 ? obj.data : false)
@@ -177,11 +167,6 @@
 				this.tamanho = obj.size;
 				this.paginaAtual = obj.number;
 				this.ultimaPagina = obj.last_page;
-
-				// await gfn.fApi({url:"https://api.construe.cf/categorias/industria/"+this.idCatalogo, options: {method: 'GET'}}, this.goToConstrue);
-				// await gfn.fApi({url:"https://api.construe.cf/produtos?id_industria="+this.idCatalogo+"&id_categoria="+this.idCategoria, options: {method: 'GET'}}, this.openProdConstrue);
-
-
 			},
 			goToCat(id) {
 				this.$router.push({
@@ -191,9 +176,6 @@
 					}
 				});
 			},
-			goToConstrue(obj){
-				this.listProdConstrue = (obj.data.length > 0 ? obj.data : false)
-			},
 			openProdConstrue(obj){
 				this.listCatProd = (obj.data.length > 0 ? obj.data : false)
 
@@ -202,10 +184,19 @@
 				await gfn.fApi({url:"https://api.construe.cf/produtos?id_industria="+this.idCatalogo+"&id_categoria="+this.idProdCons+"&tamanho_pagina=20&pagina="+(this.currentPage - 1), options: {method: 'GET'}}, this.loadCat);
 			},
 			async loadCatalogos() {
-				await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}}, this.fetchUrl);
+				let obj = await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}});
+				this.listCatalogos = obj.data;
+				this.listCatalogos.forEach(cat => {
+					try {
+						this.listImgCatalogo[cat.id] = require(`../../assets/img/logos/logo-${cat.nome.toLowerCase()}.png`)
+					} catch(error) {
+						this.listImgCatalogo[cat.id] = require(`../../assets/img/logos/logo-default.png`)
+					}
+				})
 			},
 			async loadProdConstrue() {
-				await gfn.fApi({url:"https://api.construe.cf/categorias/industria/"+this.idCatalogo+"?tamanho_pagina=200", options: {method: 'GET'}}, this.goToConstrue);
+				let obj = await gfn.fApi({url:"https://api.construe.cf/categorias/industria/"+this.idCatalogo+"?tamanho_pagina=200", options: {method: 'GET'}});
+				this.listProdConstrue = (obj.data.length > 0 ? obj.data : false)
 			},
 			async loadProdByCategory(id,idc) {
 				this.currentPage = 1;
