@@ -151,15 +151,11 @@ let router = new Router({
           path: 'lojas',
           name: 'Lojas',
           component: Lojas,
-          children: [
-            {
-              path: ':cnpj',
-              component: Lojas,
-              params: {
-                id: ':cnpj'
-              }
-            }
-          ]
+        },
+        {
+          path: 'loja/:id',
+          name: 'loja',
+          component: Lojas,
         },
 		{
 			path: 'associacoes',

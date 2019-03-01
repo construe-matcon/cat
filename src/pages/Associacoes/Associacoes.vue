@@ -7,24 +7,32 @@
 		<b-tabs>
 			<b-tab title="Rejeitados">
 				<b-row class="filterRejeitado">
-					<b-col lg="6">
+					<b-col lg="4">
 						<b-form  @submit.prevent="onSubmit">
 							<b-form-group
-								id="form"
-								label-for="buscaInd"
-								description="Digite o nome da indústria para filtrar (se mais de uma, separar por vírgula)"
+							id="form"
+							label-for="buscaInd"
+							description="Se mais de uma palavra, separar por vírgula"
 							>
 								<b-form-input
 									id="buscaInd"
 									type="text"
 									v-model="filtroInds"
-									placeholder="Digite aqui o(s) nome(s)" />
+									placeholder="Digite aqui sua busca" />
 							</b-form-group>
 						</b-form>
 					</b-col>
-					<b-col lg="6">
+					<b-col lg="2">
 						<b-button @click="onSubmit" variant="primary">Filtrar</b-button>
 					</b-col>
+					<b-col lg="4" v-show="filterCat">
+						<b-form  @submit.prevent="onSubmit">
+							<b-form-select v-model="selected" :options="selectInds" @input="getVal" class="mb-3 limitH" />
+						</b-form>
+					</b-col>
+					<!-- <b-col lg="2" v-show="filterCat">
+						<b-button @click="onSubmit" variant="primary">Filtrar</b-button>
+					</b-col> -->
 				</b-row>
 				<b-row class="formProduto">
 					<b-col lg="6" class="list-item">
@@ -155,6 +163,10 @@
 		name: 'Rejeitados',
 		data() {
 			return {
+				filterCat: false,
+				selected: null,
+				selectInds: [],
+				idInd: null,
 				selDesc: null,
 				selProd: null,
 				add: false,
@@ -181,12 +193,14 @@
 		},
 		methods: {
 			resetAll(){
+				this.selected = null
 				this.detailProd = false;
 				this.detailRej = false;
 				this.selDesc = null
 				this.selProd = null
 				this.listaDesc = true
 				this.listaProds = true
+				this.filterCat = false
 			},
 			async pages(){
 				this.resetAll()
@@ -208,7 +222,45 @@
 					this.nome = ''
 				}
 			},
+			getVal(id){
+				this.idInd = id
+
+				this.detailProd = false;
+				this.selProd = null
+				this.listaProds = true
+				this.add = false
+
+				axios.post('https://api.construe.cf/produtos-rejeitados/sugerir', {
+					descricao: this.listaDesc[this.selDesc].descricao,
+					id_industria: this.idInd
+				}, {
+					headers: {
+						"Content-type": "application/json; charset=UTF-8",
+						"Authorization": JSON.parse(window.localStorage.getItem("account")).token
+					}
+				}).then((response) => {
+					this.add = false
+					this.fillProd(response)
+				}).catch((error) => {
+					this.add = false
+					console.log(error)
+				})
+			},
+			fetchCat(obj){
+				var ind      = obj.data
+				this.selectInds.push({
+					"text": 'Selecione uma indústria para melhores resultados',
+					"value": null
+				})
+				for (var i = 0, lgt = ind.length; i < lgt; i++ ) {
+					this.selectInds.push({
+						"text": ind[i].nome,
+						"value": ind[i].id
+					})
+				}
+			},
 			sugestao(){
+				this.filterCat = true,
 				this.detailRej = false
 				this.detailProd = false;
 				this.add = false
@@ -217,7 +269,8 @@
 				this.selProd = null
 
 				axios.post('https://api.construe.cf/produtos-rejeitados/sugerir', {
-					descricao: this.listaDesc[this.selDesc].descricao
+					descricao: this.listaDesc[this.selDesc].descricao,
+					id_industria: this.idInd
 				}, {
 					headers: {
 						"Content-type": "application/json; charset=UTF-8",
@@ -294,6 +347,7 @@
 		async mounted() {
 			this.cnpj = (this.$route.query.cnpj ? '&cnpj='+this.$route.query.cnpj : '')
 			await gfn.fApi({url:"https://api.construe.cf/produtos-rejeitados?tamanho_pagina=20"+this.cnpj, options: {method: 'GET'}}, this.loadRej);
+			await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}}, this.fetchCat);
 		},
 		watch: {
 			'$route' () {
