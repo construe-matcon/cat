@@ -48,7 +48,10 @@
 				dados: {
 					'email': '',
 					'nome': '',
-					'senha': ''
+					'senha': '',
+					'id_perfil': 1,
+					'ind_todas_industrias': true,
+					'ids_industrias': ''
 				},
 				errorMessage: '',
 				successMessage: '',
