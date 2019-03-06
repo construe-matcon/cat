@@ -1,7 +1,7 @@
 <template>
 	<div v-if="loja">
-		<h1 class="page-title" v-if="dashData.loja">Loja: <span class="fw-semi-bold">{{dashData.loja.razao_social}}</span></h1>
-		<span class="small" v-if="dashData.loja">cnpj: <span class="fw-semi-bold">{{fCNPJ(dashData.loja.cnpj)}}</span></span>
+		<h1 class="page-title" v-if="dashLineData.loja">Loja: <span class="fw-semi-bold">{{dashLineData.loja.razao_social}}</span></h1>
+		<span class="small" v-if="dashLineData.loja">cnpj: <span class="fw-semi-bold">{{fCNPJ(dashLineData.loja.cnpj)}}</span></span>
 		<hr>
 		<b-row>
 			<b-col lg="12">
@@ -137,31 +137,21 @@
 				msgErro: 'Nenhuma loja encontrada',
 				loja: this.$route.params.id,
 				lojaInd: '',
-				dashData: [],
+				dashLineData: [],
+				dashBarData: [],
 			};
 		},
 		methods: {
-			// Charts
 			// startCharts(type, idEl, label, datax,displayLegend=true) {
 			startCharts(type, idEl) {
-
-				// var now 		= new Date()
-				// , 	ms 			= 86400000
-				var dates 		= this.dashData.datas
-				, 	total 		= this.dashData.valores_totais
-				, 	totalCat 	= this.dashData.valores_totais_produtos_catalogo
-
-
-				// for (var i = 1; i < 31; i++) {
-				// 	var newDate = new Date(now - (i * ms))
-				// 	dates.push((newDate.getDate()).toString().padStart(2, '0')+'/'+(newDate.getMonth()+1).toString().padStart(2, '0'))
-				// }
+				var dates 		= this.dashLineData.datas
+				, 	total 		= this.dashLineData.valores_totais
+				, 	totalCat 	= this.dashLineData.valores_totais_produtos_catalogo
 
 				var el = document.getElementById(idEl).getContext('2d')
-				// var graph;
 
 
-				var sellOut = new Chart (el, {
+				new Chart (el, {
 					type: type,
 					data: {
 						labels: dates,
@@ -190,9 +180,29 @@
 						}
 					}
 				});
-				console.log(sellOut)
+
+				// var graph;
+
+				// if (type == 'line') {
+				// 	graph = {
+				// 		type: type,
+				// 		data:datax,
+				// 		options: {
+				// 			responsive: true,
+				// 			scales: {
+				// 				xAxes: [{
+				// 					display: true,
+				// 				}],
+				// 				yAxes: [{
+				// 				}]
+				// 			}
+				// 		}
+				// 	}
+				// }
+
+				// return new Chart(el,graph)
+
 			},
-			// Charts
 			async pages(){
 				await gfn.fApi({url:'https://api.construe.cf/dashboard/lojas?pagina='+(this.currentPage - 1)+'&tamanho_pagina='+this.lojas+'&razao_social='+this.razaoSocial, options: {method: 'GET'}}, this.listStores);
 			},
@@ -203,13 +213,24 @@
 				await gfn.fApi({url:'https://api.construe.cf/dashboard/lojas?pagina='+(this.currentPage - 1)+'&tamanho_pagina='+this.lojas+'&razao_social='+this.razaoSocial, options: {method: 'GET'}}, this.listStores);
 			},
 			async goToDash(){
-				this.dashData = await gfn.fApi({url:'https://api.construe.cf/dashboard/lojas/'+this.loja+'/grafico-faturamento-mensal', options: {method: 'GET'}});
-				if (this.dashData) {
+				this.dashLineData = await gfn.fApi({url:'https://api.construe.cf/dashboard/lojas/'+this.loja+'/grafico-faturamento-mensal', options: {method: 'GET'}});
+				if (this.dashLineData) {
 					this.startCharts('line', 'linechart1','','', true);
 				}
+				this.dashBarData = await gfn.fApi({url:'https://api.construe.cf/dashboard/lojas/'+this.loja+'/grafico-faturamento-produto-construe-mensal', options: {method: 'GET'}});
+				if (this.dashBarData) {
+					// this.startCharts('bar', 'barchart1','','', true);
+				}
+
+				console.log('-- Dados Gráficos --')
+				console.log('Faturamento ==> ' , this.dashLineData)
+				console.log('--------------------------------')
+				console.log('Categorias ==> ' , this.dashBarData)
+				console.log('-- Dados Gráficos --')
+
 			},
 			loadDash(obj) {
-				this.dashData = obj
+				this.dashLineData = obj
 			},
 			goToAssoc(cnpj) {
 				this.$router.push({
@@ -247,7 +268,7 @@
 				if(this.$route.params.id != undefined) {
 					this.goToDash()
 				} else {
-					this.dashData = ''
+					this.dashLineData = ''
 					gfn.fApi({url:'https://api.construe.cf/dashboard/lojas?pagina='+(this.currentPage - 1)+'&tamanho_pagina='+this.lojas+'&razao_social='+this.razaoSocial, options: {method: 'GET'}}, this.listStores);
 				}
 			}
