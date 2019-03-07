@@ -112,6 +112,14 @@ export default {
 			rMounth = (rMounth < 10) ? "0"+rMounth : rMounth;
 			rYear = t2[0];
 			return rDay +'/'+ rMounth +'/'+ rYear + '' + (removeHour ? '' : (' '+ t1[1]));
+		} else if (valueDate.indexOf('-') == 2 || valueDate.indexOf('-') == 4) {
+			t1 = valueDate.split('-');
+			if (t1[0].length == 4) {
+				t2 = `${t1[2]}/${t1[1]}/${t1[0]}`
+			} else {
+				t2 = valueDate.replace(/-/gi,'/')
+			}
+			return t2;
 		} else {
 			return valueDate;
 		}
@@ -120,5 +128,8 @@ export default {
 		cnpj = cnpj.replace(/\D/g,'');
 		// return cnpj = cnpj.replace(/(\d{2})(\d{1})\.?(\d{2})(\d{1})\.?(\d{2})(\d{1})\-?(\d{0,3})(\d{0,2})/,"$1.$2$3.$4$5/$6$7-$8")
 		return cnpj = cnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,"$1.$2.$3/$4-$5")
+	},
+	formatPrice(valor) {
+		return `R$ ${valor.toLocaleString('pt-br')}`
 	}
 }

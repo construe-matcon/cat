@@ -154,7 +154,7 @@
 				new Chart (el, {
 					type: type,
 					data: {
-						labels: dates,
+						labels: dates.map(date => {return gfn.formatDate(date)}),
 						datasets: [{
 							label: 'Total de vendas',
 							backgroundColor: '#A02B13',
@@ -177,6 +177,18 @@
 							}],
 							yAxes: [{
 							}]
+						},
+						tooltips: {
+							callbacks: {
+								label: function(tooltipItem, data) {
+									var label = data.datasets[tooltipItem.datasetIndex].label || '';
+									if (label) {
+										label += ': ';
+									}
+									label += gfn.formatPrice(Math.round(tooltipItem.yLabel * 100) / 100);
+									return label;
+								}
+							}
 						}
 					}
 				});
@@ -222,11 +234,11 @@
 					// this.startCharts('bar', 'barchart1','','', true);
 				}
 
-				console.log('-- Dados Gráficos --')
-				console.log('Faturamento ==> ' , this.dashLineData)
-				console.log('--------------------------------')
-				console.log('Categorias ==> ' , this.dashBarData)
-				console.log('-- Dados Gráficos --')
+				// console.log('-- Dados Gráficos --')
+				// console.log('Faturamento ==> ' , this.dashLineData)
+				// console.log('--------------------------------')
+				// console.log('Categorias ==> ' , this.dashBarData)
+				// console.log('-- Dados Gráficos --')
 
 			},
 			loadDash(obj) {
