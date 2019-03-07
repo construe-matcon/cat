@@ -87,8 +87,8 @@ export default {
 			return rdata
 		}
 	},
-	formatDate(valueDate,removeHour) {
-		removeHour = removeHour || false;
+	formatDate(valueDate,remove) {
+		remove = remove || false;
 		let t1, t2, t3, rDay, rMounth, rYear, rHour, rMin, rSec;
 		if (valueDate.indexOf('AM') > 0 || valueDate.indexOf('PM') > 0) {
 			t1 = valueDate.split('/')
@@ -102,7 +102,7 @@ export default {
 			rHour = (t2[2] === 'AM') ? (parseInt(t3[0]) === 12 ? 0 : t3[0]) : (parseInt(t3[0]) === 12 ? parseInt(t3[0]) : parseInt(t3[0]) + 12);
 			rMin = t3[1];
 			rSec = t3[2];
-			return rDay +'/'+ rMounth +'/'+ rYear + '' + (removeHour ? '' : (' '+ rHour +':'+ rMin +':'+ rSec));
+			return rDay +'/'+ rMounth +'/'+ rYear + '' + (remove ? '' : (' '+ rHour +':'+ rMin +':'+ rSec));
 		} else if (valueDate.indexOf('T') > 0) {
 			t1 = valueDate.split('T');
 			t2 = t1[0].split('-');
@@ -111,13 +111,13 @@ export default {
 			rMounth = parseInt(t2[1]);
 			rMounth = (rMounth < 10) ? "0"+rMounth : rMounth;
 			rYear = t2[0];
-			return rDay +'/'+ rMounth +'/'+ rYear + '' + (removeHour ? '' : (' '+ t1[1]));
+			return rDay +'/'+ rMounth +'/'+ rYear + '' + (remove ? '' : (' '+ t1[1]));
 		} else if (valueDate.indexOf('-') == 2 || valueDate.indexOf('-') == 4) {
 			t1 = valueDate.split('-');
 			if (t1[0].length == 4) {
-				t2 = `${t1[2]}/${t1[1]}/${t1[0]}`
+				t2 = `${t1[2]}/${t1[1]}${(remove ? '' : `/${t1[0]}`)}`
 			} else {
-				t2 = valueDate.replace(/-/gi,'/')
+				t2 = `${t1[0]}/${t1[1]}${(remove ? '' : `/${t1[2]}`)}`
 			}
 			return t2;
 		} else {
