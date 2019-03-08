@@ -11,7 +11,7 @@
   .imgCat {
     display: block;
     width: 450px;
-    max-width: 100%;
+    max-width: 90%;
     height: auto;
     background: url('https://images.construe.cf/404.png') center center no-repeat;
     background-size: cover;
@@ -62,6 +62,14 @@
           font-weight: 100;
         }
       }
+    }
+  }
+}
+
+/deep/ .modal {
+  .modal-content {
+    .modal-header.text-light {
+      color: #f8f9fa !important;
     }
   }
 }

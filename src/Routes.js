@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import jwt from 'jsonwebtoken';
 
 import Layout from '@/components/Layout/Layout';
 import Login from '@/pages/Login/Login';
@@ -27,148 +28,219 @@ import NotificationsPage from '@/pages/Notifications/Notifications';
 // Catalogo
 import Catalogo from '@/pages/Catalogo/Catalogo';
 
+// Lojas
+import Lojas from '@/pages/Lojas/Lojas';
+
 // Categorias
 import CategoriasPage from '@/pages/Categorias/Basic';
 // Produto
 import ProdutoPage from '@/pages/Produto/Produto';
 
+// Associacoes
+import RejeitadoPage from '@/pages/Associacoes/Associacoes';
+// Usuario
+import UserPage from '@/pages/User/User';
 // Importar
 import UploadPage from '@/pages/Upload/Upload';
+
+//beforeEnter
+
+let validateUser = function(page, cb) {
+	let user = (JSON.parse(window.localStorage.getItem('account')) ? jwt.decode(JSON.parse(window.localStorage.getItem('account')).token).usuario : '')
+	console.log(user)
+		if (user.id_perfil == 1) {
+			cb();
+		} else {
+			if (user.acessos.indexOf(page) >= 0) {
+				cb();
+			} else {
+				if (user.acessos.indexOf('DASHBOARD') == -1) {
+					cb('/catalogo');
+				} else {
+					cb('/error');
+				}
+			}
+		}
+	}
 
 
 Vue.use(Router);
 
 let router = new Router({
-  mode: 'hash',
-  base: process.env.BASE_URL,
-  routes: [
-    {
-      path: '*',
-      name: 'Error',
-      component: ErrorPage,
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: Login,
-    },
-    {
-      path: '',
-      component: Layout,
-      children: [
+	mode: 'hash',
+	base: process.env.BASE_URL,
+	routes: [
+	{
+		path: '*',
+		name: 'Error',
+		component: ErrorPage,
+	},
+	{
+		path: '/login',
+		name: 'login',
+		component: Login,
+	},
+	{
+		path: '',
+		component: Layout,
+		children: [
+		{
+			path: '',
+			redirect: 'dashboard'
+		},
+		{
+			path: '/admin/cadastro',
+			name: 'CadUser',
+			component: CadUser,
+			beforeEnter(to, from, next) {
+				validateUser('USUARIOS', next)
+			},
+		},
+		{
+			path: 'dashboard',
+			name: 'Dashboard',
+			component: Dashboard,
+			beforeEnter(to, from, next) {
+				validateUser('DASHBOARD', next)
+			},
+		},
+		{
+			path: 'catalogo',
+			name: 'Catalogo',
+			component: Catalogo,
+			beforeEnter(to, from, next) {
+				validateUser('CATALOGOS', next)
+			},
+			children: [
+			{
+				path: ':id',
+				component: Catalogo,
+				params: {
+					id: ':id'
+				},
+				children: [
+				{
+					path: ':idc',
+					component: Catalogo,
+					params: {
+						id: ':idc'
+					}
+				}
+				]
+			}
+			]
+		},
+		{
+			path: 'categorias',
+			name: 'AllCategoriasPage',
+			component: CategoriasPage,
+			beforeEnter(to, from, next) {
+				validateUser('CATEGORIAS', next)
+			},
+			children: [
+			{
+				path: ':id',
+				component: CategoriasPage,
+				params: {
+					id: ':id'
+				}
+			}
+			]
+		},
+		{
+			path: 'produto/:id',
+			name: 'ProdutoPage',
+			component: ProdutoPage,
+		},
         {
-          path: '',
-          redirect: 'dashboard'
+          path: 'lojas',
+          name: 'Lojas',
+          component: Lojas,
+			beforeEnter(to, from, next) {
+				validateUser('DASHBOARD_LOJAS', next)
+			},
         },
         {
-          path: '/admin/cadastro',
-          name: 'CadUser',
-          component: CadUser,
+          path: 'loja/:id',
+          name: 'loja',
+          component: Lojas,
+			beforeEnter(to, from, next) {
+				validateUser('DASHBOARD_LOJAS', next)
+			},
         },
-        {
-          path: 'dashboard',
-          name: 'Dashboard',
-          component: Dashboard,
-        },
-        {
-          path: 'catalogo',
-          name: 'Catalogo',
-          component: Catalogo,
-          children: [
-            {
-              path: ':id',
-              component: Catalogo,
-              params: {
-                id: ':id'
-              },
-              children: [
-              {
-                path: ':idc',
-                component: Catalogo,
-                params: {
-                  id: ':idc'
-                }
-              }
-              ]
-            }
-          ]
-        },
-        {
-          path: 'categorias',
-          name: 'AllCategoriasPage',
-          component: CategoriasPage,
-          children: [
-            {
-              path: ':id',
-              component: CategoriasPage,
-              params: {
-                id: ':id'
-              }
-            }
-          ]
-        },
-        {
-          path: 'produto/:id',
-          name: 'ProdutoPage',
-          component: ProdutoPage,
-        },
-        {
-          path: 'typography',
-          name: 'TypographyPage',
-          component: TypographyPage,
-        },
-        {
-          path: 'upload',
-          name: 'UploadPage',
-          component: UploadPage,
-        },
-        {
-          path: 'components/icons',
-          name: 'IconsPage',
-          component: IconsPage,
-        },
-        {
-          path: 'notifications',
-          name: 'NotificationsPage',
-          component: NotificationsPage,
-        },
-        {
-          path: 'components/charts',
-          name: 'ChartsPage',
-          component: ChartsPage,
-        },
-        {
-          path: 'tables',
-          name: 'TablesBasicPage',
-          component: TablesBasicPage,
-        },
-        {
-          path: 'components/maps',
-          name: 'GoogleMapPage',
-          component: GoogleMapPage,
-        },
-      ],
-    },
-  ],
+		{
+			path: 'associacoes',
+			name: 'RejeitadoPage',
+			component: RejeitadoPage,
+			beforeEnter(to, from, next) {
+				validateUser('REJEITADOS', next)
+			},
+		},
+		{
+			path: 'minha-conta',
+			name: 'UserPage',
+			component: UserPage,
+		},
+		{
+			path: 'upload',
+			name: 'UploadPage',
+			component: UploadPage,
+			beforeEnter(to, from, next) {
+				validateUser('IMPORTAR_CATALOGO', next)
+			},
+		},
+		{
+			path: 'typography',
+			name: 'TypographyPage',
+			component: TypographyPage,
+		},
+		{
+			path: 'components/icons',
+			name: 'IconsPage',
+			component: IconsPage,
+		},
+		{
+			path: 'notifications',
+			name: 'NotificationsPage',
+			component: NotificationsPage,
+		},
+		{
+			path: 'components/charts',
+			name: 'ChartsPage',
+			component: ChartsPage,
+		},
+		{
+			path: 'tables',
+			name: 'TablesBasicPage',
+			component: TablesBasicPage,
+		},
+		{
+			path: 'components/maps',
+			name: 'GoogleMapPage',
+			component: GoogleMapPage,
+		},
+		],
+	},
+	],
 });
 
 router.beforeEach((to, from, next) => {
-  // document.title = 'Catálogos Matcon - Construe'
+// document.title = 'Catálogos Matcon - Construe'
 
-  if (to.name == 'Error' && to.path !== '/error') {
-    next('/error');
-  } else if(window.localStorage.getItem('authenticated') !== 'true' && to.name !== 'login') {
-    next('/login');
-  } else if(window.localStorage.getItem('authenticated') === 'true' && to.name === 'login') {
-    next(from.path);
-  } else if(window.localStorage.getItem("account") == null && to.name !== 'login') {
-    window.localStorage.setItem('authenticated','false');
-    next('/login');
-  } else if (window.location.pathname != '/') {
-    window.location = window.location.origin + '#' + window.location.pathname;
-  } else {
-    next();
-  }
+if (to.name == 'Error' && to.path !== '/error') {
+	next('/error');
+} else if(window.localStorage.getItem('authenticated') !== 'true' && to.name !== 'login') {
+	next('/login');
+} else if(window.localStorage.getItem('authenticated') === 'true' && to.name === 'login') {
+	next(from.path);
+} else if(window.localStorage.getItem("account") == null && to.name !== 'login') {
+	window.localStorage.setItem('authenticated','false');
+	next('/login');
+} else if (window.location.pathname != '/') {
+	window.location = window.location.origin + '#' + window.location.pathname;
+} else {
+	next();
+}
 
 });
 

@@ -10,6 +10,7 @@
 			iconName="fa fa-bar-chart"
 			index="dashboard"
 			isHeader
+			v-if="user.acessos.indexOf('DASHBOARD') >= 0"
 			/>
 			<NavLink
 			:activeItem="activeItem"
@@ -20,6 +21,7 @@
 			index="catalogo"
 			:childrenLinks="catNavItens"
 			:deep="0"
+			v-if="user.acessos.indexOf('CATALOGOS') >= 0"
 			/>
 			<NavLink
 			:activeItem="activeItem"
@@ -30,6 +32,7 @@
 			index="categorias"
 			:childrenLinks="navItens"
 			:deep="0"
+			v-if="user.acessos.indexOf('CATEGORIAS') >= 0"
 			/>
 			<NavLink
 			:activeItem="activeItem"
@@ -39,6 +42,27 @@
 			iconName="fa fa-upload"
 			index="categorias"
 			isHeader
+			v-if="user.acessos.indexOf('IMPORTAR_CATALOGO') >= 0"
+			/>
+			<NavLink
+			:activeItem="activeItem"
+			nome="Associações"
+			link="/associacoes"
+			parentLink="/associacoes"
+			iconName="fa fa-archive"
+			index="associacoes"
+			isHeader
+			v-if="user.acessos.indexOf('REJEITADOS') >= 0"
+			/>
+			<NavLink
+			:activeItem="activeItem"
+			nome="Lojas"
+			link="/lojas"
+			parentLink="/lojas"
+			iconName="fa fa-industry"
+			index="lojas"
+			isHeader
+			v-if="user.acessos.indexOf('DASHBOARD_LOJAS') >= 0 && 1 == 2"
 			/>
 		</ul>
 		<div class="bottom">
@@ -62,12 +86,14 @@
 	import { mapState, mapActions } from 'vuex';
 	import NavLink from './NavLink/NavLink';
 	import gfn from '@/core/globalFunctions';
+	import jwt from 'jsonwebtoken';
 
 	export default {
 		name: 'Sidebar',
 		components: { NavLink },
 		data() {
 			return {
+				user: (JSON.parse(window.localStorage.getItem('account')) ? jwt.decode(JSON.parse(window.localStorage.getItem('account')).token).usuario : ''),
 				alerts: [],
 				icon: {
 					picture: require('../../assets/img/construe.png'), // eslint-disable-line global-require
@@ -112,6 +138,7 @@
 			}),
 		},
 		async mounted() {
+			console.log('user: ', this.user)
 			await gfn.fApi({url:"https://api.construe.cf/categorias?tamanho_pagina=20", options: {method: 'GET'}}, this.fetchUrl);
 			await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}}, this.fetchCat);
 			await gfn.fApi({url:"https://api.construe.cf/dashboard", options: {method: 'GET'}}, this.fetchStats);

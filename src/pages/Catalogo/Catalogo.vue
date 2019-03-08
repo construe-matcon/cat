@@ -1,7 +1,7 @@
 <template>
 	<div v-if="idCatalogo">
 		<template v-if="listProdConstrue.length > 0">
-			<h1 class="page-title">Produtos Construe - {{listProdConstrue[0].industria}}</h1>
+			<h1 class="page-title">Produtos Construe - <span class="fw-semi-bold">{{listProdConstrue[0].industria}}</span></h1>
 			<!-- <h5 class="page-title"><small>Última atualização: <span class='fw-semi-bold'>{{date}}</span></small></h5> -->
 			<b-row>
 				<b-col>
@@ -27,7 +27,7 @@
 			</b-row>
 		</template>
 		<template v-else-if="listCatalogo.length > 0">
-			<h1 class="page-title">Catálogo - {{listCatalogo[0].industria}}</h1>
+			<h1 class="page-title">Catálogo - <span class="fw-semi-bold">{{listCatalogo[0].industria}}</span></h1>
 			<h5 class="page-title"><small>Produto Construe: <span class='fw-semi-bold'>{{listCatalogo[0].categoria}}</span></small></h5>
 			<b-row>
 				<b-col>
@@ -117,7 +117,7 @@
 	<div v-else>
 		<h1 class="page-title">Catálogos</h1>
 		<b-row>
-			<b-col col xs="12" lg="2" align-v="center" v-for="cat in listCatalogo" :key="`cat-${cat.id}`" class="holder-catalogo d-flex align-items-center" @click="goToCat(cat.id)">
+			<b-col col xs="12" lg="2" align-v="center" v-for="cat in listCatalogos" :key="`cat-${cat.id}`" class="holder-catalogo d-flex align-items-center" @click="goToCat(cat.id)">
 				<div>
 					<img :src="listImgCatalogo[cat.id]" width="50%" :alt="cat.nome.toLowerCase()">
 					<br>
@@ -144,33 +144,22 @@
 		components: { Widget },
 		data() {
 			return {
-				teste: true,
-				teste2: false,
 				currentPage: 1,
 				totalProdutos: 0,
 				tamanho: 1,
 				paginaAtual: 0,
 				ultimaPagina: true,
-				listCatalogo: true,
+				listCatalogo: false,
+				listCatalogos: false,
 				idCatalogo: this.$route.params.id,
 				idProdCons: this.$route.params.idc,
 				listImgCatalogo: {},
-				listProdConstrue: true,
-				listCatProd: true,
+				listProdConstrue: false,
+				listCatProd: false,
 				idCategoria: 277,
 			};
 		},
 		methods: {
-			fetchUrl(obj){
-				this.listCatalogo = obj.data
-				obj.data.forEach(cat => {
-					try {
-						this.listImgCatalogo[cat.id] = require(`../../assets/img/logos/logo-${cat.nome.toLowerCase()}.png`)
-					} catch(error) {
-						this.listImgCatalogo[cat.id] = require(`../../assets/img/logos/logo-default.png`)
-					}
-				})
-			},
 			async loadCat(obj) {
 				this.listProdConstrue = ""
 				this.listCatalogo = (obj.data.length > 0 ? obj.data : false)
@@ -178,11 +167,6 @@
 				this.tamanho = obj.size;
 				this.paginaAtual = obj.number;
 				this.ultimaPagina = obj.last_page;
-
-				// await gfn.fApi({url:"https://api.construe.cf/categorias/industria/"+this.idCatalogo, options: {method: 'GET'}}, this.goToConstrue);
-				// await gfn.fApi({url:"https://api.construe.cf/produtos?id_industria="+this.idCatalogo+"&id_categoria="+this.idCategoria, options: {method: 'GET'}}, this.openProdConstrue);
-
-
 			},
 			goToCat(id) {
 				this.$router.push({
@@ -192,23 +176,27 @@
 					}
 				});
 			},
-			goToConstrue(obj){
-				this.listProdConstrue = (obj.data.length > 0 ? obj.data : false)
-				console.log(obj)
-			},
 			openProdConstrue(obj){
 				this.listCatProd = (obj.data.length > 0 ? obj.data : false)
 
-				console.log(obj)
 			},
 			async loadCatalogo() {
 				await gfn.fApi({url:"https://api.construe.cf/produtos?id_industria="+this.idCatalogo+"&id_categoria="+this.idProdCons+"&tamanho_pagina=20&pagina="+(this.currentPage - 1), options: {method: 'GET'}}, this.loadCat);
 			},
 			async loadCatalogos() {
-				await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}}, this.fetchUrl);
+				let obj = await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}});
+				this.listCatalogos = obj.data;
+				this.listCatalogos.forEach(cat => {
+					try {
+						this.listImgCatalogo[cat.id] = require(`../../assets/img/logos/logo-${cat.nome.toLowerCase()}.png`)
+					} catch(error) {
+						this.listImgCatalogo[cat.id] = require(`../../assets/img/logos/logo-default.png`)
+					}
+				})
 			},
 			async loadProdConstrue() {
-				await gfn.fApi({url:"https://api.construe.cf/categorias/industria/"+this.idCatalogo, options: {method: 'GET'}}, this.goToConstrue);
+				let obj = await gfn.fApi({url:"https://api.construe.cf/categorias/industria/"+this.idCatalogo+"?tamanho_pagina=200", options: {method: 'GET'}});
+				this.listProdConstrue = (obj.data.length > 0 ? obj.data : false)
 			},
 			async loadProdByCategory(id,idc) {
 				this.currentPage = 1;
@@ -251,7 +239,7 @@
 			'$route' () {
 				this.idCatalogo = (this.$route.params.id ? this.$route.params.id : '');
 				this.idProdCons = (this.$route.params.idc ? this.$route.params.idc : '');
-				
+
 				if (this.idProdCons.length > 0) {
 					this.loadProdByCategory(this.idCatalogo,this.idProdCons)
 				} else if (this.idCatalogo.length > 0) {

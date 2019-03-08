@@ -9,7 +9,6 @@
 	cursor: pointer;
 
 	div {
-		width: 100%;
 		text-align: center;
 	}
 	img {
@@ -24,13 +23,19 @@
 		transform: translate(-50%,0);
 	}
 }
-.tables-basic {
+.table-resposive {
   .table th {
     font-size: $font-size-sm;
   }
+  .table td {
+    line-height: 1.2;
+  }
 
-  .table tr {
+  .table .cpointer {
   	cursor: pointer;
+  }
+  .ultima-atualizacao td {
+  	border: 0;
   }
 }
 

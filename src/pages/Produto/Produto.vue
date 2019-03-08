@@ -218,7 +218,7 @@
 					</b-col>
 				</b-row>
 			</b-tab>
-			<b-tab title="Associações">
+			<b-tab title="Associações" v-if= "1 == 2">
 				<b-row class="formProduto">
 					<b-col lg="4" class="list-item">
 						<img class="img-rounded imgCat" :src="'https://images.construe.cf/'+prod.industria+'/'+prod.ean+'.jpg'" alt="" />
@@ -234,102 +234,32 @@
 						<b-form @submit.prevent="">
 							<div class="form-group row">
 								<b-form-group class="col">
-									<label for="inputIndustria" class="col-form-label">Industria</label>
+									<label for="inputIndustria" class="col-form-label">Possiveis associações de Sell Out</label>
 									<div class="">
 										<b-input class="form-control-plaintext" id="inputIndustria" v-model="prod.industria" readonly />
 									</div>
 								</b-form-group>
-								<b-form-group class="col">
-									<label for="inputFabricante" class="col-form-label">Fabricante</label>
-									<div class="">
-										<b-input class="form-control-plaintext" id="inputFabricante" v-model="prod.fabricante" readonly />
-									</div>
-								</b-form-group>
-								<b-form-group class="col">
-									<label for="inputCategoria" class="col-form-label">Categoria</label>
-									<div class="">
-										<b-input class="form-control-plaintext" id="inputCategoria" v-model="prod.categoria" readonly />
-									</div>
-								</b-form-group>
 							</div>
-							<div class="form-group row">
-								<b-form-group class="col">
-									<label for="inputEan" class="col-form-label">EAN</label>
-									<div class="">
-										<template v-if="prod.ean.length == 13">
-											<b-input class="form-control-plaintext" id="inputEan" v-model="prod.ean" readonly />
-										</template>
-										<template v-else>
-											<b-input class="form-control-plaintext" autocomplete="off" id="inputEan" v-model="prod.ean" pattern="\d{13}" maxlength="13" />
-										</template>
-									</div>
-								</b-form-group>
-								<b-form-group class="col">
-									<label for="inputCodInterno" class="col-form-label">Cod. Interno</label>
-									<div class="">
-										<b-input class="form-control-plaintext" id="inputCodInterno" v-model="prod.codigo_interno" readonly />
-									</div>
-								</b-form-group>
-								<b-form-group class="col">
-									<label for="inputNcm" class="col-form-label">NCM</label>
-									<div class="">
-										<b-input class="form-control-plaintext" id="inputNcm" v-model="prod.ncm" readonly />
-									</div>
-								</b-form-group>
-								<b-form-group class="col">
-									<label for="inputMarca" class="col-form-label">Marca</label>
-									<div class="">
-										<b-input class="form-control-plaintext" id="inputMarca" v-model="prod.marca" readonly />
-									</div>
-								</b-form-group>
-							</div>
-							<div class="form-group row">
-								<b-form-group class="col">
-									<label for="inputDescricao" class="col-form-label">Descrição</label>
-									<div class="">
-										<b-form-textarea class="form-control-plaintext" id="inputDescricao" v-model="prod.descricao" readonly rows="3" max-rows="3" />
-									</div>
-								</b-form-group>
-								<b-form-group class="col">
-									<label for="inputDescInd" class="col-form-label">Descrição Ind.</label>
-									<div class="">
-										<b-form-textarea class="form-control-plaintext" id="inputDescInd" v-model="prod.descricao_industria" readonly rows="3" max-rows="3" />
-									</div>
-								</b-form-group>
-							</div>
-							<div class="form-group row">
-								<label for="inputTags" class="col-3 col-form-label">Tags</label>
-								<div class="col-9">
-									<input type="text" class="form-control-plaintext" id="inputTags" placeholder="Adicionar tags" @keyup.enter="addTag" @keydown.prevent.tab="addTag" maxlength="35" />
-									<b-badge variant="success" v-for="tag in prod.tags" v-if="tag != ''" :key="'tag-'+tag">{{tag.toLowerCase()}}<b-button-close @click.prevent="removeTag" /></b-badge>
-								</div>
-							</div>
-							<h3>Detalhes</h3>
-							<h5>Atributos</h5>
-							<div class="form-group row">
-								<template v-for="(value, key) in prod.detalhe.atributo">
-									<label class="col-3 col-form-label" :key="'atributo-1-'+key" style="text-transform: capitalize;">{{key.replace(/\_/g,' ')}}</label>
-									<div class="col-9" :key="'atributo-2-'+key">
-										<b-input class="form-control-plaintext" v-model="prod.detalhe.atributo[key]" />
-									</div>
-								</template>
-							</div>
-							<h5>Embalagem</h5>
-							<div class="form-group row">
-								<template v-for="(value, key) in prod.detalhe.embalagem">
-									<label class="col-3 col-form-label" :key="'embalagem-1-'+key" style="text-transform: capitalize;">{{key.replace(/\_/g,' ')}}</label>
-									<div class="col-9" :key="'embalagem-2'+key">
-										<b-input class="form-control-plaintext" v-model="prod.detalhe.embalagem[key]" />
-									</div>
-								</template>
-							</div>
-							<b-button variant="outline-danger float-left" @click.prevent="resetForm">Cancelar</b-button>
-							<b-button variant="outline-success float-right" @click.prevent="sendForm">Salvar</b-button>
 						</b-form>
 					</b-col>
 				</b-row>
 			</b-tab>
 		</b-tabs>
+		<b-modal
+			ref="completeEdit"
+			:title="avisoModalTitle"
+			:header-bg-variant="avisoModalTipo"
+			:header-text-variant="'light'"
+			:body-bg-variant="'light'"
+			:body-text-variant="'dark'"
+			:footer-bg-variant="'light'"
+			:footer-text-variant="'dark'"
+			ok-only
+		>
+			<div class="d-block text-left">
+				<p v-html="avisoModal"></p>
+			</div>
+		</b-modal>
 	</section>
 	<section v-else-if="prod.mensagens">
 		Produto não encontrado...
@@ -348,29 +278,45 @@
 			return {
 				prod: {},
 				bkpprod: {},
+				avisoModal: 'Produto Alterado com sucesso',
+				avisoModalTipo: 'light',
+				avisoModalTitle: 'Atualização de produto',
 			};
 		},
 		methods: {
-			loadProducts(id) {
-				gfn.fApi({url:"https://api.construe.cf/produtos/"+id, options: {method: 'GET'}}, this.fetchUrl);
-			},
-			fetchUrl(obj){
+			async loadProducts(id) {
+				let obj = await gfn.fApi({url:"https://api.construe.cf/produtos/"+id, options: {method: 'GET'}});
 				this.prod = obj;
 				this.bkpprod = JSON.stringify(obj);
 			},
 			sendForm() {
-
+				this.avisoModal = ''
 				if (this.prod.tags != undefined) {
 					this.prod.tags = this.prod.tags.filter(tag => {
 						return tag != ""
 					})
 				}
+				gfn.fApi({url:"https://api.construe.cf/produtos/"+this.$route.params.id, options: {method: 'PUT', body: JSON.stringify(this.prod)}}, this.completeForm);
+			},
+			completeForm(data) {
+				if (data != null) {
+					this.avisoModal =''
+					this.avisoModalTipo = 'danger'
+					this.avisoModalTitle ='Erro ao atualizar o produto'
 
-
+					data.mensagens.forEach(msg => {
+						this.avisoModal += msg + '<br />'
+					})
+				} else {
+					this.avisoModal = 'Produto atualizado com sucesso!'
+					this.avisoModalTipo = 'success'
+					this.avisoModalTitle ='Atualização do produto'
+					this.bkpprod = JSON.stringify(this.prod)
+				}
+				this.$refs.completeEdit.show()
 			},
 			resetForm() {
 				this.prod = JSON.parse(this.bkpprod)
-				console.log(this.prod)
 			},
 			addTag(event) {
 				let inputVal = event.target.value.trim().replace(/\s+/g," ")
@@ -383,7 +329,6 @@
 				event.target.value = ''
 			},
 			removeTag(event) {
-				console.log(event.path[1].innerText.split('\n')[0])
 				this.prod.tags = this.prod.tags.filter(tag => {
 					return (tag != event.path[1].innerText.split('\n')[0] && tag != "")
 				})
