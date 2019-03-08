@@ -2,18 +2,18 @@
 	<div class="cadastro-page">
 		<b-container>
 			<Widget class="mx-auto" title="<h3 class='mt-0'>Cadastro de novo usuário</h3>" customHeader>
-				<form class="mt" @submit.prevent="cadastro">
+				<form class="mt" @submit.prevent="cadastro" autocomplete="off">
 					<div class="form-group">
 						<input class="form-control no-border" v-model="dados.nome" ref="fullname"
-						required type="text" name="fullname" placeholder="Nome Completo" />
+						required type="text" name="fullname" placeholder="Nome Completo" autocomplete="off" />
 					</div>
 					<div class="form-group">
 						<input class="form-control no-border" v-model="dados.email" ref="email"
-						required type="text" name="email" placeholder="Email" />
+						required type="text" name="email" placeholder="Email" autocomplete="off" />
 					</div>
 					<div class="form-group">
 						<input class="form-control no-border" v-model="dados.senha" ref="password"
-						required type="password" name="password" placeholder="Senha" />
+						required type="password" name="password" placeholder="Senha" autocomplete="new-password" />
 					</div>
 					<div class="form-group">
 						<b-form-group label="Perfil" label-cols="6" label-for="perfil">
@@ -77,11 +77,7 @@
 					'ind_todas_industrias': false,
 					'ids_industrias': []
 				},
-				perfilOpt: [
-					{ text: 'Admin', value: 1 },
-					{ text: 'Visualizar', value: 2 },
-					{ text: 'Industria', value: 3 }
-				],
+				perfilOpt: [],
 				industriaOpt: [],
 				errorMessage: '',
 				successMessage: '',
@@ -128,16 +124,31 @@
 				} else {
 					this.dados.ind_todas_industrias = false
 				}
+			},
+			mountObjInd(obj) {
+				obj.data.forEach( ind => {
+					this.industriaOpt.push({
+						'text': ind.nome,
+						'value': ind.id
+					})
+				});
+			},
+			mountObjPerf(obj) {
+				let perfis = []
+				obj.data.forEach( perf => {
+					perfis.push({
+						'text': perf.nome,
+						'value': perf.id
+					})
+				});
+				this.perfilOpt = perfis.sort((a,b) => {
+					return a.text - b.text;
+				})
 			}
 		},
 		async mounted() {
-			let allInd = await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}});
-			allInd.data.forEach( ind => {
-				this.industriaOpt.push({
-					'text': ind.nome,
-					'value': ind.id
-				})
-			});
+			await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}}, this.mountObjInd);
+			await gfn.fApi({url:"https://api.construe.cf/perfis?tamanho_pagina=200", options: {method: 'GET'}}, this.mountObjPerf);
 		}
 	};
 </script>

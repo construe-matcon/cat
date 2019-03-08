@@ -47,13 +47,18 @@ import UploadPage from '@/pages/Upload/Upload';
 
 let validateUser = function(page, cb) {
 	let user = (JSON.parse(window.localStorage.getItem('account')) ? jwt.decode(JSON.parse(window.localStorage.getItem('account')).token).usuario : '')
+	console.log(user)
 		if (user.id_perfil == 1) {
 			cb();
 		} else {
 			if (user.acessos.indexOf(page) >= 0) {
 				cb();
 			} else {
-				cb('/error');
+				if (user.acessos.indexOf('DASHBOARD') == -1) {
+					cb('/catalogo');
+				} else {
+					cb('/error');
+				}
 			}
 		}
 	}
@@ -151,11 +156,17 @@ let router = new Router({
           path: 'lojas',
           name: 'Lojas',
           component: Lojas,
+			beforeEnter(to, from, next) {
+				validateUser('DASHBOARD_LOJAS', next)
+			},
         },
         {
           path: 'loja/:id',
           name: 'loja',
           component: Lojas,
+			beforeEnter(to, from, next) {
+				validateUser('DASHBOARD_LOJAS', next)
+			},
         },
 		{
 			path: 'associacoes',

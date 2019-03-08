@@ -69,8 +69,10 @@
 					<span class="fw-semi-bold" v-text="account.name"></span>
 				</template>
 				<b-dropdown-item :to="'/minha-conta'"><i class="fa fa-user" /> Minha Conta</b-dropdown-item>
-				<b-dropdown-divider />
-					<b-dropdown-item :to="'/admin/cadastro/'"><i class="fa fa-user-plus" /> Criar Usuário</b-dropdown-item>
+				<template v-if="account.id_perfil == 1">
+					<b-dropdown-divider />
+					<b-dropdown-item  :to="'/admin/cadastro/'"><i class="fa fa-user-plus" /> Criar Usuário</b-dropdown-item>
+				</template>
 				<b-dropdown-divider />
 				<!-- <b-dropdown-item>Calendar</b-dropdown-item>
 				<b-dropdown-item>
@@ -126,6 +128,7 @@
 				account: {
 					name: (!dados) ? '' :  dados.nome,
 					foto: (!dados ? require('../../assets/people/user-default.png') : (!dados.foto ? require('../../assets/people/user-default.png') : 'https://images.construe.cf/usuarios/'+dados.foto)), // eslint-disable-line global-require
+					id_perfil: dados.id_perfil
 				},
 				icon: {
 					picture: require('../../assets/img/construe.png'), // eslint-disable-line global-require
