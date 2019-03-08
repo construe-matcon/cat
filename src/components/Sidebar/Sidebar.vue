@@ -62,7 +62,7 @@
 			iconName="fa fa-industry"
 			index="lojas"
 			isHeader
-			v-if="user.acessos.indexOf('DASHBOARD_LOJAS') >= 0 && 1 == 2"
+			v-if="user.acessos.indexOf('DASHBOARD_LOJAS') >= 0"
 			/>
 		</ul>
 		<div class="bottom">
