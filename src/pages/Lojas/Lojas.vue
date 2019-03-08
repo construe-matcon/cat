@@ -14,6 +14,16 @@
 					</div>
 				</Widget>
 			</b-col>
+			<b-col lg="12">
+				<Widget
+					title="<h4>Produto Construe - <span class='fw-semi-bold'>Mais vendidos</span></h4>"
+					bodyClass="widget-table-overflow"
+					customHeader>
+					<div class="table-responsive">
+						<canvas id="barchart1" height="80"></canvas>
+					</div>
+				</Widget>
+			</b-col>
 		</b-row>
 	</div>
 	<!-- Lista de lojas -->
@@ -147,72 +157,141 @@
 				var dates 		= this.dashLineData.datas
 				, 	total 		= this.dashLineData.valores_totais
 				, 	totalCat 	= this.dashLineData.valores_totais_produtos_catalogo
+				, 	catNomes 	= this.dashBarData.categorias
+				, 	catQuan 	= this.dashBarData.quantidades
+				, 	catTotal 	= this.dashBarData.valores_totais
 
 				var el = document.getElementById(idEl).getContext('2d')
 
 
-				new Chart (el, {
-					type: type,
-					data: {
-						labels: dates.map(date => {return gfn.formatDate(date)}),
-						datasets: [{
-							label: 'Total de vendas',
-							backgroundColor: '#A02B13',
-							borderColor: '#A02B13',
-							fill: false,
-							data: total,
-						}, {
-							label: 'Total de vendas com associação',
-							backgroundColor: '#FBC14B',
-							borderColor: '#FBC14B',
-							fill: false,
-							data: totalCat,
-						}]
-					},
-					options: {
-						responsive: true,
-						scales: {
-							xAxes: [{
-								display: true,
-							}],
-							yAxes: [{
+				// new Chart (el, {
+				// 	type: type,
+				// 	data: {
+				// 		labels: dates.map(date => {return gfn.formatDate(date)}),
+				// 		datasets: [{
+				// 			label: 'Total de vendas',
+				// 			backgroundColor: '#A02B13',
+				// 			borderColor: '#A02B13',
+				// 			fill: false,
+				// 			data: total,
+				// 		}, {
+				// 			label: 'Total de vendas com associação',
+				// 			backgroundColor: '#FBC14B',
+				// 			borderColor: '#FBC14B',
+				// 			fill: false,
+				// 			data: totalCat,
+				// 		}]
+				// 	},
+				// 	options: {
+				// 		responsive: true,
+				// 		scales: {
+				// 			xAxes: [{
+				// 				display: true,
+				// 			}],
+				// 			yAxes: [{
+				// 			}]
+				// 		},
+				// 		tooltips: {
+				// 			callbacks: {
+				// 				label: function(tooltipItem, data) {
+				// 					var label = data.datasets[tooltipItem.datasetIndex].label || '';
+				// 					if (label) {
+				// 						label += ': ';
+				// 					}
+				// 					label += gfn.formatPrice(Math.round(tooltipItem.yLabel * 100) / 100);
+				// 					return label;
+				// 				}
+				// 			}
+				// 		}
+				// 	}
+				// });
+
+				var graph;
+
+				if (type == 'line') {
+					graph = {
+						type: type,
+						data: {
+							labels: dates.map(date => {return gfn.formatDate(date)}),
+							datasets: [{
+								label: 'Total de vendas',
+								backgroundColor: '#A02B13',
+								borderColor: '#A02B13',
+								fill: false,
+								data: total,
+							}, {
+								label: 'Total de vendas com associação',
+								backgroundColor: '#FBC14B',
+								borderColor: '#FBC14B',
+								fill: false,
+								data: totalCat,
 							}]
 						},
-						tooltips: {
-							callbacks: {
-								label: function(tooltipItem, data) {
-									var label = data.datasets[tooltipItem.datasetIndex].label || '';
-									if (label) {
-										label += ': ';
+						options: {
+							responsive: true,
+							scales: {
+								xAxes: [{
+									display: true,
+								}],
+								yAxes: [{
+								}]
+							},
+							tooltips: {
+								callbacks: {
+									label: function(tooltipItem, data) {
+										var label = data.datasets[tooltipItem.datasetIndex].label || '';
+										if (label) {
+											label += ': ';
+										}
+										label += gfn.formatPrice(Math.round(tooltipItem.yLabel * 100) / 100);
+										return label;
 									}
-									label += gfn.formatPrice(Math.round(tooltipItem.yLabel * 100) / 100);
-									return label;
 								}
 							}
 						}
 					}
-				});
+				} else if (type == 'bar') {
+					graph = {
+						type: type,
+						data: {
+							labels: catNomes,
+							datasets: [{
+								label: 'Quantidade',
+								backgroundColor: '#A02B13',
+								data: catQuan
+							},{
+								label: 'Valor',
+								backgroundColor: '#FBC14B',
+								data: catTotal
+							}]
+						},
+						options: {
+							responsive: true,
+							scales: {
+								xAxes: [{
+									display: true,
+								}],
+								yAxes: [{
+								}]
+							},
+							tooltips: {
+								callbacks: {
+									label: function(tooltipItem, data) {
+										var label = data.datasets[tooltipItem.datasetIndex].label || '';
+										var math  = Math.round(tooltipItem.yLabel * 100) / 100
+										if (label) {
+											label += ': ';
+										}
+										label += (label == 'Valor: ' ? gfn.formatPrice(math) : math.toLocaleString('pt-br'));
+										return label;
+									}
+								}
+							}
+						}
+					}
+				}
 
-				// var graph;
-
-				// if (type == 'line') {
-				// 	graph = {
-				// 		type: type,
-				// 		data:datax,
-				// 		options: {
-				// 			responsive: true,
-				// 			scales: {
-				// 				xAxes: [{
-				// 					display: true,
-				// 				}],
-				// 				yAxes: [{
-				// 				}]
-				// 			}
-				// 		}
-				// 	}
-				// }
-
-				// return new Chart(el,graph)
+				return new Chart(el,graph)
 
 			},
 			async pages(){
@@ -231,14 +310,8 @@
 				}
 				this.dashBarData = await gfn.fApi({url:'https://api.construe.cf/dashboard/lojas/'+this.loja+'/grafico-faturamento-produto-construe-mensal', options: {method: 'GET'}});
 				if (this.dashBarData) {
-					// this.startCharts('bar', 'barchart1','','', true);
+					this.startCharts('bar', 'barchart1','','',true);
 				}
-
-				// console.log('-- Dados Gráficos --')
-				// console.log('Faturamento ==> ' , this.dashLineData)
-				// console.log('--------------------------------')
-				// console.log('Categorias ==> ' , this.dashBarData)
-				// console.log('-- Dados Gráficos --')
 
 			},
 			loadDash(obj) {
