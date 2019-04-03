@@ -54,7 +54,7 @@
 			isHeader
 			v-if="user.acessos.indexOf('REJEITADOS') >= 0"
 			/>
-			<NavLink
+			<!-- <NavLink
 			:activeItem="activeItem"
 			nome="Lojas"
 			link="/lojas"
@@ -63,7 +63,7 @@
 			index="lojas"
 			isHeader
 			v-if="user.acessos.indexOf('DASHBOARD_LOJAS') >= 0"
-			/>
+			/> -->
 		</ul>
 		<div class="bottom">
 			<small :title="'Leitura de Sellout: '+percent.sell" v-if="percent.sell">Leitura de Sellout: <span class='fw-semi-bold'>{{percent.sell}}</span></small>
