@@ -4,16 +4,13 @@
 			<Widget class="mx-auto" title="<h3 class='mt-0'>Cadastro de novo usuário</h3>" customHeader>
 				<form class="mt" @submit.prevent="cadastro" autocomplete="off">
 					<div class="form-group">
-						<input class="form-control no-border" v-model="dados.nome" ref="fullname"
-						required type="text" name="fullname" placeholder="Nome Completo" autocomplete="off" />
+						<input type="text" class="form-control no-border" v-model="dados.nome" required name="fullname" placeholder="Nome Completo" autocomplete="off" />
 					</div>
 					<div class="form-group">
-						<input class="form-control no-border" v-model="dados.email" ref="email"
-						required type="text" name="email" placeholder="Email" autocomplete="off" />
+						<input type="text" class="form-control no-border" v-model="dados.email" required name="email" placeholder="Email" autocomplete="off" />
 					</div>
 					<div class="form-group">
-						<input class="form-control no-border" v-model="dados.senha" ref="password"
-						required type="password" name="password" placeholder="Senha" autocomplete="new-password" />
+						<input type="password" class="form-control no-border" v-model="dados.senha" required name="password" placeholder="Senha" autocomplete="off" />
 					</div>
 					<div class="form-group">
 						<b-form-group label="Perfil" label-cols="6" label-for="perfil">
@@ -28,7 +25,7 @@
 						</b-form-group>
 					</div>
 					<div class="form-group">
-						<b-form-group label="Associar Industria" label-cols="6" label-for="industria">
+						<b-form-group label="Associar Industrias" label-cols="6" label-for="industria">
 							<b-form-checkbox class="float-left" v-model="dados.ind_todas_industrias" @change="toggleAll">Todas</b-form-checkbox>
 							<b-form-checkbox-group
 								id="industria1"
@@ -147,7 +144,7 @@
 			}
 		},
 		async mounted() {
-			await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}}, this.mountObjInd);
+			await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=99999", options: {method: 'GET'}}, this.mountObjInd);
 			await gfn.fApi({url:"https://api.construe.cf/perfis?tamanho_pagina=200", options: {method: 'GET'}}, this.mountObjPerf);
 		}
 	};
