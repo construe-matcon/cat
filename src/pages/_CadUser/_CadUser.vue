@@ -4,16 +4,13 @@
 			<Widget class="mx-auto" title="<h3 class='mt-0'>Cadastro de novo usuário</h3>" customHeader>
 				<form class="mt" @submit.prevent="cadastro" autocomplete="off">
 					<div class="form-group">
-						<input class="form-control no-border" v-model="dados.nome" ref="fullname"
-						required type="text" name="fullname" placeholder="Nome Completo" autocomplete="off" />
+						<input class="form-control no-border" v-model="dados.nome" ref="fullname" required type="text" name="fullname" placeholder="Nome Completo" autocomplete="off" />
 					</div>
 					<div class="form-group">
-						<input class="form-control no-border" v-model="dados.email" ref="email"
-						required type="text" name="email" placeholder="Email" autocomplete="off" />
+						<input class="form-control no-border" v-model="dados.email" ref="email" required type="text" name="email" placeholder="Email" autocomplete="off" />
 					</div>
 					<div class="form-group">
-						<input class="form-control no-border" v-model="dados.senha" ref="password"
-						required type="password" name="password" placeholder="Senha" autocomplete="new-password" />
+						<input class="form-control no-border" v-model="dados.senha" ref="password" required type="password" name="password" placeholder="Senha" autocomplete="new-password" />
 					</div>
 					<div class="form-group">
 						<b-form-group label="Perfil" label-cols="6" label-for="perfil">
