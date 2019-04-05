@@ -184,7 +184,7 @@
 				await gfn.fApi({url:"https://api.construe.cf/produtos?id_industria="+this.idCatalogo+"&id_categoria="+this.idProdCons+"&tamanho_pagina=20&pagina="+(this.currentPage - 1), options: {method: 'GET'}}, this.loadCat);
 			},
 			async loadCatalogos() {
-				let obj = await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}});
+				let obj = await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=99999", options: {method: 'GET'}});
 				this.listCatalogos = obj.data;
 				this.listCatalogos.forEach(cat => {
 					try {
