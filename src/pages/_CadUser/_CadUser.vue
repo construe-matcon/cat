@@ -2,15 +2,15 @@
 	<div class="cadastro-page">
 		<b-container>
 			<Widget class="mx-auto" title="<h3 class='mt-0'>Cadastro de novo usuário</h3>" customHeader>
-				<form class="mt" @submit.prevent="cadastro" autocomplete="off">
+				<form class="mt" @submit.prevent="cadastro">
 					<div class="form-group">
-						<input type="text" class="form-control no-border" v-model="dados.nome" name="fullname" placeholder="Nome Completo" autocomplete="off" />
+						<input type="text" class="form-control no-border" v-model="dados.nome" name="fullname" placeholder="Nome Completo" />
 					</div>
 					<div class="form-group">
-						<input type="text" class="form-control no-border" v-model="dados.email" name="email" placeholder="Email" autocomplete="off" />
+						<input type="text" class="form-control no-border" v-model="dados.email" name="email" placeholder="Email" />
 					</div>
 					<div class="form-group">
-						<input type="password" class="form-control no-border" v-model="dados.senha" name="password" placeholder="Senha" autocomplete="new-password" />
+						<input type="password" class="form-control no-border" v-model="dados.senha" name="password" placeholder="Senha" />
 					</div>
 					<div class="form-group">
 						<b-form-group label="Perfil" label-cols="6" label-for="perfil">
