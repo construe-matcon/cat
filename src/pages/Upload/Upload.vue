@@ -312,7 +312,7 @@
 			},
 		},
 		async mounted() {
-			await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}}, this.fetchCat);
+			await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=99999", options: {method: 'GET'}}, this.fetchCat);
 		},
 	};
 </script>
