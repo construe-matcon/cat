@@ -138,7 +138,7 @@
 			}),
 		},
 		async mounted() {
-			console.log('user: ', this.user)
+			// console.log('user: ', this.user)
 			await gfn.fApi({url:"https://api.construe.cf/categorias?tamanho_pagina=20", options: {method: 'GET'}}, this.fetchUrl);
 			await gfn.fApi({url:"https://api.construe.cf/industrias?tamanho_pagina=200", options: {method: 'GET'}}, this.fetchCat);
 			await gfn.fApi({url:"https://api.construe.cf/dashboard", options: {method: 'GET'}}, this.fetchStats);

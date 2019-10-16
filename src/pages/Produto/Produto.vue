@@ -285,7 +285,9 @@
 		},
 		methods: {
 			async loadProducts(id) {
-				let obj = await gfn.fApi({url:"https://api.construe.cf/produtos/"+id, options: {method: 'GET'}});
+				let obj = await gfn.fApi({url:"https://api.construe.cf/produtos/"+id, options: {method: 'GET'}}, this.prodFull);
+			},
+			prodFull(obj){
 				this.prod = obj;
 				this.bkpprod = JSON.stringify(obj);
 			},

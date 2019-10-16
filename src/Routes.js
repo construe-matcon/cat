@@ -18,8 +18,8 @@ import GoogleMapPage from '@/pages/Maps/Google';
 // Main
 import Dashboard from '@/pages/Dashboard/Dashboard';
 
-// Charts
-import ChartsPage from '@/pages/Charts/Charts';
+// // Charts
+// import ChartsPage from '@/pages/Charts/Charts';
 
 // Ui
 import IconsPage from '@/pages/Icons/Icons';
@@ -47,7 +47,7 @@ import UploadPage from '@/pages/Upload/Upload';
 
 let validateUser = function(page, cb) {
 	let user = (JSON.parse(window.localStorage.getItem('account')) ? jwt.decode(JSON.parse(window.localStorage.getItem('account')).token).usuario : '')
-	console.log(user)
+	// console.log(user)
 		if (user.id_perfil == 1) {
 			cb();
 		} else {
@@ -204,11 +204,11 @@ let router = new Router({
 			name: 'NotificationsPage',
 			component: NotificationsPage,
 		},
-		{
-			path: 'components/charts',
-			name: 'ChartsPage',
-			component: ChartsPage,
-		},
+		// {
+		// 	path: 'components/charts',
+		// 	name: 'ChartsPage',
+		// 	component: ChartsPage,
+		// },
 		{
 			path: 'tables',
 			name: 'TablesBasicPage',
